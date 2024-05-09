@@ -17,6 +17,10 @@
   },
   "type": "module",
   "dependencies": {
+    "@solidjs/router": "^0.13.3",
+    "axios": "^1.6.8",
+    "jwt-decode": "^4.0.0",
+    "solid-bootstrap": "^1.0.19",
     "solid-js": "^1.8.17"
   }
 }

@@ -1,27 +1,25 @@
-import type { Component } from 'solid-js';
-
-import logo from './logo.svg';
+import {Component, createEffect, JSX} from 'solid-js';
 import styles from './App.module.css';
+import NavBar from "./components/NavBar";
+import {createStore} from "solid-js/store";
+import {AuthState} from "./auth/model/AuthState";
+import AuthContext from "./auth/AuthContext";
 
-const App: Component = () => {
-  return (
-    <div class={styles.App}>
-      <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          class={styles.link}
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
-      </header>
-    </div>
-  );
+const App: Component = (props: { children?: JSX.Element }) => {
+    const [authState, setAuthState] = createStore<AuthState>({});
+
+    return (
+        <AuthContext.Provider value={{authState, setAuthState}} >
+            < div class={styles.App}>
+            <header class={styles.header}>
+        {/*<img src={logo} class={styles.logo} alt="logo"/>*/}
+            <NavBar></NavBar>
+            </header>
+        {props.children}
+</div>
+</AuthContext.Provider>
+)
+    ;
 };
 
 export default App;

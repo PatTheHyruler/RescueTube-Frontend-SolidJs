@@ -96,9 +96,9 @@ export const registerAuthInterceptors = () => {
 
                 throw new LoginRequiredError();
             }
-
-            throw error;
         }
+
+        throw error;
     });
 }
 

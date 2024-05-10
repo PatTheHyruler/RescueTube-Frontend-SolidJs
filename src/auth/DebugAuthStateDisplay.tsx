@@ -27,7 +27,7 @@ const DebugAuthStateDisplay = () => {
         <>
             <div class={styles.floating} style={{bottom: 0, left: 0}}>
                 <button onclick={() => setState(prev => ({ ...prev, display: !prev.display }))}>
-                    {state() ? 'Hide' : 'Show auth debug'}
+                    {state().display ? 'Hide' : 'Show auth debug'}
                 </button>
                 <Show when={state().display}>
                     <div>

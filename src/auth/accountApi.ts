@@ -1,5 +1,17 @@
 import {api} from "../services/api";
-import {AuthBehavior, JwtResponse, LoginRequest, LogoutRequest, RefreshRequest, UserDetails} from "./authTypes";
+import {
+    AuthBehavior,
+    JwtResponse,
+    LoginRequest,
+    LogoutRequest,
+    RefreshRequest,
+    RegisterRequest,
+    UserDetails
+} from "./authTypes";
+
+const register = async (data: RegisterRequest) => {
+    return await api.axios.post<JwtResponse>('/v1/Account/Register', data, {authBehavior: AuthBehavior.SkipAuth});
+}
 
 const login = async (data: LoginRequest) => {
     return await api.axios.post<JwtResponse>('/v1/Account/Login', data, {authBehavior: AuthBehavior.SkipAuth});
@@ -18,6 +30,7 @@ const refreshToken = async (data: RefreshRequest) => {
 }
 
 export const accountApi = {
+    register,
     login,
     logout,
     getCurrentUserDetails,

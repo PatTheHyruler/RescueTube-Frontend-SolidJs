@@ -105,3 +105,12 @@ export const registerAuthInterceptors = () => {
 const setAuthHeader = (request: InternalAxiosRequestConfig, jwt: string) => {
     request.headers.Authorization = `Bearer ${jwt}`;
 }
+
+export const getValidationErrors = (error: any) => {
+    // TODO: better errors (also on API side)
+    if (isAxiosError(error) && error.response?.data) {
+        return ['Error: ' + JSON.stringify(error.response.data)];
+    } else {
+        return "Unknown error occurred.";
+    }
+}

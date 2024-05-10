@@ -18,6 +18,11 @@ export interface LoginRequest {
     password: string,
 }
 
+export interface RegisterRequest {
+    userName: string,
+    password: string,
+}
+
 export interface LogoutRequest {
     jwt: string,
     refreshToken: string,

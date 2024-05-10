@@ -1,25 +1,59 @@
-import {Component, createEffect, JSX} from 'solid-js';
+import {Component, createEffect, createResource, JSX, Show} from 'solid-js';
 import styles from './App.module.css';
 import NavBar from "./components/NavBar";
 import {createStore} from "solid-js/store";
-import {AuthState} from "./auth/model/AuthState";
 import AuthContext from "./auth/AuthContext";
+import {
+    interceptorAuthState,
+    registerAuthInterceptors
+} from "./auth/authUtils";
+import {AuthState} from "./auth/authTypes";
+import {accountApi} from "./auth/accountApi";
+import DebugAuthStateDisplay from "./auth/DebugAuthStateDisplay";
+import {persistJwt, readPersistedJwt} from "./auth/jwtStorage";
 
 const App: Component = (props: { children?: JSX.Element }) => {
-    const [authState, setAuthState] = createStore<AuthState>({});
+    const persistedJwt = readPersistedJwt();
+
+    const [authState, setAuthState] = createStore<AuthState>({
+        jwtState: persistedJwt,
+        userDetails: null,
+    });
+
+    createEffect(() => {
+        interceptorAuthState.jwtState = authState.jwtState;
+        interceptorAuthState.setJwtState = jwtState => setAuthState("jwtState", jwtState);
+    });
+    registerAuthInterceptors();
+
+    createResource(() => authState.jwtState, async () => {
+        if (authState.jwtState) {
+            const response = await accountApi.getCurrentUserDetails();
+            const userDetails = response.data;
+            setAuthState("userDetails", userDetails);
+            return userDetails;
+        }
+        return null;
+    });
+
+    createEffect(() => {
+        persistJwt(authState.jwtState);
+    })
 
     return (
-        <AuthContext.Provider value={{authState, setAuthState}} >
-            < div class={styles.App}>
-            <header class={styles.header}>
-        {/*<img src={logo} class={styles.logo} alt="logo"/>*/}
-            <NavBar></NavBar>
-            </header>
-        {props.children}
-</div>
-</AuthContext.Provider>
-)
-    ;
+        <AuthContext.Provider value={{authState, setAuthState}}>
+            <div class={styles.App}>
+                <header class={styles.header}>
+                    {/*<img src={logo} class={styles.logo} alt="logo"/>*/}
+                    <NavBar></NavBar>
+                </header>
+                {props.children}
+            </div>
+            <Show when={import.meta.env.DEV}>
+                <DebugAuthStateDisplay></DebugAuthStateDisplay>
+            </Show>
+        </AuthContext.Provider>
+    );
 };
 
 export default App;

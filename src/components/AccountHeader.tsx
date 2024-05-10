@@ -1,7 +1,7 @@
 import {Show, useContext} from "solid-js";
 import AuthContext from "../auth/AuthContext";
 import {A, useNavigate} from "@solidjs/router";
-import {authService} from "../auth/AuthService";
+import {accountApi} from "../auth/accountApi";
 
 const AccountHeader = () => {
     const {authState, setAuthState} = useContext(AuthContext)!;
@@ -9,18 +9,18 @@ const AccountHeader = () => {
 
     const logOut = async () => {
         if (authState.jwtState) {
-            void authService.logout(authState.jwtState.jwt, authState.jwtState.refreshToken);
+            void accountApi.logout(authState.jwtState);
         }
-        setAuthState({jwtState: undefined, user: undefined});
+        setAuthState({jwtState: undefined, userDetails: undefined});
         navigate("/");
     }
 
     return (
         <>
             <Show when={authState.jwtState}>
-                <Show when={authState.user}>
+                <Show when={authState.userDetails}>
                     <li class="nav-item">
-                        {authState.user!.username}
+                        {authState.userDetails!.user.userName}
                     </li>
                 </Show>
                 <li class="nav-item">

@@ -1,8 +1,8 @@
 import {createSignal, For, useContext} from "solid-js";
-import {JwtClaims, login} from "./AuthService";
 import AuthContext from "./AuthContext";
-import {jwtDecode, JwtPayload} from "jwt-decode";
 import {useNavigate} from "@solidjs/router";
+import {accountApi} from "./accountApi";
+import {processJwtResponse} from "./jwtStorage";
 
 const Login = () => {
     const {authState, setAuthState} = useContext(AuthContext)!;
@@ -24,17 +24,8 @@ const Login = () => {
             return;
         }
 
-        const jwtResponse = await login(username(), password());
-        const jwtDecoded = jwtDecode<JwtPayload & {
-            [JwtClaims.name]: string,
-            [JwtClaims.roles]: string,
-        }>(jwtResponse.jwt);
-        setAuthState("jwtState", {
-            jwt: jwtResponse.jwt,
-            jwtExpiresAt: new Date(jwtDecoded.exp! * 1000),
-            refreshToken: jwtResponse.refreshToken,
-            refreshTokenExpiresAt: new Date(jwtResponse.refreshTokenExpiresAt),
-        });
+        const jwtResponse = await accountApi.login({userName: username(), password: password()});
+        setAuthState("jwtState", processJwtResponse(jwtResponse.data));
 
         navigate("/");
     }

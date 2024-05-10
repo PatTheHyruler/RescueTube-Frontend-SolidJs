@@ -1,0 +1,16 @@
+.floating {
+    border-radius: .3rem;
+    border: 3px solid rgba(0, 0, 0, .125);
+
+    padding: 1rem 1rem;
+    margin: .5rem;
+
+    position: fixed;
+    z-index: 999;
+
+    max-width: 40rem;
+
+    text-wrap: wrap;
+
+    font-size: .8rem;
+}

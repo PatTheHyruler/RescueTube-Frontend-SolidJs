@@ -19,6 +19,11 @@ const NavBar = () => {
                                     Home
                                 </A>
                             </li>
+                            <li class="nav-item">
+                                <A href="/videos/search" class="nav-link text-dark">
+                                    Videos
+                                </A>
+                            </li>
                         </ul>
                         <ul class="navbar-nav">
                             <AccountHeader></AccountHeader>

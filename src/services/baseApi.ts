@@ -8,7 +8,7 @@ const rtAxios = axios.create({
     baseURL: baseUrl,
 });
 
-export const api = {
+export const baseApi = {
     baseUrl,
     axios: rtAxios,
 }

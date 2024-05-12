@@ -1,4 +1,4 @@
-import {api} from "../services/api";
+import {baseApi} from "../services/baseApi";
 import {
     AuthBehavior,
     JwtResponse,
@@ -10,23 +10,23 @@ import {
 } from "./authTypes";
 
 const register = async (data: RegisterRequest) => {
-    return await api.axios.post<JwtResponse>('/v1/Account/Register', data, {authBehavior: AuthBehavior.SkipAuth});
+    return await baseApi.axios.post<JwtResponse>('/v1/Account/Register', data, {authBehavior: AuthBehavior.SkipAuth});
 }
 
 const login = async (data: LoginRequest) => {
-    return await api.axios.post<JwtResponse>('/v1/Account/Login', data, {authBehavior: AuthBehavior.SkipAuth});
+    return await baseApi.axios.post<JwtResponse>('/v1/Account/Login', data, {authBehavior: AuthBehavior.SkipAuth});
 }
 
 const logout = async (data: LogoutRequest) => {
-    return await api.axios.post('/v1/Account/Logout', data, {authBehavior: AuthBehavior.SkipAuth});
+    return await baseApi.axios.post('/v1/Account/Logout', data, {authBehavior: AuthBehavior.SkipAuth});
 }
 
 const getCurrentUserDetails = async () => {
-    return await api.axios.get<UserDetails>('/v1/Account/Me');
+    return await baseApi.axios.get<UserDetails>('/v1/Account/Me');
 }
 
 const refreshToken = async (data: RefreshRequest) => {
-    return await api.axios.post<JwtResponse>('/v1/Account/RefreshToken', data, {authBehavior: AuthBehavior.SkipAuth});
+    return await baseApi.axios.post<JwtResponse>('/v1/Account/RefreshToken', data, {authBehavior: AuthBehavior.SkipAuth});
 }
 
 export const accountApi = {

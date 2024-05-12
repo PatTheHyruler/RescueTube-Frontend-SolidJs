@@ -1,4 +1,4 @@
-import {api} from "../services/api";
+import {baseApi} from "../services/baseApi";
 import {InternalAxiosRequestConfig, isAxiosError} from "axios";
 import {accountApi} from "./accountApi";
 import {AuthBehavior, JwtState, LoginRequiredError} from "./authTypes";
@@ -40,7 +40,7 @@ const isTimeInPast = (time: Date) => {
 }
 
 export const registerAuthInterceptors = () => {
-    api.axios.interceptors.request.use(
+    baseApi.axios.interceptors.request.use(
         async config => {
             if (!config.authBehavior) {
                 config.authBehavior = AuthBehavior.RequireAuth;
@@ -76,7 +76,7 @@ export const registerAuthInterceptors = () => {
             return config;
         }
     );
-    api.axios.interceptors.response.use(response => response, async error => {
+    baseApi.axios.interceptors.response.use(response => response, async error => {
         if (isAxiosError(error) && error.config?.authBehavior !== AuthBehavior.SkipAuth) {
             if (error.response?.status === 401 && error.config?.headers.Authorization) {
                 const config = error.config;
@@ -91,7 +91,7 @@ export const registerAuthInterceptors = () => {
                         throw new LoginRequiredError();
                     }
                     setAuthHeader(error.config, jwtResponse.jwt);
-                    return await api.axios.request(config);
+                    return await baseApi.axios.request(config);
                 }
 
                 throw new LoginRequiredError();

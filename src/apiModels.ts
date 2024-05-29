@@ -65,7 +65,7 @@ export interface VideoSimpleDtoV1 {
     title: TextTranslationDtoV1[],
     description: TextTranslationDtoV1[],
 
-    thumbnail: ImageDtoV1[] | null,
+    thumbnail: ImageDtoV1 | null,
 
     durationSeconds: number,
 

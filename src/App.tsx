@@ -1,4 +1,4 @@
-import {Component, createEffect, createResource, JSX, Show} from 'solid-js';
+import {Component, createEffect, createResource, ErrorBoundary, JSX, Show} from 'solid-js';
 import styles from './App.module.css';
 import NavBar from "./components/NavBar";
 import {createStore} from "solid-js/store";
@@ -11,6 +11,7 @@ import {AuthState} from "./auth/authTypes";
 import {accountApi} from "./auth/accountApi";
 import DebugAuthStateDisplay from "./auth/DebugAuthStateDisplay";
 import {persistJwt, readPersistedJwt} from "./auth/jwtStorage";
+import {RootErrorHandler} from "./components/RootErrorHandler";
 
 const App: Component = (props: { children?: JSX.Element }) => {
     const persistedJwt = readPersistedJwt();
@@ -41,18 +42,20 @@ const App: Component = (props: { children?: JSX.Element }) => {
     })
 
     return (
-        <AuthContext.Provider value={{authState, setAuthState}}>
-            <div class={styles.App}>
-                <header class={styles.header}>
-                    {/*<img src={logo} class={styles.logo} alt="logo"/>*/}
-                    <NavBar></NavBar>
-                </header>
-                {props.children}
-            </div>
-            <Show when={import.meta.env.DEV}>
-                <DebugAuthStateDisplay></DebugAuthStateDisplay>
-            </Show>
-        </AuthContext.Provider>
+        <ErrorBoundary fallback={RootErrorHandler}>
+            <AuthContext.Provider value={{authState, setAuthState}}>
+                <div class={styles.App}>
+                    <header class={styles.header}>
+                        {/*<img src={logo} class={styles.logo} alt="logo"/>*/}
+                        <NavBar></NavBar>
+                    </header>
+                    {props.children}
+                </div>
+                <Show when={import.meta.env.DEV}>
+                    <DebugAuthStateDisplay></DebugAuthStateDisplay>
+                </Show>
+            </AuthContext.Provider>
+        </ErrorBoundary>
     );
 };
 

@@ -6,13 +6,21 @@ import {useNavigate} from "@solidjs/router";
 import {getValidationErrors} from "./authUtils";
 
 const Register = () => {
-    const {setAuthState} = useContext(AuthContext)!;
+    const {setAuthState, authState} = useContext(AuthContext)!;
     const navigate = useNavigate();
 
     const [username, setUsername] = createSignal("");
     const [password, setPassword] = createSignal("");
     const [confirmPassword, setConfirmPassword] = createSignal("");
     const [validationErrors, setValidationErrors] = createSignal([] as string[]);
+
+    const [shouldLogOut, setShouldLogOut] = createSignal(true);
+
+    if (authState.jwtState && shouldLogOut()) {
+        void accountApi.logout(authState.jwtState);
+        setAuthState({jwtState: undefined, userDetails: undefined});
+        setShouldLogOut(false);
+    }
 
     const onSubmit = async (event: SubmitEvent) => {
         event.preventDefault();
@@ -52,7 +60,7 @@ const Register = () => {
 
                 TODO: pending approval
                 <For each={validationErrors()}>
-                    {(item, index) => (
+                    {(item) => (
                         <div class="text-danger">
                             {item}
                         </div>

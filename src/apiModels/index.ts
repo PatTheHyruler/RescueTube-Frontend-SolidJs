@@ -4,7 +4,15 @@ export enum KnownPlatforms {
     YouTube = 'YouTube',
 }
 
-type Platform = `${KnownPlatforms}` | string;
+export type Platform = `${KnownPlatforms}` | string;
+
+export enum EntityTypes {
+    Video = 'Video',
+    Author = 'Author',
+    Playlist = 'Playlist',
+}
+
+export type EntityType = `${EntityTypes}`;
 
 export interface AuthorSimpleDtoV1 {
     id: string,
@@ -92,4 +100,19 @@ export interface PaginationResultDtoV1 {
     limit: number,
     amountOnPage: number,
     totalResults: number | null,
+}
+
+export interface LinkSubmissionRequestDtoV1 {
+    url: string,
+    platformHint?: Platform,
+    typeHint?: EntityType,
+}
+
+export interface LinkSubmissionResponseDtoV1 {
+    submissionId: string,
+    type: EntityType,
+    entityId?: string,
+    platform: Platform,
+    idOnPlatform: string,
+    alreadyAdded: boolean,
 }

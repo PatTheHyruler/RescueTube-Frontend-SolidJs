@@ -3,7 +3,7 @@ import {VideoSearchDtoV1, VideoSortingOptions} from "../../apiModels";
 import {createResource, createSignal, For, Show} from "solid-js";
 import VideoSearchForm from "../../components/VideoSearchForm";
 import {DateTimeDisplay} from "../../components/DateTimeDisplay";
-import {DurationDisplay} from "../../components/DurationDisplay";
+import {secondsToDurationString} from "../../services/timeUtils";
 
 const VideoSearch = () => {
     const [query, setQuery] = createSignal<VideoSearchDtoV1>({
@@ -28,37 +28,43 @@ const VideoSearch = () => {
         <>
             <VideoSearchForm query={query()} onSubmit={applySearch} setQuery={setQuery}></VideoSearchForm>
             <Show when={searchResults()?.data}>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Thumbnail</th>
-                        <th>Duration</th>
-                        <th>CreatedAt</th>
-                        <th>ArchivedAt</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <div>
                     <For each={searchResults()!.data.videos}>
-                        {(video) => <tr>
-                            <td>{video.title[0].content}</td>
-                            <td>
-                                <Show when={video.thumbnail}>
-                                    <img loading="lazy"
-                                         src={video.thumbnail?.url}
-                                         width={160}
-                                         height={90}
-                                         alt="Video thumbnail"
-                                    />
-                                </Show>
-                            </td>
-                            <td><DurationDisplay durationSeconds={video.durationSeconds}></DurationDisplay></td>
-                            <td><DateTimeDisplay value={video.publishedAt ?? video.createdAt}></DateTimeDisplay></td>
-                            <td><DateTimeDisplay value={video.addedToArchiveAt}></DateTimeDisplay></td>
-                        </tr>}
+                        {(video) => (
+                            <div style={{margin: '8px', display: 'flex'}}>
+                                <div style={{
+                                    "border-radius": '6px',
+                                    overflow: 'hidden',
+                                    width: 'fit-content',
+                                    height: 'fit-content',
+                                }}>
+                                    <Show when={video.thumbnail} fallback={<div>No thumbnails :(</div>}>
+                                        <img loading="lazy"
+                                             src={video.thumbnail?.url}
+                                             width={160}
+                                             height={90}
+                                             alt="Video thumbnail"
+                                        />
+                                    </Show>
+                                </div>
+                                <div>
+                                    <div>
+                                        {video.title[0].content}
+                                    </div>
+                                    <div>
+                                        {video.authors[0].displayName}
+                                    </div>
+                                    <div style={{display: 'flex', gap: '3px'}}>
+                                        <DateTimeDisplay value={video.createdAt ?? video.publishedAt}></DateTimeDisplay>
+                                        <div>
+                                            Duration: {secondsToDurationString(video.durationSeconds)}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </For>
-                    </tbody>
-                </table>
+                </div>
             </Show>
         </>
     );

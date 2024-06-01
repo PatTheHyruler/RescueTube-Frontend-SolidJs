@@ -1,11 +1,29 @@
-export const secondsToDurationString = (totalSeconds: number) => {
+interface DurationFormat {
+    zeroPad?: boolean,
+    includeUnnecessary?: boolean,
+}
+
+export const secondsToDurationString = (totalSeconds: number, format?: DurationFormat) => {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
     const seconds = totalSeconds - (hours * 3600) - (minutes * 60);
 
-    const hourString = hours.toString().padStart(2, '0');
-    const minuteString = minutes.toString().padStart(2, '0');
-    const secondString = seconds.toString().padStart(2, '0');
+    let hourString = hours.toString();
+    let minuteString = minutes.toString();
+    let secondString = seconds.toString();
 
-    return `${hourString}:${minuteString}:${secondString}`;
+    if (format?.zeroPad ?? true) {
+        hourString = hourString.padStart(2, '0');
+        minuteString = minuteString.padStart(2, '0');
+        secondString = secondString.padStart(2, '0');
+    }
+
+    let components = [];
+    if (hours > 0 || format?.includeUnnecessary) {
+        components.push(hourString);
+    }
+    components.push(minuteString);
+    components.push(secondString);
+
+    return components.join(':');
 }

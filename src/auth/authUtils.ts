@@ -22,12 +22,16 @@ const refreshToken = async () => {
 }
 
 const _refreshToken = async (): Promise<JwtState | null> => {
-    if (interceptorAuthState.jwtState && !isTimeInPast(interceptorAuthState.jwtState.refreshTokenExpiresAt)) {
-        const response = await accountApi.refreshToken(interceptorAuthState.jwtState);
-        const jwtState = processJwtResponse(response.data);
-        interceptorAuthState.setJwtState(jwtState);
-        interceptorAuthState.jwtState = jwtState;
-        return jwtState;
+    try {
+        if (interceptorAuthState.jwtState && !isTimeInPast(interceptorAuthState.jwtState.refreshTokenExpiresAt)) {
+            const response = await accountApi.refreshToken(interceptorAuthState.jwtState);
+            const jwtState = processJwtResponse(response.data);
+            interceptorAuthState.setJwtState(jwtState);
+            interceptorAuthState.jwtState = jwtState;
+            return jwtState;
+        }
+    } catch (error) {
+        return null;
     }
 
     return null;

@@ -5,7 +5,9 @@ import styles from './DebugAuthStateDisplay.module.css';
 const DebugAuthStateDisplay = () => {
     const authContext = useContext(AuthContext);
     const defaultState = {
-        display: false
+        display: false,
+        x: 0,
+        y: 0,
     }
     const storedValue = localStorage.getItem(debugAuthStateKey);
     let initialState = defaultState;
@@ -18,15 +20,42 @@ const DebugAuthStateDisplay = () => {
     }
 
     const [state, setState] = createSignal(initialState);
-
     createEffect(() => {
-        localStorage.setItem(debugAuthStateKey, JSON.stringify(state()))
-    })
+        localStorage.setItem(debugAuthStateKey, JSON.stringify(state()));
+    });
+
+    const [position, setPosition] = createSignal({x: initialState.x, y: initialState.y});
+    const [isPressed, setIsPressed] = createSignal(false);
+    const onMove = (e: MouseEvent) => {
+        if (isPressed()) {
+            setPosition(p => ({x: p.x + e.movementX, y: p.y + e.movementY}));
+        }
+    }
+
+    window.addEventListener('mouseup', () => {
+        console.log('mouseup');
+        const wasPressed = isPressed();
+        setIsPressed(false);
+        if (wasPressed) {
+            setState(v => ({...v, x: position().x, y: position().y}));
+        }
+    });
+
+    window.addEventListener('mousemove', onMove);
 
     return (
         <>
-            <div class={styles.floating} style={{bottom: 0, left: 0}}>
-                <button onclick={() => setState(prev => ({ ...prev, display: !prev.display }))}>
+            <div class={styles.floating} style={{transform: `translate(${position().x}px, ${position().y}px)`}}>
+                <button
+                    onMouseDown={e => {
+                        e.preventDefault();
+                        setIsPressed(true);
+                    }}
+                    style={{cursor: 'move'}}
+                >
+                    MOVE
+                </button>
+                <button onclick={() => setState(prev => ({...prev, display: !prev.display}))}>
                     {state().display ? 'Hide' : 'Show auth debug'}
                 </button>
                 <Show when={state().display}>

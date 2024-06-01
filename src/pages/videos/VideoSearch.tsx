@@ -4,6 +4,7 @@ import {createResource, createSignal, For, Show} from "solid-js";
 import VideoSearchForm from "../../components/VideoSearchForm";
 import {DateTimeDisplay} from "../../components/DateTimeDisplay";
 import {secondsToDurationString} from "../../services/timeUtils";
+import {A} from "@solidjs/router";
 
 const VideoSearch = () => {
     const [query, setQuery] = createSignal<VideoSearchDtoV1>({
@@ -38,19 +39,23 @@ const VideoSearch = () => {
                                     width: 'fit-content',
                                     height: 'fit-content',
                                 }}>
-                                    <Show when={video.thumbnail} fallback={<div>No thumbnails :(</div>}>
-                                        <img loading="lazy"
-                                             src={video.thumbnail?.url}
-                                             width={160}
-                                             height={90}
-                                             alt="Video thumbnail"
-                                        />
-                                    </Show>
+                                    <A href={`/videos/watch/${video.id}`}>
+                                        <Show when={video.thumbnail} fallback={<div>No thumbnails :(</div>}>
+                                            <img loading="lazy"
+                                                 src={video.thumbnail?.url}
+                                                 width={160}
+                                                 height={90}
+                                                 alt="Video thumbnail"
+                                            />
+                                        </Show>
+                                    </A>
                                 </div>
                                 <div>
-                                    <div>
-                                        {video.title[0].content}
-                                    </div>
+                                    <A href={`/videos/watch/${video.id}`}>
+                                        <div>
+                                            {video.title[0].content}
+                                        </div>
+                                    </A>
                                     <div>
                                         {video.authors[0].displayName}
                                     </div>

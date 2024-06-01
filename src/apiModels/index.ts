@@ -116,3 +116,8 @@ export interface LinkSubmissionResponseDtoV1 {
     idOnPlatform: string,
     alreadyAdded: boolean,
 }
+
+export interface AccessTokenDtoV1 {
+    token: string,
+    expiresAt: string,
+}

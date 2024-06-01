@@ -8,6 +8,8 @@ import Home from "./pages/Home";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import VideoSearch from "./pages/videos/VideoSearch";
+import VideoWatch from "./pages/videos/VideoWatch";
+import {isGuid} from "./utils";
 
 const root = document.getElementById('root');
 
@@ -23,5 +25,6 @@ render(() => <Router root={App}>
     <Route path="/register" component={Register}></Route>
     <Route path="/videos">
         <Route path="/search" component={VideoSearch}></Route>
+        <Route path="/watch/:id" component={VideoWatch} matchFilters={{id: id => isGuid(id)}}></Route>
     </Route>
 </Router>, root!);

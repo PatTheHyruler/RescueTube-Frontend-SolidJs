@@ -17,4 +17,9 @@ export default defineConfig({
   build: {
     target: 'esnext',
   },
+  css: {
+    modules: {
+      localsConvention: 'dashes',
+    }
+  }
 });

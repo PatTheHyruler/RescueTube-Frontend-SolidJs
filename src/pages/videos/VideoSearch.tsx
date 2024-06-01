@@ -5,6 +5,7 @@ import VideoSearchForm from "../../components/VideoSearchForm";
 import {DateTimeDisplay} from "../../components/DateTimeDisplay";
 import {secondsToDurationString} from "../../services/timeUtils";
 import {A} from "@solidjs/router";
+import {translationToString} from "../../utils";
 
 const VideoSearch = () => {
     const [query, setQuery] = createSignal<VideoSearchDtoV1>({
@@ -53,7 +54,7 @@ const VideoSearch = () => {
                                 <div>
                                     <A href={`/videos/watch/${video.id}`}>
                                         <div>
-                                            {video.title[0].content}
+                                            {translationToString(video.title)}
                                         </div>
                                     </A>
                                     <div>

@@ -37,7 +37,7 @@ const VideoPlayer = ({videoId}: IProps) => {
     return (
         <>
             <Show when={accessToken.state === 'ready' || accessToken.state === 'refreshing'}>
-                <video controls width={560} height={315}
+                <video controls width="100%"
                        onTimeUpdate={e => setCurrentTimeSeconds(e.currentTarget.currentTime)}
                        onError={onError}
                 >

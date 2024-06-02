@@ -6,13 +6,16 @@ import AuthorSummary from "./AuthorSummary";
 
 interface IProps {
     comment: CommentDtoV1,
+    depth?: number,
 }
 
 const VideoComment = (props: IProps) => {
+    const depth = () => Math.max(props.depth ?? 0, 0);
+
     return (
-        <div class="border border-3 p-2 rounded-2">
+        <div class="border border-3 p-2 rounded-2" style={{"margin-left": `${depth() * 40}px`}}>
             <div>
-                <AuthorSummary author={props.comment.author} />
+                <AuthorSummary author={props.comment.author}/>
                 <div><DateTimeDisplay value={props.comment.createdAt}/></div>
                 <Show when={isLikelyDeleted(props.comment)}>
                     <div class="text-danger">
@@ -27,10 +30,10 @@ const VideoComment = (props: IProps) => {
             </div>
             <Show when={props.comment.conversationReplies?.length}>
                 <details>
-                    <summary>Replies</summary>
+                    <summary>Replies ({props.comment.conversationReplies?.length})</summary>
                     <For each={props.comment.conversationReplies}>
                         {reply => (
-                            <VideoComment comment={reply}/>
+                            <VideoComment comment={reply} depth={depth() + 1}/>
                         )}
                     </For>
                 </details>

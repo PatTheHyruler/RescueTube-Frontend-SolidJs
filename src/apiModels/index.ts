@@ -83,7 +83,7 @@ export interface VideoSearchDtoV1 extends PaginationQuery {
 }
 
 export interface VideoSearchResponseDtoV1 {
-    paginationResult: PaginationResultDtoV1,
+    paginationResult: PaginationResult,
     videos: VideoSimpleDtoV1[],
 }
 
@@ -111,12 +111,15 @@ export interface VideoSimpleDtoV1 {
     lastCommentsFetch: string | null,
 }
 
-export interface PaginationQuery {
+export interface PaginationBase {
     page: number,
     limit: number,
 }
 
-export interface PaginationResultDtoV1 {
+export interface PaginationQuery extends PaginationBase {
+}
+
+export interface PaginationResult {
     page: number,
     limit: number,
     amountOnPage: number,
@@ -185,5 +188,5 @@ export interface CommentStatisticSnapshotDtoV1 {
 
 export interface CommentRootsResponseDtoV1 {
     comments: CommentDtoV1[],
-    paginationResult: PaginationResultDtoV1,
+    paginationResult: PaginationResult,
 }

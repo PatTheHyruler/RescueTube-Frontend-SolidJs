@@ -29,7 +29,11 @@ const VideoSearch = () => {
 
     return (
         <>
-            <VideoSearchForm query={query()} onSubmit={applySearch} setQuery={setQuery}></VideoSearchForm>
+            <VideoSearchForm query={query()}
+                             onSubmit={applySearch}
+                             setQuery={setQuery}
+                             paginationResult={searchResults()?.data.paginationResult}
+            />
             <Show when={searchResults()?.data}>
                 <div>
                     <For each={searchResults()!.data.videos}>

@@ -1,6 +1,6 @@
 import {useParams} from "@solidjs/router";
 import VideoPlayer from "../../components/VideoPlayer";
-import {createResource, createSignal, Show, Suspense} from "solid-js";
+import {createResource, createSignal, Suspense} from "solid-js";
 import {videosApi} from "../../services/videosApi";
 import {translationToString} from "../../utils";
 import styles from './VideoWatch.module.css'
@@ -39,7 +39,9 @@ const VideoWatch = () => {
                         </div>
                     </div>
                 </Suspense>
-                <VideoComments videoId={videoId} />
+                <div class={styles.comments}>
+                    <VideoComments videoId={videoId} />
+                </div>
             </div>
         </>
     );

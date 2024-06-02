@@ -33,7 +33,6 @@ const DebugAuthStateDisplay = () => {
     }
 
     window.addEventListener('mouseup', () => {
-        console.log('mouseup');
         const wasPressed = isPressed();
         setIsPressed(false);
         if (wasPressed) {

@@ -1,9 +1,12 @@
-import {VideoSearchDtoV1, VideoSortingOptions} from "../apiModels";
+import {PaginationResult, VideoSearchDtoV1, VideoSortingOptions} from "../apiModels";
 import {For, Setter} from "solid-js";
+import PaginationComponent from "./PaginationComponent";
+import {useOnPaginationQueryUpdate} from "../utils/pagination";
 
 interface IProps {
     query: VideoSearchDtoV1,
     setQuery: Setter<VideoSearchDtoV1>,
+    paginationResult?: PaginationResult | null,
     onSubmit: (() => Promise<void>) | (() => void),
 }
 
@@ -12,6 +15,8 @@ const VideoSearchForm = (props: IProps) => {
         e.preventDefault();
         return props.onSubmit();
     }
+
+    const onPaginationQueryUpdate = useOnPaginationQueryUpdate(props.setQuery);
 
     return (
         <>
@@ -40,8 +45,13 @@ const VideoSearchForm = (props: IProps) => {
                 <input type="checkbox" id="descending" checked={props.query.descending}
                        onChange={() => props.setQuery(p => ({...p, descending: !p.descending}))}/>
                 <button type="submit">Apply</button>
-                {JSON.stringify(props.query)}
             </form>
+            <PaginationComponent
+                paginationQuery={props.query}
+                paginationResult={props.paginationResult}
+                onUpdate={onPaginationQueryUpdate}
+                onSubmit={props.onSubmit}
+            />
         </>
     );
 }

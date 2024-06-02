@@ -6,6 +6,7 @@ import {DateTimeDisplay} from "../../components/DateTimeDisplay";
 import {secondsToDurationString} from "../../services/timeUtils";
 import {A} from "@solidjs/router";
 import {translationToString} from "../../utils";
+import AuthorSummary from "../../components/AuthorSummary";
 
 const VideoSearch = () => {
     const [query, setQuery] = createSignal<VideoSearchDtoV1>({
@@ -58,7 +59,7 @@ const VideoSearch = () => {
                                         </div>
                                     </A>
                                     <div>
-                                        {video.authors[0].displayName}
+                                        <AuthorSummary author={video.authors[0]}/>
                                     </div>
                                     <div style={{display: 'flex', gap: '3px'}}>
                                         <DateTimeDisplay value={video.createdAt ?? video.publishedAt}></DateTimeDisplay>

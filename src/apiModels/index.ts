@@ -14,6 +14,24 @@ export enum EntityTypes {
 
 export type EntityType = `${EntityTypes}`;
 
+export enum PrivacyStatuses {
+    Public = 'Public',
+    Unlisted = 'Unlisted',
+    Private = 'Private',
+    NeedsAuth = 'NeedsAuth',
+    PremiumOnly = 'PremiumOnly',
+    SubscriberOnly = 'SubscriberOnly',
+}
+
+export type PrivacyStatus = `${PrivacyStatuses}`;
+
+export interface Fetchable {
+    lastFetchUnofficial?: string,
+    lastSuccessfulFetchUnofficial?: string,
+    lastFetchOfficial?: string,
+    lastSuccessfulFetchOfficial?: string,
+}
+
 export interface AuthorSimpleDtoV1 {
     id: string,
     userName: string | null,
@@ -21,6 +39,7 @@ export interface AuthorSimpleDtoV1 {
     platform: Platform,
     profileImages: ImageDtoV1[],
     idOnPlatform: string,
+    urlOnPlatform?: string,
 }
 
 export interface ImageDtoV1 {
@@ -88,6 +107,8 @@ export interface VideoSimpleDtoV1 {
 
     externalUrl: string | null,
     embedUrl: string | null,
+
+    lastCommentsFetch: string | null,
 }
 
 export interface PaginationQuery {
@@ -120,4 +141,49 @@ export interface LinkSubmissionResponseDtoV1 {
 export interface AccessTokenDtoV1 {
     token: string,
     expiresAt: string,
+}
+
+export interface CommentDtoV1 extends Fetchable {
+    id: string,
+    platform: Platform,
+    idOnPlatform: string,
+
+    privacyStatusOnPlatform?: PrivacyStatus,
+    isAvailable: boolean,
+    privacyStatus: PrivacyStatus,
+
+    addedToArchiveAt: string,
+
+    author: AuthorSimpleDtoV1,
+
+    conversationReplies?: CommentDtoV1[],
+    directReplies?: CommentDtoV1[],
+
+    content?: string,
+
+    createdAt?: string,
+    updatedAt?: string,
+    authorIsCreator?: boolean,
+
+    createdAtVideoTimeSeconds: number,
+
+    orderIndex: number,
+
+    statistics?: CommentStatisticSnapshotDtoV1,
+
+    videoId: string,
+}
+
+export interface CommentStatisticSnapshotDtoV1 {
+    likeCount?: number,
+    dislikeCount?: number,
+    replyCount?: number,
+    isFavorited?: number,
+
+    validAt?: string,
+}
+
+export interface CommentRootsResponseDtoV1 {
+    comments: CommentDtoV1[],
+    paginationResult: PaginationResultDtoV1,
 }

@@ -1,14 +1,11 @@
+import {DateOrStringNullable, getDate} from "../utils";
+
 interface IProps {
-    value?: string | Date | null,
+    value?: DateOrStringNullable,
 }
 
-export const DateTimeDisplay = ({value}: IProps) => {
-    let dateValue: Date | null = null;
-    if (value instanceof Date) {
-        dateValue = value;
-    } else if (typeof value === 'string' && value) {
-        dateValue = new Date(value);
-    }
+export const DateTimeDisplay = (props: IProps) => {
+    const dateValue = getDate(props.value);
 
     return (
         <span title={dateValue?.toLocaleString('swe')}>

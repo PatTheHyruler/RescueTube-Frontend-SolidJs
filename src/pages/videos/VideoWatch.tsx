@@ -4,6 +4,7 @@ import {createResource, createSignal, Show, Suspense} from "solid-js";
 import {videosApi} from "../../services/videosApi";
 import {translationToString} from "../../utils";
 import styles from './VideoWatch.module.css'
+import VideoComments from "../../components/VideoComments";
 
 const VideoWatch = () => {
     const params = useParams();
@@ -38,6 +39,7 @@ const VideoWatch = () => {
                         </div>
                     </div>
                 </Suspense>
+                <VideoComments videoId={videoId} />
             </div>
         </>
     );

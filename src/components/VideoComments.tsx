@@ -1,4 +1,4 @@
-import {createResource, createSignal, For, Show, Suspense} from "solid-js";
+import {createResource, createSignal, For, Show} from "solid-js";
 import {commentsApi} from "../services/commentsApi";
 import VideoComment from "./VideoComment";
 import {PaginationQuery} from "../apiModels";
@@ -24,13 +24,11 @@ const VideoComments = ({videoId}: IProps) => {
                 onUpdate={p => setPaginationQuery(p)}
                 onSubmit={refetch}
             />
-            <Suspense>
-                <For each={comments()?.comments}>
-                    {comment => (
-                        <VideoComment comment={comment}/>
-                    )}
-                </For>
-            </Suspense>
+            <For each={comments()?.comments}>
+                {comment => (
+                    <VideoComment comment={comment}/>
+                )}
+            </For>
             <Show when={comments()?.comments.length ?? 0 > 5}>
                 <PaginationComponent
                     paginationQuery={paginationQuery()}

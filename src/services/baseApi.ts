@@ -15,7 +15,7 @@ const _getApiBaseUrl = async () => {
     try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000);
-        const configJsonResponse = await fetch('./config.json', {signal: controller.signal});
+        const configJsonResponse = await fetch('/config.json', {signal: controller.signal});
         clearTimeout(timeoutId);
         const configData = await configJsonResponse.json();
         const jsonConfigUrl = configData?.baseApiUrl;

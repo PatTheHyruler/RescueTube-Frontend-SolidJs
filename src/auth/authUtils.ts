@@ -1,8 +1,9 @@
 import {baseApi} from "../services/baseApi";
 import {InternalAxiosRequestConfig, isAxiosError} from "axios";
 import {accountApi} from "./accountApi";
-import {AuthBehavior, JwtState, LoginRequiredError} from "./authTypes";
+import {AuthBehavior, JwtState, LoginRequiredError, User} from "./authTypes";
 import {processJwtResponse} from "./jwtStorage";
+import {Roles} from "./Roles";
 
 export const interceptorAuthState = {
     jwtState: null as JwtState | null,
@@ -117,4 +118,15 @@ export const getValidationErrors = (error: any) => {
     } else {
         return "Unknown error occurred.";
     }
+}
+
+export const isInRole = (user: User | null | undefined, ...roles: string[]) => {
+    if (!user) {
+        return false;
+    }
+    return roles.some(role => user.roles.some(ur => ur.name === role));
+}
+
+export const isAdmin = (user: User | null | undefined) => {
+    return isInRole(user, ...Roles.AdminRoles);
 }

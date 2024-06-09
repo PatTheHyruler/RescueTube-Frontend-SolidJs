@@ -1,5 +1,6 @@
 import AccountHeader from "./AccountHeader";
 import {A} from "@solidjs/router";
+import AdminDropDown from "./AdminDropDown";
 
 const NavBar = () => {
     return (
@@ -24,6 +25,9 @@ const NavBar = () => {
                                     Videos
                                 </A>
                             </li>
+                            <AdminDropDown>
+
+                            </AdminDropDown>
                         </ul>
                         <ul class="navbar-nav">
                             <AccountHeader></AccountHeader>

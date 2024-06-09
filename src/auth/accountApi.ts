@@ -29,10 +29,15 @@ const refreshToken = async (data: RefreshRequest) => {
     return await baseApi.axios.post<JwtResponse>('/v1/Account/RefreshToken', data, {authBehavior: AuthBehavior.SkipAuth});
 }
 
+const getHangfireToken = async () => {
+    return await baseApi.axios.post<string>('/v1/Account/HangfireToken');
+}
+
 export const accountApi = {
     register,
     login,
     logout,
     getCurrentUserDetails,
     refreshToken,
+    getHangfireToken,
 }

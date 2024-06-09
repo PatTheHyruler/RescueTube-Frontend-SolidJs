@@ -54,7 +54,7 @@ export interface ImageDtoV1 {
     originalUrl: string | null,
     localUrl: string | null,
     localFilePath: string | null,
-    url: string,
+    url: string | undefined,
 
     width: number | null,
     height: number | null,

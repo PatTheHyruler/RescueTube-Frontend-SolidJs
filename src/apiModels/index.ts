@@ -128,17 +128,13 @@ export interface PaginationResult {
 
 export interface LinkSubmissionRequestDtoV1 {
     url: string,
-    platformHint?: Platform,
-    typeHint?: EntityType,
 }
 
 export interface LinkSubmissionResponseDtoV1 {
     submissionId: string,
     type: EntityType,
-    entityId?: string,
     platform: Platform,
     idOnPlatform: string,
-    alreadyAdded: boolean,
 }
 
 export interface AccessTokenDtoV1 {

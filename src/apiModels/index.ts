@@ -26,10 +26,8 @@ export enum PrivacyStatuses {
 export type PrivacyStatus = `${PrivacyStatuses}`;
 
 export interface Fetchable {
-    lastFetchUnofficial?: string,
-    lastSuccessfulFetchUnofficial?: string,
-    lastFetchOfficial?: string,
-    lastSuccessfulFetchOfficial?: string,
+    lastSuccessfulFetch?: string,
+    lastUnsuccessfulFetch?: string,
 }
 
 export interface AuthorSimpleDtoV1 {

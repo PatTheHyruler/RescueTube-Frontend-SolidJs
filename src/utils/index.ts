@@ -39,16 +39,8 @@ export const getLatest = (a: DateOrStringNullable, b: DateOrStringNullable) => {
         : bDate ?? aDate;
 }
 
-export const lastFetch = (entity: Fetchable) => {
-    return getLatest(entity.lastFetchOfficial, entity.lastFetchUnofficial);
-}
-
-export const lastSuccessfulFetch = (entity: Fetchable) => {
-    return getLatest(entity.lastSuccessfulFetchOfficial, entity.lastSuccessfulFetchUnofficial);
-}
-
 export const isLikelyDeleted = (entity: Fetchable) => {
-    const diff = getUnixTimeMillisOrMinimum(lastFetch(entity))
-        - getUnixTimeMillisOrMinimum(lastSuccessfulFetch(entity));
+    const diff = getUnixTimeMillisOrMinimum(getDate(entity.lastUnsuccessfulFetch))
+        - getUnixTimeMillisOrMinimum(getDate(entity.lastSuccessfulFetch));
     return diff > 24 * 60 * 1000;
 }

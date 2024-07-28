@@ -11,5 +11,10 @@
     "types": ["vite/client"],
     "noEmit": true,
     "isolatedModules": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true
   },
 }

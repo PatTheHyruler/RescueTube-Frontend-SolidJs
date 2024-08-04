@@ -1,7 +1,7 @@
 import {baseApi} from "../services/baseApi";
-import {InternalAxiosRequestConfig, isAxiosError} from "axios";
+import {type InternalAxiosRequestConfig, isAxiosError} from "axios";
 import {accountApi} from "./accountApi";
-import {AuthBehavior, JwtState, LoginRequiredError, User} from "./authTypes";
+import {AuthBehavior, type JwtState, LoginRequiredError, type User} from "./authTypes";
 import {processJwtResponse} from "./jwtStorage";
 import {Roles} from "./Roles";
 

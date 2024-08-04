@@ -1,5 +1,5 @@
 import {videosApi} from "../../services/videosApi";
-import {VideoSearchDtoV1, VideoSortingOptions} from "../../apiModels";
+import {type VideoSearchDtoV1, VideoSortingOptions} from "../../apiModels";
 import {createResource, createSignal, For, Show} from "solid-js";
 import VideoSearchForm from "../../components/VideoSearchForm";
 import {DateTimeDisplay} from "../../components/DateTimeDisplay";
@@ -63,7 +63,9 @@ const VideoSearch = () => {
                                         </div>
                                     </A>
                                     <div>
-                                        <AuthorSummary author={video.authors[0]}/>
+                                        <Show when={video.authors[0]} fallback={"No author???"} keyed>{(author) =>
+                                            <AuthorSummary author={author}/>
+                                        }</Show>
                                     </div>
                                     <div style={{display: 'flex', gap: '3px'}}>
                                         <DateTimeDisplay value={video.createdAt ?? video.publishedAt}></DateTimeDisplay>

@@ -1,4 +1,4 @@
-import {DecodedJwt, JwtResponse, JwtState} from "./authTypes";
+import type {DecodedJwt, JwtResponse, JwtState} from "./authTypes";
 import {jwtDecode} from "jwt-decode";
 
 export const processJwtResponse = (jwtResponse: JwtResponse): JwtState => {

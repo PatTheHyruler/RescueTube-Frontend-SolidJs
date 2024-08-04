@@ -1,7 +1,7 @@
-import {Accessor, createSignal, For, Match, Show, Switch} from "solid-js";
+import {type Accessor, createSignal, For, Match, Show, Switch} from "solid-js";
 import {submissionsApi} from "../services/submissionsApi";
-import {LinkSubmissionResponseDtoV1} from "../apiModels";
-import {ErrorResponseDto, isErrorResponseDto} from "../apiModels/error";
+import {type LinkSubmissionResponseDtoV1} from "../apiModels";
+import {type ErrorResponseDto, isErrorResponseDto} from "../apiModels/error";
 import {DateTimeDisplay} from "./DateTimeDisplay";
 import {isAxiosError} from "axios";
 import SubmissionSuccess from "./SubmissionSuccess";

@@ -1,4 +1,4 @@
-import {PaginationQuery, PaginationResult} from "../apiModels";
+import type {PaginationQuery, PaginationResult} from "../apiModels";
 import PaginationResultsSummary from "./PaginationResultsSummary";
 import {createEffect, For, Show} from "solid-js";
 import PaginationButton from "./PaginationButton";

@@ -1,5 +1,5 @@
 {
-  "name": "vite-template-solid",
+  "name": "rescuetube-frontend-solidjs",
   "version": "0.0.0",
   "description": "",
   "scripts": {
@@ -7,10 +7,15 @@
     "dev": "vite",
     "build": "vite build",
     "typecheck": "tsc --noEmit",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "gen:csstypes": "node ./generate-css-types.js"
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^22.1.0",
+    "css": "^3.0.0",
+    "fs": "0.0.1-security",
+    "glob": "^11.0.0",
     "solid-devtools": "^0.29.3",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",

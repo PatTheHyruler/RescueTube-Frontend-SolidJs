@@ -1,4 +1,4 @@
-import {AuthorSimpleDtoV1} from "../apiModels";
+import {type AuthorSimpleDtoV1} from "../apiModels";
 import {Show} from "solid-js";
 
 interface IProps {

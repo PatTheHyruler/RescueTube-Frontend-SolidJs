@@ -1,5 +1,5 @@
 import {createResource, createSignal, Show} from "solid-js";
-import {AccessTokenDtoV1} from "../apiModels";
+import {type AccessTokenDtoV1} from "../apiModels";
 import {videosApi} from "../services/videosApi";
 import {baseApi} from "../services/baseApi";
 

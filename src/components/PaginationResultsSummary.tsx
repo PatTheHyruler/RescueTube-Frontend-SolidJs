@@ -1,4 +1,4 @@
-import {PaginationResult} from "../apiModels";
+import type {PaginationResult} from "../apiModels";
 import {getPageRangeEnd, getPageRangeStart, isLastPage} from "../utils/pagination";
 import {Match, Switch} from "solid-js";
 

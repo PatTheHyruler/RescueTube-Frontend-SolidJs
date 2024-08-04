@@ -1,5 +1,5 @@
-import {PaginationQuery, PaginationResult} from "../apiModels";
-import {Setter} from "solid-js";
+import type {PaginationQuery, PaginationResult} from "../apiModels";
+import {type Setter} from "solid-js";
 
 export const useOnPaginationQueryUpdate = <TQuery extends PaginationQuery>(
     setQuery: Setter<TQuery>) =>

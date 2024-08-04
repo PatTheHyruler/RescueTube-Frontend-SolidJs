@@ -1,4 +1,4 @@
-import {Component, createEffect, createResource, ErrorBoundary, JSX, Show} from 'solid-js';
+import {type Component, createEffect, createResource, ErrorBoundary, type JSX, Show} from 'solid-js';
 import styles from './App.module.css';
 import NavBar from "./components/NavBar";
 import {createStore} from "solid-js/store";
@@ -7,7 +7,7 @@ import {
     interceptorAuthState,
     registerAuthInterceptors
 } from "./auth/authUtils";
-import {AuthState} from "./auth/authTypes";
+import {type AuthState} from "./auth/authTypes";
 import {accountApi} from "./auth/accountApi";
 import DebugAuthStateDisplay from "./auth/DebugAuthStateDisplay";
 import {persistJwt, readPersistedJwt} from "./auth/jwtStorage";

@@ -1,4 +1,4 @@
-import {LinkSubmissionResponseDtoV1} from "../apiModels";
+import type {LinkSubmissionResponseDtoV1} from "../apiModels";
 
 interface IProps {
     response: LinkSubmissionResponseDtoV1,

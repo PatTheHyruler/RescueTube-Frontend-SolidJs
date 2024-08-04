@@ -1,4 +1,4 @@
-import {CommentRootsResponseDtoV1, PaginationQuery} from "../apiModels";
+import type {CommentRootsResponseDtoV1, PaginationQuery} from "../apiModels";
 import {baseApi} from "./baseApi";
 
 const getVideoComments = async (videoId: string, paginationQuery: PaginationQuery) => {

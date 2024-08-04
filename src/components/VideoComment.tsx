@@ -1,4 +1,4 @@
-import {CommentDtoV1} from "../apiModels";
+import {type CommentDtoV1} from "../apiModels";
 import {DateTimeDisplay} from "./DateTimeDisplay";
 import {For, Show} from "solid-js";
 import {isLikelyDeleted} from "../utils";

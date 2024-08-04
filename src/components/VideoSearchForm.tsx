@@ -1,5 +1,5 @@
-import {PaginationResult, VideoSearchDtoV1, VideoSortingOptions} from "../apiModels";
-import {For, Setter} from "solid-js";
+import {type PaginationResult, type VideoSearchDtoV1, VideoSortingOptions} from "../apiModels";
+import {For, type Setter} from "solid-js";
 import PaginationComponent from "./PaginationComponent";
 import {useOnPaginationQueryUpdate} from "../utils/pagination";
 

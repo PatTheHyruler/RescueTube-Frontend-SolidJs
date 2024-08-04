@@ -1,12 +1,12 @@
 import {baseApi} from "../services/baseApi";
 import {
     AuthBehavior,
-    JwtResponse,
-    LoginRequest,
-    LogoutRequest,
-    RefreshRequest,
-    RegisterRequest,
-    UserDetails
+    type JwtResponse,
+    type LoginRequest,
+    type LogoutRequest,
+    type RefreshRequest,
+    type RegisterRequest,
+    type UserDetails
 } from "./authTypes";
 
 const register = async (data: RegisterRequest) => {

@@ -1,7 +1,7 @@
 import {createResource, createSignal, For, Show} from "solid-js";
 import {commentsApi} from "../services/commentsApi";
 import VideoComment from "./VideoComment";
-import {PaginationQuery} from "../apiModels";
+import {type PaginationQuery} from "../apiModels";
 import PaginationComponent from "./PaginationComponent";
 
 interface IProps {

@@ -1,4 +1,4 @@
-import {AccessTokenDtoV1, VideoSearchDtoV1, VideoSearchResponseDtoV1, VideoSimpleDtoV1} from "../apiModels";
+import type {AccessTokenDtoV1, VideoSearchDtoV1, VideoSearchResponseDtoV1, VideoSimpleDtoV1} from "../apiModels";
 import {baseApi} from "./baseApi";
 
 const searchVideos = async (query: VideoSearchDtoV1) => {

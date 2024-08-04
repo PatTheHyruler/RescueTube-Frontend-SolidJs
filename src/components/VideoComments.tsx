@@ -1,17 +1,25 @@
-import {createResource, createSignal, For, Show} from "solid-js";
-import {commentsApi} from "../services/commentsApi";
-import VideoComment from "./VideoComment";
-import {type PaginationQuery} from "../apiModels";
-import PaginationComponent from "./PaginationComponent";
+import { createResource, createSignal, For, Show } from 'solid-js';
+import { commentsApi } from '../services/commentsApi';
+import VideoComment from './VideoComment';
+import { type PaginationQuery } from '../apiModels';
+import PaginationComponent from './PaginationComponent';
 
 interface IProps {
-    videoId: string,
+    videoId: string;
 }
 
-const VideoComments = ({videoId}: IProps) => {
-    const [paginationQuery, setPaginationQuery] = createSignal<PaginationQuery>({page: 0, limit: 50});
-    const [comments, {refetch}] = createResource(async () => {
-        const response = await commentsApi.getVideoComments(videoId, paginationQuery());
+const VideoComments = ({ videoId }: IProps) => {
+    const [paginationQuery, setPaginationQuery] = createSignal<PaginationQuery>(
+        {
+            page: 0,
+            limit: 50,
+        }
+    );
+    const [comments, { refetch }] = createResource(async () => {
+        const response = await commentsApi.getVideoComments(
+            videoId,
+            paginationQuery()
+        );
         return response.data;
     });
 
@@ -21,24 +29,22 @@ const VideoComments = ({videoId}: IProps) => {
             <PaginationComponent
                 paginationQuery={paginationQuery()}
                 paginationResult={comments()?.paginationResult}
-                onUpdate={p => setPaginationQuery(p)}
+                onUpdate={(p) => setPaginationQuery(p)}
                 onSubmit={refetch}
             />
             <For each={comments()?.comments}>
-                {comment => (
-                    <VideoComment comment={comment}/>
-                )}
+                {(comment) => <VideoComment comment={comment} />}
             </For>
             <Show when={comments()?.comments.length ?? 0 > 5}>
                 <PaginationComponent
                     paginationQuery={paginationQuery()}
                     paginationResult={comments()?.paginationResult}
-                    onUpdate={p => setPaginationQuery(p)}
+                    onUpdate={(p) => setPaginationQuery(p)}
                     onSubmit={refetch}
                 />
             </Show>
         </>
     );
-}
+};
 
 export default VideoComments;

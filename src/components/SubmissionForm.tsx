@@ -1,23 +1,34 @@
-import {type Accessor, createSignal, For, Match, Show, Switch} from "solid-js";
-import {submissionsApi} from "../services/submissionsApi";
-import {type LinkSubmissionResponseDtoV1} from "../apiModels";
-import {type ErrorResponseDto, isErrorResponseDto} from "../apiModels/error";
-import {DateTimeDisplay} from "./DateTimeDisplay";
-import {isAxiosError} from "axios";
-import SubmissionSuccess from "./SubmissionSuccess";
+import {
+    type Accessor,
+    createSignal,
+    For,
+    Match,
+    Show,
+    Switch,
+} from 'solid-js';
+import { submissionsApi } from '../services/submissionsApi';
+import { type LinkSubmissionResponseDtoV1 } from '../apiModels';
+import { type ErrorResponseDto, isErrorResponseDto } from '../apiModels/error';
+import { DateTimeDisplay } from './DateTimeDisplay';
+import { isAxiosError } from 'axios';
+import SubmissionSuccess from './SubmissionSuccess';
 
 interface SubmissionState {
-    status: 'error' | 'success' | 'pending' | 'cancelling' | 'cancelled',
-    url: string,
-    startedAt: Date,
-    cancel?: () => void,
-    value?: LinkSubmissionResponseDtoV1 | ErrorResponseDto,
+    status: 'error' | 'success' | 'pending' | 'cancelling' | 'cancelled';
+    url: string;
+    startedAt: Date;
+    cancel?: () => void;
+    value?: LinkSubmissionResponseDtoV1 | ErrorResponseDto;
 }
 
 const SubmissionForm = () => {
-    const [url, setUrl] = createSignal("");
-    const [submissions, setSubmissions] = createSignal<Accessor<SubmissionState>[]>([]);
-    const [inputValidationErrors, setInputValidationErrors] = createSignal<string[]>([]);
+    const [url, setUrl] = createSignal('');
+    const [submissions, setSubmissions] = createSignal<
+        Accessor<SubmissionState>[]
+    >([]);
+    const [inputValidationErrors, setInputValidationErrors] = createSignal<
+        string[]
+    >([]);
 
     const onSubmit = async (e: SubmitEvent) => {
         e.preventDefault();
@@ -40,22 +51,26 @@ const SubmissionForm = () => {
             startedAt: new Date(),
         });
 
-        setSubmissions(r => [...r, submission]);
+        setSubmissions((r) => [...r, submission]);
 
         try {
             const controller = new AbortController();
-            setSubmission(v => ({
-                ...v, cancel: () => {
+            setSubmission((v) => ({
+                ...v,
+                cancel: () => {
                     controller.abort();
-                    setSubmission(v => ({...v, status: 'cancelling'}));
-                }
+                    setSubmission((v) => ({ ...v, status: 'cancelling' }));
+                },
             }));
 
-            const response = await submissionsApi.submitLink({
-                url: submittingUrl,
-            }, {signal: controller.signal});
+            const response = await submissionsApi.submitLink(
+                {
+                    url: submittingUrl,
+                },
+                { signal: controller.signal }
+            );
 
-            setSubmission(v => ({
+            setSubmission((v) => ({
                 ...v,
                 status: 'success',
                 value: response.data,
@@ -63,7 +78,7 @@ const SubmissionForm = () => {
             }));
         } catch (e) {
             if (isAxiosError(e) && e.code === 'ERR_CANCELED') {
-                setSubmission(v => ({
+                setSubmission((v) => ({
                     ...v,
                     status: 'cancelled',
                     cancel: undefined,
@@ -72,26 +87,33 @@ const SubmissionForm = () => {
             }
 
             console.error(e);
-            setSubmission(v => ({
+            setSubmission((v) => ({
                 ...v,
                 status: 'error',
                 value: isErrorResponseDto(e) ? e : undefined,
                 cancel: undefined,
             }));
         }
-    }
+    };
 
     return (
         <div>
             <form onSubmit={onSubmit} class="text-center">
-                <input value={url()} onInput={e => setUrl(e.currentTarget.value)}/>
-                <button type="submit" class="btn btn-primary" style={{"margin-left": '4px'}}>Submit</button>
+                <input
+                    value={url()}
+                    onInput={(e) => setUrl(e.currentTarget.value)}
+                />
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style={{ 'margin-left': '4px' }}
+                >
+                    Submit
+                </button>
                 <Show when={inputValidationErrors().length > 0}>
                     <div class="text-danger">
                         <For each={inputValidationErrors()}>
-                            {item => (
-                                <div>{item}</div>
-                            )}
+                            {(item) => <div>{item}</div>}
                         </For>
                     </div>
                 </Show>
@@ -102,12 +124,19 @@ const SubmissionForm = () => {
                         <div class="m-3">
                             <Switch>
                                 <Match when={item().status === 'success'}>
-                                    <SubmissionSuccess response={item().value as LinkSubmissionResponseDtoV1} />
+                                    <SubmissionSuccess
+                                        response={
+                                            item()
+                                                .value as LinkSubmissionResponseDtoV1
+                                        }
+                                    />
                                 </Match>
                                 <Match when={item().status === 'pending'}>
                                     <div class="text-warning">
-                                        Submitting URL '{item().url}', initiated <DateTimeDisplay
-                                        value={item().startedAt}/>
+                                        Submitting URL '{item().url}', initiated{' '}
+                                        <DateTimeDisplay
+                                            value={item().startedAt}
+                                        />
                                     </div>
                                     <Show when={item().cancel}>
                                         <button onClick={item().cancel}>
@@ -139,6 +168,6 @@ const SubmissionForm = () => {
             </div>
         </div>
     );
-}
+};
 
 export default SubmissionForm;

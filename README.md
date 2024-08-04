@@ -1,20 +1,23 @@
 ### Type checks
+
 Vite doesn't check types on build to improve performance.  
 You can check types manually by doing `pnpm run typecheck`.
 
 ### CSS module types
+
 When using CSS modules (`import styles from './App.module.css';`) with `"noUncheckedIndexedAccess": true` set in `tsconfig.json`, TypeScript will complain with `error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'` when you attempt to use the styles with `<div classList={{[styles.description]: true}}/>`.  
 To avoid this, you can generate type definitions using `pnpm gen:csstypes`, which will create a corresponding `*.css.d.ts` file for each `*.module.css` file.  
-NB! This does not automatically delete old `*.css.d.ts` files.  
+NB! This does not automatically delete old `*.css.d.ts` files.
 
 It uses a very basic self-made script for this.  
 I tried using the `typed-css-modules` package, which the internet pointed me to, but:
-- The `--camelCase dashes` option which I wanted to use just didn't work
-- The package's version was 0.9.1, which doesn't necessarily mean anything, but didn't exactly inspire confidence
-- The project seemed semi-abandoned?
-- When I checked out the code (to investigate `--camelCase dashes` not working), the first thing I saw was a silly, although insignificant oversight.
 
----------------------------------------
+-   The `--camelCase dashes` option which I wanted to use just didn't work
+-   The package's version was 0.9.1, which doesn't necessarily mean anything, but didn't exactly inspire confidence
+-   The project seemed semi-abandoned?
+-   When I checked out the code (to investigate `--camelCase dashes` not working), the first thing I saw was a silly, although insignificant oversight.
+
+---
 
 # Default README below - TODO: modify/remove it
 

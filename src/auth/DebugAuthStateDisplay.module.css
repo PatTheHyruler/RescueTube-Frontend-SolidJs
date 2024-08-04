@@ -1,9 +1,9 @@
 .floating {
-    border-radius: .3rem;
-    border: 3px solid rgba(0, 0, 0, .125);
+    border-radius: 0.3rem;
+    border: 3px solid rgba(0, 0, 0, 0.125);
 
     padding: 1rem 1rem;
-    margin: .5rem;
+    margin: 0.5rem;
 
     position: absolute;
     top: 0;
@@ -14,7 +14,7 @@
 
     text-wrap: wrap;
 
-    font-size: .8rem;
+    font-size: 0.8rem;
 
     background-color: rgb(255, 255, 255);
 }

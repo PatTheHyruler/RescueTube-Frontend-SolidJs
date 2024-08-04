@@ -1,63 +1,62 @@
-import {type JwtPayload} from "jwt-decode";
+import { type JwtPayload } from 'jwt-decode';
 
 export interface JwtState {
-    jwt: string,
-    refreshToken: string,
-    jwtExpiresAt: Date,
-    refreshTokenExpiresAt: Date,
+    jwt: string;
+    refreshToken: string;
+    jwtExpiresAt: Date;
+    refreshTokenExpiresAt: Date;
 }
 
 export interface JwtResponse {
-    jwt: string,
-    refreshToken: string,
-    refreshTokenExpiresAt: string,
+    jwt: string;
+    refreshToken: string;
+    refreshTokenExpiresAt: string;
 }
 
 export interface LoginRequest {
-    userName: string,
-    password: string,
+    userName: string;
+    password: string;
 }
 
 export interface RegisterRequest {
-    userName: string,
-    password: string,
+    userName: string;
+    password: string;
 }
 
 export interface LogoutRequest {
-    jwt: string,
-    refreshToken: string,
+    jwt: string;
+    refreshToken: string;
 }
 
 export interface RefreshRequest {
-    jwt: string,
-    refreshToken: string,
+    jwt: string;
+    refreshToken: string;
 }
 
 export interface Role {
-    id: string,
-    name: string,
-    normalizedName: string,
+    id: string;
+    name: string;
+    normalizedName: string;
 }
 
 export interface User {
-    id: string,
-    userName: string,
-    normalizedUserName: string,
-    isApproved: boolean,
-    roles: Role[],
+    id: string;
+    userName: string;
+    normalizedUserName: string;
+    isApproved: boolean;
+    roles: Role[];
 }
 
 export interface UserDetails {
-    user: User,
+    user: User;
 }
 
 export interface AuthState {
-    jwtState: JwtState | null,
-    userDetails: UserDetails | null,
+    jwtState: JwtState | null;
+    userDetails: UserDetails | null;
 }
 
-export class LoginRequiredError extends Error {
-}
+export class LoginRequiredError extends Error {}
 
 export enum AuthBehavior {
     RequireAuth = 'RequireAuth',
@@ -72,6 +71,6 @@ export const JwtClaims = Object.freeze({
 });
 
 export type DecodedJwt = JwtPayload & {
-    [JwtClaims.name]: string,
-    [JwtClaims.roles]: string,
-}
+    [JwtClaims.name]: string;
+    [JwtClaims.roles]: string;
+};

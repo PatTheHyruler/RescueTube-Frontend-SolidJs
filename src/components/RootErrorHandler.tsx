@@ -1,5 +1,5 @@
-import {LoginRequiredError} from "../auth/authTypes";
-import {useNavigate} from "@solidjs/router";
+import { LoginRequiredError } from '../auth/authTypes';
+import { useNavigate } from '@solidjs/router';
 
 export const RootErrorHandler = (err: Error | undefined) => {
     const navigate = useNavigate();
@@ -8,7 +8,5 @@ export const RootErrorHandler = (err: Error | undefined) => {
         navigate('/login');
     }
 
-    return <div>
-        {err?.toString()}
-    </div>
-}
+    return <div>{err?.toString()}</div>;
+};

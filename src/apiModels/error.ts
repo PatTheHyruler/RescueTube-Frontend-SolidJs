@@ -17,15 +17,15 @@ export enum ErrorTypes {
 export type ErrorType = `${ErrorTypes}` | string;
 
 export interface ErrorResponseDto {
-    errorType: ErrorType,
-    message?: string,
-    details?: object,
-    subErrors: ErrorResponseDto[],
+    errorType: ErrorType;
+    message?: string;
+    details?: object;
+    subErrors: ErrorResponseDto[];
 }
 
 export function isErrorResponseDto(value: any): value is ErrorResponseDto {
     if (value === undefined || value === null) {
         return false;
     }
-    return (value.errorType && typeof value.errorType === 'string');
+    return value.errorType && typeof value.errorType === 'string';
 }

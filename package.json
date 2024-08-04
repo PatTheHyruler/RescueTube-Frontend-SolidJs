@@ -1,32 +1,33 @@
 {
-  "name": "rescuetube-frontend-solidjs",
-  "version": "0.0.0",
-  "description": "",
-  "scripts": {
-    "start": "vite",
-    "dev": "vite",
-    "build": "vite build",
-    "typecheck": "tsc --noEmit",
-    "serve": "vite preview",
-    "gen:csstypes": "node ./generate-css-types.js"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^22.1.0",
-    "css": "^3.0.0",
-    "fs": "0.0.1-security",
-    "glob": "^11.0.0",
-    "solid-devtools": "^0.29.3",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.11",
-    "vite-plugin-solid": "^2.10.2"
-  },
-  "type": "module",
-  "dependencies": {
-    "@solidjs/router": "^0.13.3",
-    "axios": "^1.6.8",
-    "jwt-decode": "^4.0.0",
-    "solid-bootstrap": "^1.0.19",
-    "solid-js": "^1.8.17"
-  }
+    "name": "rescuetube-frontend-solidjs",
+    "version": "0.0.0",
+    "description": "",
+    "scripts": {
+        "start": "vite",
+        "dev": "vite",
+        "build": "vite build",
+        "typecheck": "tsc --noEmit",
+        "serve": "vite preview",
+        "gen:csstypes": "node ./generate-css-types.js"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^22.1.0",
+        "css": "^3.0.0",
+        "fs": "0.0.1-security",
+        "glob": "^11.0.0",
+        "prettier": "3.3.3",
+        "solid-devtools": "^0.29.3",
+        "typescript": "^5.4.5",
+        "vite": "^5.2.11",
+        "vite-plugin-solid": "^2.10.2"
+    },
+    "type": "module",
+    "dependencies": {
+        "@solidjs/router": "^0.13.3",
+        "axios": "^1.6.8",
+        "jwt-decode": "^4.0.0",
+        "solid-bootstrap": "^1.0.19",
+        "solid-js": "^1.8.17"
+    }
 }

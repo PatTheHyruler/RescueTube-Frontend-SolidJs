@@ -26,45 +26,45 @@ export enum PrivacyStatuses {
 export type PrivacyStatus = `${PrivacyStatuses}`;
 
 export interface Fetchable {
-    lastSuccessfulFetch?: string,
-    lastUnsuccessfulFetch?: string,
+    lastSuccessfulFetch?: string;
+    lastUnsuccessfulFetch?: string;
 }
 
 export interface AuthorSimpleDtoV1 {
-    id: string,
-    userName: string | null,
-    displayName: string | null,
-    platform: Platform,
-    profileImages: ImageDtoV1[],
-    idOnPlatform: string,
-    urlOnPlatform?: string,
+    id: string;
+    userName: string | null;
+    displayName: string | null;
+    platform: Platform;
+    profileImages: ImageDtoV1[];
+    idOnPlatform: string;
+    urlOnPlatform?: string;
 }
 
 export interface ImageDtoV1 {
-    id: string,
-    platform: Platform,
-    idOnPlatform: string | null,
+    id: string;
+    platform: Platform;
+    idOnPlatform: string | null;
 
-    key: string | null,
-    quality: string | null,
-    ext: string | null,
+    key: string | null;
+    quality: string | null;
+    ext: string | null;
 
-    originalUrl: string | null,
-    localUrl: string | null,
-    localFilePath: string | null,
-    url: string | undefined,
+    originalUrl: string | null;
+    localUrl: string | null;
+    localFilePath: string | null;
+    url: string | undefined;
 
-    width: number | null,
-    height: number | null,
+    width: number | null;
+    height: number | null;
 }
 
 export interface TextTranslationDtoV1 {
-    id: string,
-    content: string,
-    culture: string | null,
+    id: string;
+    content: string;
+    culture: string | null;
 
-    validSince: string | null,
-    validUntil: string | null,
+    validSince: string | null;
+    validUntil: string | null;
 }
 
 export enum VideoSortingOptions {
@@ -73,114 +73,113 @@ export enum VideoSortingOptions {
 }
 
 export interface VideoSearchDtoV1 extends PaginationQuery {
-    nameQuery: string | null,
-    authorQuery: string | null,
+    nameQuery: string | null;
+    authorQuery: string | null;
 
-    sortingOptions: VideoSortingOptions,
-    descending: boolean,
+    sortingOptions: VideoSortingOptions;
+    descending: boolean;
 }
 
 export interface VideoSearchResponseDtoV1 {
-    paginationResult: PaginationResult,
-    videos: VideoSimpleDtoV1[],
+    paginationResult: PaginationResult;
+    videos: VideoSimpleDtoV1[];
 }
 
 export interface VideoSimpleDtoV1 {
-    id: string,
-    title: TextTranslationDtoV1[],
-    description: TextTranslationDtoV1[],
+    id: string;
+    title: TextTranslationDtoV1[];
+    description: TextTranslationDtoV1[];
 
-    thumbnail: ImageDtoV1 | null,
+    thumbnail: ImageDtoV1 | null;
 
-    durationSeconds: number,
+    durationSeconds: number;
 
-    platform: Platform,
-    idOnPlatform: string,
+    platform: Platform;
+    idOnPlatform: string;
 
-    authors: AuthorSimpleDtoV1[],
+    authors: AuthorSimpleDtoV1[];
 
-    createdAt: string | null,
-    publishedAt: string | null,
-    addedToArchiveAt: string | null,
+    createdAt: string | null;
+    publishedAt: string | null;
+    addedToArchiveAt: string | null;
 
-    externalUrl: string | null,
-    embedUrl: string | null,
+    externalUrl: string | null;
+    embedUrl: string | null;
 
-    lastCommentsFetch: string | null,
+    lastCommentsFetch: string | null;
 }
 
 export interface PaginationBase {
-    page: number,
-    limit: number,
+    page: number;
+    limit: number;
 }
 
-export interface PaginationQuery extends PaginationBase {
-}
+export interface PaginationQuery extends PaginationBase {}
 
 export interface PaginationResult {
-    page: number,
-    limit: number,
-    amountOnPage: number,
-    totalResults: number | null,
+    page: number;
+    limit: number;
+    amountOnPage: number;
+    totalResults: number | null;
 }
 
 export interface LinkSubmissionRequestDtoV1 {
-    url: string,
+    url: string;
 }
 
 export interface LinkSubmissionResponseDtoV1 {
-    submissionId: string,
-    type: EntityType,
-    platform: Platform,
-    idOnPlatform: string,
+    submissionId: string;
+    type: EntityType;
+    platform: Platform;
+    idOnPlatform: string;
 }
 
 export interface AccessTokenDtoV1 {
-    token: string,
-    expiresAt: string,
+    token: string;
+    expiresAt: string;
 }
 
 export interface CommentDtoV1 extends Fetchable {
-    id: string,
-    platform: Platform,
-    idOnPlatform: string,
+    id: string;
+    platform: Platform;
+    idOnPlatform: string;
 
-    privacyStatusOnPlatform?: PrivacyStatus,
-    isAvailable: boolean,
-    privacyStatus: PrivacyStatus,
+    privacyStatusOnPlatform?: PrivacyStatus;
+    isAvailable: boolean;
+    privacyStatus: PrivacyStatus;
 
-    addedToArchiveAt: string,
+    addedToArchiveAt: string;
 
-    author: AuthorSimpleDtoV1,
+    author: AuthorSimpleDtoV1;
 
-    conversationReplies?: CommentDtoV1[],
-    directReplies?: CommentDtoV1[],
+    conversationReplies?: CommentDtoV1[];
+    directReplies?: CommentDtoV1[];
 
-    content?: string,
+    content?: string;
 
-    createdAt?: string,
-    updatedAt?: string,
-    authorIsCreator?: boolean,
+    createdAt?: string;
+    updatedAt?: string;
+    authorIsCreator?: boolean;
 
-    createdAtVideoTimeSeconds: number,
+    createdAtVideoTimeSeconds: number;
 
-    orderIndex: number,
+    orderIndex: number;
 
-    statistics?: CommentStatisticSnapshotDtoV1,
+    statistics?: CommentStatisticSnapshotDtoV1;
 
-    videoId: string,
+    videoId: string;
 }
 
 export interface CommentStatisticSnapshotDtoV1 {
-    likeCount?: number,
-    dislikeCount?: number,
-    replyCount?: number,
-    isFavorited?: number,
+    likeCount?: number;
+    dislikeCount?: number;
+    replyCount?: number;
+    isFavorited?: number;
 
-    validAt?: string,
+    validAt?: string;
 }
 
 export interface CommentRootsResponseDtoV1 {
-    comments: CommentDtoV1[],
-    paginationResult: PaginationResult,
+    comments: CommentDtoV1[];
+    paginationResult: PaginationResult;
 }

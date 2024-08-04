@@ -1,9 +1,11 @@
-import SubmissionForm from "../components/SubmissionForm";
+import SubmissionForm from '../components/SubmissionForm';
 
 const Home = () => {
-    return <>
-        <SubmissionForm />
-    </>
-}
+    return (
+        <>
+            <SubmissionForm />
+        </>
+    );
+};
 
 export default Home;

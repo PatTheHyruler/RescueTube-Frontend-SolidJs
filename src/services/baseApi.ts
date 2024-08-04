@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from 'axios';
 
 interface ConfigWindow extends Window {
-    apiBaseUrl?: string,
+    apiBaseUrl?: string;
 }
 
 declare const window: ConfigWindow & typeof globalThis;
@@ -15,7 +15,9 @@ const _getApiBaseUrl = async (): Promise<string> => {
     try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000);
-        const configJsonResponse = await fetch('/config.json', {signal: controller.signal});
+        const configJsonResponse = await fetch('/config.json', {
+            signal: controller.signal,
+        });
         clearTimeout(timeoutId);
         const configData = await configJsonResponse.json();
         const jsonConfigUrl = configData?.baseApiUrl;
@@ -29,11 +31,13 @@ const _getApiBaseUrl = async (): Promise<string> => {
         return `https://${window.location.hostname}:7125/api`;
     }
     if (configJsonFetchError) {
-        throw new Error('Failed to configure API base URL', {cause: configJsonFetchError});
+        throw new Error('Failed to configure API base URL', {
+            cause: configJsonFetchError,
+        });
     } else {
         throw new Error('Failed to configure API base URL');
     }
-}
+};
 
 const getApiBaseUrl = async (): Promise<string> => {
     if (window.apiBaseUrl) {
@@ -42,7 +46,7 @@ const getApiBaseUrl = async (): Promise<string> => {
     const apiBaseUrl = await _getApiBaseUrl();
     window.apiBaseUrl = apiBaseUrl;
     return apiBaseUrl;
-}
+};
 
 const getApiBaseUrlWithoutPrefix = async () => {
     const apiBaseUrl = await getApiBaseUrl();
@@ -51,7 +55,7 @@ const getApiBaseUrlWithoutPrefix = async () => {
         throw new Error('Invalid API base URL');
     }
     return match[1];
-}
+};
 
 const rtAxios = axios.create({
     baseURL: await getApiBaseUrl(),
@@ -65,4 +69,4 @@ export const baseApi = {
 
     baseUrlWithoutPrefix: await getApiBaseUrlWithoutPrefix(),
     axios: rtAxios,
-}
+};

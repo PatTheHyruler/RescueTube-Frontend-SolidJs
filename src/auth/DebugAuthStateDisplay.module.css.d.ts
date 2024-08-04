@@ -1,4 +1,4 @@
 declare const styles: {
-  readonly floating: string;
+    readonly floating: string;
 };
 export default styles;

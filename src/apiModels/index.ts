@@ -1,3 +1,5 @@
+import type { Values } from '../utils';
+
 export enum KnownPlatforms {
     Local = 'Local',
     Other = 'Other',
@@ -67,16 +69,16 @@ export interface TextTranslationDtoV1 {
     validUntil: string | null;
 }
 
-export enum VideoSortingOptions {
-    CreatedAt = 'CreatedAt',
-    Duration = 'Duration',
-}
+export const VideoSortingOptions = {
+    CreatedAt: 'CreatedAt',
+    Duration: 'Duration',
+} as const;
 
 export interface VideoSearchDtoV1 extends PaginationQuery {
     nameQuery: string | null;
     authorQuery: string | null;
 
-    sortingOptions: VideoSortingOptions;
+    sortingOptions: Values<typeof VideoSortingOptions>;
     descending: boolean;
 }
 

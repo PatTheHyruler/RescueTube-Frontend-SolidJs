@@ -4,25 +4,53 @@ import { createResource, createSignal, For, Show } from 'solid-js';
 import VideoSearchForm from '../../components/VideoSearchForm';
 import { DateTimeDisplay } from '../../components/DateTimeDisplay';
 import { secondsToDurationString } from '../../services/timeUtils';
-import { A } from '@solidjs/router';
-import { translationToString } from '../../utils';
+import { A, useSearchParams } from '@solidjs/router';
+import {
+    reduceForSearchParams,
+    translationToString,
+    tryParseBool,
+    tryParseInt,
+    tryParseObjEnum,
+} from '../../utils';
 import AuthorSummary from '../../components/AuthorSummary';
 
+const defaultSearch: VideoSearchDtoV1 = {
+    nameQuery: '',
+    authorQuery: '',
+    sortingOptions: VideoSortingOptions.CreatedAt,
+    descending: true,
+    page: 0,
+    limit: 50,
+};
+
 const VideoSearch = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [query, setQuery] = createSignal<VideoSearchDtoV1>({
-        nameQuery: '',
-        authorQuery: '',
+        nameQuery: searchParams.name ?? defaultSearch.nameQuery,
+        authorQuery: searchParams.author ?? defaultSearch.authorQuery,
 
-        sortingOptions: VideoSortingOptions.CreatedAt,
-        descending: true,
+        sortingOptions:
+            tryParseObjEnum(searchParams.sort, VideoSortingOptions) ??
+            defaultSearch.sortingOptions,
+        descending:
+            tryParseBool(searchParams.descending) ?? defaultSearch.descending,
 
-        page: 0,
-        limit: 50,
+        page: tryParseInt(searchParams.page) ?? defaultSearch.page,
+        limit: tryParseInt(searchParams.limit) ?? defaultSearch.limit,
     });
     const [searchResults, searchResultActions] = createResource(() =>
         videosApi.searchVideos(query())
     );
     const applySearch = () => {
+        const reduced = reduceForSearchParams(query(), defaultSearch);
+        setSearchParams({
+            name: reduced.nameQuery,
+            author: reduced.authorQuery,
+            sort: reduced.sortingOptions,
+            descending: reduced.descending,
+            page: reduced.page,
+            limit: reduced.limit,
+        });
         searchResultActions.refetch();
     };
 

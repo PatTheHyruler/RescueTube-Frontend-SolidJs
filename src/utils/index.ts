@@ -52,3 +52,56 @@ export const isLikelyDeleted = (entity: Fetchable) => {
         getUnixTimeMillisOrMinimum(getDate(entity.lastSuccessfulFetch));
     return diff > 24 * 60 * 1000;
 };
+
+export type Values<TObject> = TObject[keyof TObject];
+
+export function tryParseObjEnum<TEnumObj extends Record<string, string>>(
+    input: string | null | undefined,
+    enumObj: TEnumObj,
+    caseSensitive: boolean = false
+): Values<TEnumObj> | null {
+    let values = Object.values(enumObj);
+    const comparer: (value: string) => boolean = caseSensitive
+        ? (v) => v === input
+        : (v) => v.toLowerCase() === input?.toLowerCase();
+    return (values.find(comparer) as Values<TEnumObj>) ?? null;
+}
+
+export function tryParseInt(value: string | null | undefined): number | null {
+    if (value === null || value === undefined) {
+        return null;
+    }
+    const result = parseInt(value);
+    if (isNaN(result)) {
+        return null;
+    }
+    return result;
+}
+
+export function tryParseBool(value: string | null | undefined): boolean | null {
+    if (value === null || value === undefined) {
+        return null;
+    }
+    value = value.trim().toLowerCase();
+    if (value === 'true') {
+        return true;
+    }
+    if (value === 'false') {
+        return false;
+    }
+    return null;
+}
+
+export function reduceForSearchParams<TValues extends Record<string, any>>(
+    values: TValues,
+    defaultValues?: TValues | null
+): Partial<TValues> {
+    const result: Partial<TValues> & Record<string, any> = {};
+    Object.entries(values).forEach(([key, value]) => {
+        const defaultValue = defaultValues?.[key];
+        if (value !== undefined && value !== defaultValue) {
+            (result as Record<string, any>)[key] = value;
+        }
+    });
+    return result;
+}

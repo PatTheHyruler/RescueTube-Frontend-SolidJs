@@ -10,7 +10,7 @@ import { submissionsApi } from '../services/submissionsApi';
 import { type LinkSubmissionResponseDtoV1 } from '../apiModels';
 import { type ErrorResponseDto, isErrorResponseDto } from '../apiModels/error';
 import { DateTimeDisplay } from './DateTimeDisplay';
-import { isAxiosError } from 'axios';
+import { AxiosError, isAxiosError } from 'axios';
 import SubmissionSuccess from './SubmissionSuccess';
 
 interface SubmissionState {
@@ -77,7 +77,7 @@ const SubmissionForm = () => {
                 cancel: undefined,
             }));
         } catch (e) {
-            if (isAxiosError(e) && e.code === 'ERR_CANCELED') {
+            if (isAxiosError(e) && e.code === AxiosError.ERR_CANCELED) {
                 setSubmission((v) => ({
                     ...v,
                     status: 'cancelled',

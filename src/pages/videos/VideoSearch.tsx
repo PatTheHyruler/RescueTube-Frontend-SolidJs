@@ -1,16 +1,23 @@
 import { videosApi } from '../../services/videosApi';
 import { type VideoSearchDtoV1, VideoSortingOptions } from '../../apiModels';
-import { createResource, createSignal, For, Show } from 'solid-js';
+import {
+    createEffect,
+    createResource,
+    createSignal,
+    For,
+    Show,
+} from 'solid-js';
 import VideoSearchForm from '../../components/VideoSearchForm';
 import { DateTimeDisplay } from '../../components/DateTimeDisplay';
 import { secondsToDurationString } from '../../services/timeUtils';
-import { A, useSearchParams } from '@solidjs/router';
+import { A, type Params, useSearchParams } from '@solidjs/router';
 import {
     reduceForSearchParams,
     translationToString,
     tryParseBool,
     tryParseInt,
     tryParseObjEnum,
+    excludeUndefinedFields,
 } from '../../utils';
 import AuthorSummary from '../../components/AuthorSummary';
 
@@ -23,34 +30,61 @@ const defaultSearch: VideoSearchDtoV1 = {
     limit: 50,
 };
 
-const VideoSearch = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [query, setQuery] = createSignal<VideoSearchDtoV1>({
-        nameQuery: searchParams.name ?? defaultSearch.nameQuery,
-        authorQuery: searchParams.author ?? defaultSearch.authorQuery,
+interface SearchParams extends Params {
+    name: string;
+    author: string;
+    sortingOptions: string;
+    descending: string;
+    page: string;
+    limit: string;
+}
 
+function mapSearchToDto(
+    searchParams: Partial<SearchParams>
+): Partial<VideoSearchDtoV1> {
+    return {
+        nameQuery: searchParams.name,
+        authorQuery: searchParams.author,
         sortingOptions:
             tryParseObjEnum(searchParams.sort, VideoSortingOptions) ??
-            defaultSearch.sortingOptions,
-        descending:
-            tryParseBool(searchParams.descending) ?? defaultSearch.descending,
+            undefined,
+        descending: tryParseBool(searchParams.descending) ?? undefined,
+        page: tryParseInt(searchParams.page) ?? undefined,
+        limit: tryParseInt(searchParams.limit) ?? undefined,
+    };
+}
 
-        page: tryParseInt(searchParams.page) ?? defaultSearch.page,
-        limit: tryParseInt(searchParams.limit) ?? defaultSearch.limit,
+function mapDtoToSearch(dto: Partial<VideoSearchDtoV1>): Partial<SearchParams> {
+    return {
+        name: dto.nameQuery ?? undefined,
+        author: dto.authorQuery ?? undefined,
+        sort: dto.sortingOptions,
+        descending: dto.descending?.toString() ?? undefined,
+        page: dto.page?.toString() ?? undefined,
+        limit: dto.limit?.toString() ?? undefined,
+    };
+}
+
+const VideoSearch = () => {
+    const [searchParams, setSearchParams] = useSearchParams<SearchParams>();
+    const [query, setQuery] = createSignal<VideoSearchDtoV1>({
+        ...defaultSearch,
+        ...excludeUndefinedFields(mapSearchToDto(searchParams)),
+    });
+    createEffect(() => {
+        setQuery({
+            ...defaultSearch,
+            ...excludeUndefinedFields(mapSearchToDto(searchParams)),
+        });
+        searchResultActions.refetch();
     });
     const [searchResults, searchResultActions] = createResource(() =>
         videosApi.searchVideos(query())
     );
     const applySearch = () => {
-        const reduced = reduceForSearchParams(query(), defaultSearch);
-        setSearchParams({
-            name: reduced.nameQuery,
-            author: reduced.authorQuery,
-            sort: reduced.sortingOptions,
-            descending: reduced.descending,
-            page: reduced.page,
-            limit: reduced.limit,
-        });
+        setSearchParams(
+            mapDtoToSearch(reduceForSearchParams(query(), defaultSearch))
+        );
         searchResultActions.refetch();
     };
 

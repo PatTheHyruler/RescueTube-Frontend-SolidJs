@@ -1,4 +1,6 @@
 import type { Fetchable, TextTranslationDtoV1 } from '../apiModels';
+import { type Params, useSearchParams } from '@solidjs/router';
+import { createSignal } from 'solid-js';
 
 export const uid = () => {
     return Date.now().toString(36) + Math.random().toString(36).substring(2);
@@ -104,4 +106,21 @@ export function reduceForSearchParams<TValues extends Record<string, any>>(
         }
     });
     return result;
+}
+
+type ExcludeUndefinedFields<T> = Omit<
+    T,
+    { [K in keyof T]: T[K] extends undefined ? K : never }[keyof T]
+>;
+
+export function excludeUndefinedFields<T extends Record<string, any>>(
+    obj: T
+): ExcludeUndefinedFields<T> {
+    const result: Record<string, any> = {};
+    Object.entries(obj).forEach(([key, value]) => {
+        if (value !== undefined) {
+            result[key] = value;
+        }
+    });
+    return result as ExcludeUndefinedFields<T>;
 }

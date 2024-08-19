@@ -1,6 +1,4 @@
 import type { Fetchable, TextTranslationDtoV1 } from '../apiModels';
-import { type Params, useSearchParams } from '@solidjs/router';
-import { createSignal } from 'solid-js';
 
 export const uid = () => {
     return Date.now().toString(36) + Math.random().toString(36).substring(2);

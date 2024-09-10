@@ -6,7 +6,7 @@ export enum KnownPlatforms {
     YouTube = 'YouTube',
 }
 
-export type Platform = `${KnownPlatforms}` | string;
+export type Platform = `${KnownPlatforms}` | (string & {});
 
 export enum EntityTypes {
     Video = 'Video',
@@ -184,4 +184,14 @@ export interface CommentStatisticSnapshotDtoV1 {
 export interface CommentRootsResponseDtoV1 {
     comments: CommentDtoV1[];
     paginationResult: PaginationResult;
+}
+
+export interface VideoDownloadStatisticsByPlatformResponseDtoV1 {
+    videoDownloadStatistics: VideoDownloadStatisticByPlatformDtoV1[];
+}
+
+export interface VideoDownloadStatisticByPlatformDtoV1 {
+    platform: Platform;
+    hasVideoFile: boolean;
+    count: number;
 }

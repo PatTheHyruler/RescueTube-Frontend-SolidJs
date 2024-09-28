@@ -1,3 +1,8 @@
+NB! THIS IS A WORK-IN-PROGRESS HOBBY PROJECT!  
+No guarantees are made about the quality of the software or the source code.  
+Use/browse at your own risk!
+==============
+
 ### Type checks
 
 Vite doesn't check types on build to improve performance.  

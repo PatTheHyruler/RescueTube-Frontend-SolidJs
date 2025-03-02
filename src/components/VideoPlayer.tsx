@@ -7,6 +7,23 @@ interface IProps {
     videoId: string;
 }
 
+const persistVolume = (volume: number) => {
+    window.localStorage.setItem('RescueTube-Volume', volume.toString());
+};
+
+const getPersistedVolume = () => {
+    const volumeString = window.localStorage.getItem('RescueTube-Volume');
+    if (!volumeString) {
+        return null;
+    }
+    try {
+        const volume = parseFloat(volumeString);
+        return Math.max(0, Math.min(1, volume));
+    } catch (error) {
+        return null;
+    }
+};
+
 const VideoPlayer = ({ videoId }: IProps) => {
     // Loss of reactivity due to props destructuring is ok, we don't expect videoId to change
 
@@ -53,6 +70,12 @@ const VideoPlayer = ({ videoId }: IProps) => {
                     width="100%"
                     onTimeUpdate={(e) =>
                         setCurrentTimeSeconds(e.currentTarget.currentTime)
+                    }
+                    onLoadStart={(e) =>
+                        (e.currentTarget.volume = getPersistedVolume() ?? 1)
+                    }
+                    onVolumeChange={(e) =>
+                        persistVolume(e.currentTarget.volume)
                     }
                     onError={onError}
                 >

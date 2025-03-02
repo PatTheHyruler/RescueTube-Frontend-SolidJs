@@ -10,6 +10,7 @@ import Register from './auth/Register';
 import VideoSearch from './pages/videos/VideoSearch';
 import VideoWatch from './pages/videos/VideoWatch';
 import { isGuid } from './utils';
+import HangfireRedirect from './pages/hangfire/HangfireRedirect';
 
 const root = document.getElementById('root');
 
@@ -33,6 +34,10 @@ render(
                     matchFilters={{ id: (id) => isGuid(id) }}
                 ></Route>
             </Route>
+            <Route
+                path="/hangfire/redirect"
+                component={HangfireRedirect}
+            ></Route>
         </Router>
     ),
     root!

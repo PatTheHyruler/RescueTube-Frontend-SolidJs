@@ -21,14 +21,16 @@ export const AuthorSummary = (props: IProps) => {
 
     return (
         <div>
-            <div class="d-inline-block">
-                <img
-                    width={40}
-                    height={40}
-                    alt={`${nameDisplay()}'s PFP`}
-                    src={props.author.profileImages[0]?.url}
-                />
-            </div>
+            <Show when={props.author.profileImages[0]?.url}>
+                <div class="d-inline-block">
+                    <img
+                        width={40}
+                        height={40}
+                        alt={`${nameDisplay()}'s PFP`}
+                        src={props.author.profileImages[0]?.url}
+                    />
+                </div>
+            </Show>
             <div class="d-inline-block">
                 <Show
                     when={props.author.urlOnPlatform}

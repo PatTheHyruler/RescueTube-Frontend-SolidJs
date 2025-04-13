@@ -1,5 +1,5 @@
 import SubmissionForm from '../components/SubmissionForm';
-import { createResource, Show, useContext } from 'solid-js';
+import { createResource, onCleanup, Show, useContext } from 'solid-js';
 import { statisticsApi } from '../services/statisticsApi';
 import AuthContext from '../auth/AuthContext';
 import { jobsApi } from '../services/jobsApi';
@@ -16,7 +16,7 @@ const Home = () => {
             const response = await statisticsApi.getVideoDownloadStatistics();
             return response.data;
         });
-    setInterval(
+    const videoStatsIntervalId = setInterval(
         async (refetchFunc) => {
             await refetchFunc();
         },
@@ -31,13 +31,18 @@ const Home = () => {
         const response = await jobsApi.getJobStats();
         return response.data;
     });
-    setInterval(
+    const jobStatsIntervalId = setInterval(
         async (refetchFunc) => {
             await refetchFunc();
         },
         10_000,
         refetchJobStats,
     );
+
+    onCleanup(() => {
+        clearInterval(jobStatsIntervalId);
+        clearInterval(videoStatsIntervalId);
+    });
 
     return (
         <>

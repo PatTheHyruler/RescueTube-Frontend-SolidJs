@@ -11,6 +11,7 @@ import VideoSearch from './pages/videos/VideoSearch';
 import VideoWatch from './pages/videos/VideoWatch';
 import { isGuid } from './utils';
 import HangfireRedirect from './pages/hangfire/HangfireRedirect';
+import AuthorDetails from './pages/authors/AuthorDetails';
 
 const root = document.getElementById('root');
 
@@ -33,6 +34,13 @@ render(
                     component={VideoWatch}
                     matchFilters={{ id: (id) => isGuid(id) }}
                 ></Route>
+            </Route>
+            <Route path="/authors">
+                <Route
+                    path=":id"
+                    component={AuthorDetails}
+                    matchFilters={{ id: (id) => isGuid(id) }}>
+                </Route>
             </Route>
             <Route
                 path="/hangfire/redirect"

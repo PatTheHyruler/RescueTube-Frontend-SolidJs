@@ -32,11 +32,14 @@ export const AuthorSummary = (props: IProps) => {
                 </div>
             </Show>
             <div class="d-inline-block">
+                <a href={`/authors/${props.author.id}`}>{nameDisplay()}</a>
                 <Show
                     when={props.author.urlOnPlatform}
                     fallback={nameDisplay()}
                 >
-                    <a href={props.author.urlOnPlatform}>{nameDisplay()}</a>
+                    <a href={props.author.urlOnPlatform} class='ps-1' title={`View author on ${props.author.platform}`}>
+                        🡵
+                    </a>
                 </Show>
             </div>
         </div>

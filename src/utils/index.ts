@@ -19,7 +19,9 @@ export const translationToString = (
     if (!translations || !translations.length || !translations[0]) {
         return '';
     }
-    return translations[0].content;
+    return translations.toSorted((a, b) =>
+        (getDate(b.validSince)?.getTime() ?? 0) - (getDate(a.validSince)?.getTime() ?? 0))
+        [0]?.content ?? '';
 };
 
 export type DateOrStringNullable = Date | string | null | undefined;

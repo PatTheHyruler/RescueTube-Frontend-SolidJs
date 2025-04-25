@@ -195,3 +195,19 @@ export interface VideoDownloadStatisticByPlatformDtoV1 {
     hasVideoFile: boolean;
     count: number;
 }
+
+export interface AuthorArchivalSettingsDtoV1 {
+    id: string;
+    authorId: string;
+    isEnabledForArchival: boolean;
+    archiveVideos: boolean;
+    archiveClips: boolean;
+    archivePlaylists: boolean;
+}
+
+export interface AuthorArchivalSettingsUpsertDtoV1 {
+    isEnabledForArchival: boolean;
+    archiveVideos: boolean;
+    archiveClips: boolean;
+    archivePlaylists: boolean;
+}

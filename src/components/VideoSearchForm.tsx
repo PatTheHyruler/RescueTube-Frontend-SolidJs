@@ -6,6 +6,7 @@ import {
 import { For, type Setter } from 'solid-js';
 import PaginationComponent from './PaginationComponent';
 import { useOnPaginationQueryUpdate } from '../utils/pagination';
+import type { Values } from '../utils';
 
 interface IProps {
     query: VideoSearchDtoV1;
@@ -54,8 +55,7 @@ const VideoSearchForm = (props: IProps) => {
                     onChange={(e) =>
                         props.setQuery((p) => ({
                             ...p,
-                            sortingOptions: e.target
-                                .value as VideoSortingOptions,
+                            sortingOptions: e.target.value as Values<typeof VideoSortingOptions>,
                         }))
                     }
                 >

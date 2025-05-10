@@ -1,6 +1,7 @@
 import { Show, useContext } from 'solid-js';
 import AuthContext from '../auth/AuthContext';
 import { isAdmin } from '../auth/authUtils';
+import { A } from '@solidjs/router';
 
 const AdminDropDown = () => {
     const { authState } = useContext(AuthContext)!;
@@ -25,6 +26,11 @@ const AdminDropDown = () => {
                             >
                                 Jobs
                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <A href="/settings" class="dropdown-item nav-link text-dark">
+                                Settings
+                            </A>
                         </li>
                     </ul>
                 </div>

@@ -23,7 +23,7 @@ const Settings = () => {
                                         {setting.definition.key}
                                     </td>
                                     <td>
-                                        <Switch>
+                                        <Switch fallback={'Unknown setting type'}>
                                             <Match when={setting['$type'] === SettingTypes.DataSizeBytes && setting} children={setting => (
                                                 <DataSizeInput valueBytes={setting().value ?? setting().definition.defaultValue} onChange={v => setting().value = v} />
                                             )}/>

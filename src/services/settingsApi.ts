@@ -5,15 +5,17 @@ const getSettings = async () => {
     return await baseApi.axios.get<SettingValueDtoV1[]>('/v1/settings');
 };
 
-const upsertSetting = async (settingValue: SettingValueDtoV1) => {
-    await baseApi.axios.put('/v1/settings', {
-        ['$type']: settingValue['$type'],
-        key: settingValue.definition.key,
-        value: settingValue.value,
-    });
+const mapSettingValueToUpdateDto = (settingValue: SettingValueDtoV1) => ({
+    ['$type']: settingValue['$type'],
+    key: settingValue.definition.key,
+    value: settingValue.value,
+});
+
+const upsertSettings = async (settingValues: SettingValueDtoV1[]) => {
+    await baseApi.axios.put('/v1/settings/bulk', settingValues.map(mapSettingValueToUpdateDto));   
 };
 
 export const settingsApi = {
     getSettings,
-    upsertSetting,
+    upsertSettings,
 };

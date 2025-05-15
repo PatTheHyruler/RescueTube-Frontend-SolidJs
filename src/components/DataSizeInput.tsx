@@ -3,6 +3,7 @@ import type { Component } from 'solid-js';
 
 interface Props {
     valueBytes: number | null;
+    defaultValueBytes: number | null;
     onChange: (valueBytes: number | null) => void;
 }
 
@@ -42,7 +43,7 @@ const getBestUnit = (bytes: number | null): Unit => {
 };
 
 export const DataSizeInput: Component<Props> = (props) => {
-    const [unit, setUnit] = createSignal(getBestUnit(props.valueBytes));
+    const [unit, setUnit] = createSignal(getBestUnit(props.valueBytes ?? props.defaultValueBytes));
     const [value, setValue] = createSignal<string | null>(null);
     const [error, setError] = createSignal<string | null>(null);
 
@@ -94,6 +95,16 @@ export const DataSizeInput: Component<Props> = (props) => {
         setValue((currentBytes / newMultiplier).toString());
     };
 
+    const placeholder = () => {
+        if (props.defaultValueBytes === null) {
+            return undefined;
+        }
+        const currentUnit = unit();
+        const multiplier = UNIT_MULTIPLIERS[currentUnit];
+        const converted = props.defaultValueBytes / multiplier;
+        return converted.toString();
+    };
+
     return (
         <div>
             <div classList={{ error: !error() }}>
@@ -101,6 +112,7 @@ export const DataSizeInput: Component<Props> = (props) => {
                     style={{ 'max-width': '10ch' }}
                     type="number"
                     value={value() ?? undefined}
+                    placeholder={placeholder()}
                     onInput={(e) => handleValueChange(e.currentTarget.value)}
                     min="0"
                     step="any"

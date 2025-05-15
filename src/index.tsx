@@ -12,6 +12,9 @@ import VideoWatch from './pages/videos/VideoWatch';
 import { isGuid } from './utils';
 import HangfireRedirect from './pages/hangfire/HangfireRedirect';
 import AuthorDetails from './pages/authors/AuthorDetails';
+import Settings from './pages/settings/Settings';
+import RequireAuth from './components/RequireAuth';
+import { Roles } from './auth/Roles';
 
 const root = document.getElementById('root');
 
@@ -42,6 +45,7 @@ render(
                     matchFilters={{ id: (id) => isGuid(id) }}>
                 </Route>
             </Route>
+            <Route path="/settings" component={() => <RequireAuth roles={Roles.AdminRoles}><Settings/></RequireAuth>} />
             <Route
                 path="/hangfire/redirect"
                 component={HangfireRedirect}

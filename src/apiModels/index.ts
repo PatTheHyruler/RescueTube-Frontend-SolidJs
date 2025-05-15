@@ -211,3 +211,34 @@ export interface AuthorArchivalSettingsUpsertDtoV1 {
     archiveClips: boolean;
     archivePlaylists: boolean;
 }
+
+export const SettingTypes = {
+    Long: 'Long',
+    String: 'String',
+    Bool: 'Bool',
+    DataSizeBytes: 'DataSizeBytes'
+} as const;
+
+export type SettingType = typeof SettingTypes[keyof typeof SettingTypes];
+
+interface SettingDefinitionDtoV1<T> {
+    key: string;
+    defaultValue: T | null;
+}
+
+interface SettingValueDtoV1Base<T, TDiscriminator extends SettingType> {
+    ['$type']: TDiscriminator;
+    definition: SettingDefinitionDtoV1<T>;
+    value: T | null;
+}
+
+export interface SettingValueDtoV1_Long extends SettingValueDtoV1Base<number, typeof SettingTypes.Long> {}
+export interface SettingValueDtoV1_String extends SettingValueDtoV1Base<string, typeof SettingTypes.String> {}
+export interface SettingValueDtoV1_Boolean extends SettingValueDtoV1Base<boolean, typeof SettingTypes.Bool> {}
+export interface SettingValueDtoV1_DataSizeBytes extends SettingValueDtoV1Base<number, typeof SettingTypes.DataSizeBytes> {}
+
+export type SettingValueDtoV1 =
+    SettingValueDtoV1_Long |
+    SettingValueDtoV1_String |
+    SettingValueDtoV1_Boolean |
+    SettingValueDtoV1_DataSizeBytes;

@@ -2,6 +2,7 @@ import { createSignal, createEffect, For, Show } from 'solid-js';
 import type { Component } from 'solid-js';
 
 interface Props {
+    name?: string;
     valueBytes: number | null;
     defaultValueBytes: number | null;
     onChange: (valueBytes: number | null) => void;
@@ -109,6 +110,7 @@ export const DataSizeInput: Component<Props> = (props) => {
         <div>
             <div classList={{ error: !error() }}>
                 <input
+                    name={props.name}
                     style={{ 'max-width': '10ch' }}
                     type="number"
                     value={value() ?? undefined}

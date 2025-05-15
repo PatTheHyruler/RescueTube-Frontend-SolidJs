@@ -36,45 +36,51 @@ const Settings = () => {
                                     {setting().definition.key}
                                 </td>
                                 <td>
-                                    <Switch fallback={'Unknown setting type'}>
-                                        <Match when={(() => {
-                                            const s = setting();
-                                            return s['$type'] === SettingTypes.DataSizeBytes && s;
-                                        })()} children={setting => (
-                                            <DataSizeInput valueBytes={setting().value}
-                                                           defaultValueBytes={setting().definition.defaultValue}
-                                                           onChange={v => form.setFieldValue(`settings[${i}].value`, v)} />
-                                        )}/>
-                                        <Match when={(() => {
-                                            const s = setting();
-                                            return s['$type'] === SettingTypes.Bool && s;
-                                        })()} children={setting => (
-                                            <input type="checkbox"
-                                                   checked={setting().value ?? setting().definition.defaultValue ?? undefined}
-                                                   onChange={e => form.setFieldValue(`settings[${i}].value`, e.currentTarget.checked)}
-                                            />
-                                        )}/>
-                                        <Match when={(() => {
-                                            const s = setting();
-                                            return s['$type'] === SettingTypes.String && s;
-                                        })()} children={setting => (
-                                            <input value={setting().value ?? ''}
-                                                   placeholder={setting().definition.defaultValue ?? undefined}
-                                                   onChange={e => form.setFieldValue(`settings[${i}].value`, e.currentTarget.value ? e.currentTarget.value : null)}
-                                            />
-                                        )}/>
-                                        <Match when={(() => {
-                                            const s = setting();
-                                            return s['$type'] === SettingTypes.Long && s;
-                                        })()} children={setting => (
-                                            <input type="number"
-                                                   step={1}
-                                                   placeholder={setting().definition.defaultValue?.toString() ?? undefined}
-                                                   value={setting().value ?? undefined}
-                                                   onChange={e => form.setFieldValue(`settings[${i}].value`, parseInt(e.currentTarget.value))}
-                                            />
-                                        )}/>
-                                    </Switch>
+                                    <form.Field name={`settings[${i}].value`} children={subField => (
+                                        <Switch fallback={'Unknown setting type'}>
+                                            <Match when={(() => {
+                                                const s = setting();
+                                                return s['$type'] === SettingTypes.DataSizeBytes && s;
+                                            })()} children={setting => (
+                                                <DataSizeInput name={subField().name}
+                                                               valueBytes={setting().value}
+                                                               defaultValueBytes={setting().definition.defaultValue}
+                                                               onChange={v => subField().setValue(v)} />
+                                            )}/>
+                                            <Match when={(() => {
+                                                const s = setting();
+                                                return s['$type'] === SettingTypes.Bool && s;
+                                            })()} children={setting => (
+                                                <input name={subField().name}
+                                                       type="checkbox"
+                                                       checked={setting().value ?? setting().definition.defaultValue ?? undefined}
+                                                       onChange={e => subField().setValue(e.currentTarget.checked)}
+                                                />
+                                            )}/>
+                                            <Match when={(() => {
+                                                const s = setting();
+                                                return s['$type'] === SettingTypes.String && s;
+                                            })()} children={setting => (
+                                                <input name={subField().name}
+                                                       value={setting().value ?? ''}
+                                                       placeholder={setting().definition.defaultValue ?? undefined}
+                                                       onChange={e => subField().setValue(e.currentTarget.value ? e.currentTarget.value : null)}
+                                                />
+                                            )}/>
+                                            <Match when={(() => {
+                                                const s = setting();
+                                                return s['$type'] === SettingTypes.Long && s;
+                                            })()} children={setting => (
+                                                <input type="number"
+                                                       name={subField().name}
+                                                       step={1}
+                                                       placeholder={setting().definition.defaultValue?.toString() ?? undefined}
+                                                       value={setting().value ?? undefined}
+                                                       onChange={e => subField().setValue(parseInt(e.currentTarget.value))}
+                                                />
+                                            )}/>
+                                        </Switch>
+                                    )}/>
                                 </td>
                             </tr>
                         )}/>

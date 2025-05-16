@@ -21,7 +21,7 @@ export const secondsToDurationString = (
         secondString = secondString.padStart(2, '0');
     }
 
-    let components = [];
+    const components = [];
     if (hours > 0 || format?.includeUnnecessary) {
         components.push(hourString);
     }

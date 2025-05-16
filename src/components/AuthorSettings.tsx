@@ -1,5 +1,5 @@
 import { createResource } from 'solid-js';
-import { authorsApi } from '../services/authorsApi';
+import { authorsApi } from '@/services/authorsApi';
 import { createForm } from '@tanstack/solid-form';
 
 interface Props {

@@ -1,7 +1,7 @@
 import { createResource, Index, Match, Switch } from 'solid-js';
-import { settingsApi } from '../../services/settingsApi';
-import DataSizeInput from '../../components/DataSizeInput';
-import { SettingTypes } from '../../apiModels';
+import { settingsApi } from '@/services/settingsApi';
+import DataSizeInput from '@/components/DataSizeInput';
+import { SettingTypes } from '@/apiModels';
 import { createForm } from '@tanstack/solid-form';
 
 

@@ -3,7 +3,7 @@ import type {
     VideoSearchDtoV1,
     VideoSearchResponseDtoV1,
     VideoSimpleDtoV1,
-} from '../apiModels';
+} from '@/apiModels';
 import { baseApi } from './baseApi';
 
 const searchVideos = async (query: VideoSearchDtoV1) => {

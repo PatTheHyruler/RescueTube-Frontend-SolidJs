@@ -1,5 +1,5 @@
-import { videosApi } from '../../services/videosApi';
-import { type VideoSearchDtoV1, VideoSortingOptions } from '../../apiModels';
+import { videosApi } from '@/services/videosApi';
+import { type VideoSearchDtoV1, VideoSortingOptions } from '@/apiModels';
 import {
     createEffect,
     createResource,
@@ -7,9 +7,9 @@ import {
     For,
     Show,
 } from 'solid-js';
-import VideoSearchForm from '../../components/VideoSearchForm';
-import { DateTimeDisplay } from '../../components/DateTimeDisplay';
-import { secondsToDurationString } from '../../services/timeUtils';
+import VideoSearchForm from '@/components/VideoSearchForm';
+import { DateTimeDisplay } from '@/components/DateTimeDisplay';
+import { secondsToDurationString } from '@/services/timeUtils';
 import { A, type Params, useSearchParams } from '@solidjs/router';
 import {
     reduceForSearchParams,
@@ -18,8 +18,8 @@ import {
     tryParseInt,
     tryParseObjEnum,
     excludeUndefinedFields,
-} from '../../utils';
-import AuthorSummary from '../../components/AuthorSummary';
+} from '@/utils';
+import AuthorSummary from '@/components/AuthorSummary';
 
 const defaultSearch: VideoSearchDtoV1 = {
     nameQuery: '',

@@ -1,6 +1,6 @@
 import { type JSX, Match, Switch, useContext } from 'solid-js';
 
-import AuthContext from '../auth/AuthContext';
+import AuthContext from '@/auth/AuthContext';
 
 type Props = {
     roles?: string[];

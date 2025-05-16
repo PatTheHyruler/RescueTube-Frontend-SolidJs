@@ -1,10 +1,10 @@
 import { useParams } from '@solidjs/router';
-import VideoPlayer from '../../components/VideoPlayer';
+import VideoPlayer from '@/components/VideoPlayer';
 import { createResource, createSignal, Show, Suspense } from 'solid-js';
-import { videosApi } from '../../services/videosApi';
-import { translationToString } from '../../utils';
+import { videosApi } from '@/services/videosApi';
+import { translationToString } from '@/utils';
 import styles from './VideoWatch.module.css';
-import VideoComments from '../../components/VideoComments';
+import VideoComments from '@/components/VideoComments';
 
 const VideoWatch = () => {
     const params = useParams();

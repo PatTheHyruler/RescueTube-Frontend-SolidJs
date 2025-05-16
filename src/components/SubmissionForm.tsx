@@ -6,9 +6,9 @@ import {
     Show,
     Switch,
 } from 'solid-js';
-import { submissionsApi } from '../services/submissionsApi';
-import { type LinkSubmissionResponseDtoV1 } from '../apiModels';
-import { type ErrorResponseDto, isErrorResponseDto } from '../apiModels/error';
+import { submissionsApi } from '@/services/submissionsApi';
+import { type LinkSubmissionResponseDtoV1 } from '@/apiModels';
+import { type ErrorResponseDto, isErrorResponseDto } from '@/apiModels/error';
 import { DateTimeDisplay } from './DateTimeDisplay';
 import { AxiosError, isAxiosError } from 'axios';
 import SubmissionSuccess from './SubmissionSuccess';
@@ -37,6 +37,7 @@ const SubmissionForm = () => {
         const validationErrors = [];
         try {
             new URL(submittingUrl);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
             validationErrors.push('Invalid URL');
         }

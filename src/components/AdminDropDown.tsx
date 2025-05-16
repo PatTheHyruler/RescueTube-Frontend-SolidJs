@@ -1,6 +1,6 @@
 import { Show, useContext } from 'solid-js';
-import AuthContext from '../auth/AuthContext';
-import { isAdmin } from '../auth/authUtils';
+import AuthContext from '@/auth/AuthContext';
+import { isAdmin } from '@/auth/authUtils';
 import { A } from '@solidjs/router';
 
 const AdminDropDown = () => {

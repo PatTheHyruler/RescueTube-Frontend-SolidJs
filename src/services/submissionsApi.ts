@@ -1,7 +1,7 @@
 import type {
     LinkSubmissionRequestDtoV1,
     LinkSubmissionResponseDtoV1,
-} from '../apiModels';
+} from '@/apiModels';
 import { baseApi } from './baseApi';
 import { type AxiosRequestConfig } from 'axios';
 

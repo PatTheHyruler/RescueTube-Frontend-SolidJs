@@ -1,4 +1,4 @@
-import { baseApi } from '../services/baseApi';
+import { baseApi } from '@/services/baseApi';
 import { type InternalAxiosRequestConfig, isAxiosError } from 'axios';
 import { accountApi } from './accountApi';
 import {
@@ -42,6 +42,7 @@ const _refreshToken = async (): Promise<JwtState | null> => {
             return jwtState;
         }
     } catch (error) {
+        console.error('Error refreshing token', error);
         return null;
     }
 
@@ -130,7 +131,7 @@ const setAuthHeader = (request: InternalAxiosRequestConfig, jwt: string) => {
     request.headers.Authorization = `Bearer ${jwt}`;
 };
 
-export const getValidationErrors = (error: any) => {
+export const getValidationErrors = (error: unknown) => {
     // TODO: better errors (also on API side)
     if (isAxiosError(error) && error.response?.data) {
         return ['Error: ' + JSON.stringify(error.response.data)];

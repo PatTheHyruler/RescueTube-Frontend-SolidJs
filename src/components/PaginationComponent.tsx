@@ -1,8 +1,8 @@
-import type { PaginationQuery, PaginationResult } from '../apiModels';
+import type { PaginationQuery, PaginationResult } from '@/apiModels';
 import PaginationResultsSummary from './PaginationResultsSummary';
 import { createEffect, For, Show } from 'solid-js';
 import PaginationButton from './PaginationButton';
-import { getLastPage, isLastPage } from '../utils/pagination';
+import { getLastPage, isLastPage } from '@/utils/pagination';
 
 interface IProps {
     paginationQuery: PaginationQuery;
@@ -21,8 +21,8 @@ const getPagesSelection = (
     pages.add(0);
 
     const pageRadius = 2;
-    let lowPage = page - pageRadius;
-    let highPage = page + pageRadius;
+    const lowPage = page - pageRadius;
+    const highPage = page + pageRadius;
     for (let i = lowPage; i <= highPage; i++) {
         pages.add(i);
     }

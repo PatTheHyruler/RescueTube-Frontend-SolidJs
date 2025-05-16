@@ -1,4 +1,4 @@
-import type { PaginationQuery, PaginationResult } from '../apiModels';
+import type { PaginationQuery, PaginationResult } from '@/apiModels';
 import { type Setter } from 'solid-js';
 
 export const useOnPaginationQueryUpdate =

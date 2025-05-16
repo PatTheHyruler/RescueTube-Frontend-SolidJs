@@ -1,10 +1,10 @@
-import type { Fetchable, TextTranslationDtoV1 } from '../apiModels';
+import type { Fetchable, TextTranslationDtoV1 } from '@/apiModels';
 
 export const uid = () => {
     return Date.now().toString(36) + Math.random().toString(36).substring(2);
 };
 
-export const isGuid = (value: any): boolean => {
+export const isGuid = (value: unknown): boolean => {
     return (
         typeof value === 'string' &&
         /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
@@ -20,8 +20,7 @@ export const translationToString = (
         return '';
     }
     return translations.toSorted((a, b) =>
-        (getDate(b.validSince)?.getTime() ?? 0) - (getDate(a.validSince)?.getTime() ?? 0))
-        [0]?.content ?? '';
+        (getDate(b.validSince)?.getTime() ?? 0) - (getDate(a.validSince)?.getTime() ?? 0))[0]?.content ?? '';
 };
 
 export type DateOrStringNullable = Date | string | null | undefined;
@@ -62,7 +61,7 @@ export function tryParseObjEnum<TEnumObj extends Record<string, string>>(
     enumObj: TEnumObj,
     caseSensitive: boolean = false
 ): Values<TEnumObj> | null {
-    let values = Object.values(enumObj);
+    const values = Object.values(enumObj);
     const comparer: (value: string) => boolean = caseSensitive
         ? (v) => v === input
         : (v) => v.toLowerCase() === input?.toLowerCase();

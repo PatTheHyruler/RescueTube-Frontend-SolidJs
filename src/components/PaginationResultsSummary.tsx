@@ -1,9 +1,9 @@
-import type { PaginationResult } from '../apiModels';
+import type { PaginationResult } from '@/apiModels';
 import {
     getPageRangeEnd,
     getPageRangeStart,
     isLastPage,
-} from '../utils/pagination';
+} from '@/utils/pagination';
 import { Match, Switch } from 'solid-js';
 
 const PaginationResultsSummary = (props: {

@@ -1,4 +1,4 @@
-import { type DateOrStringNullable, getDate } from '../utils';
+import { type DateOrStringNullable, getDate } from '@/utils';
 
 interface IProps {
     value?: DateOrStringNullable;

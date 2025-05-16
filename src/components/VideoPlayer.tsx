@@ -1,7 +1,7 @@
 import { createResource, createSignal, Show } from 'solid-js';
-import { type AccessTokenDtoV1 } from '../apiModels';
-import { videosApi } from '../services/videosApi';
-import { baseApi } from '../services/baseApi';
+import { type AccessTokenDtoV1 } from '@/apiModels';
+import { videosApi } from '@/services/videosApi';
+import { baseApi } from '@/services/baseApi';
 
 interface IProps {
     videoId: string;
@@ -20,6 +20,7 @@ const getPersistedVolume = () => {
         const volume = parseFloat(volumeString);
         return Math.max(0, Math.min(1, volume));
     } catch (error) {
+        console.error('Failed to parse persisted volume', error);
         return null;
     }
 };

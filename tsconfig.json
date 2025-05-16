@@ -23,7 +23,10 @@
         "noEmit": true,
         "jsx": "preserve",
         "jsxImportSource": "solid-js",
-
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        },
         "allowSyntheticDefaultImports": true,
         "types": ["vite/client"],
         "experimentalDecorators": true,

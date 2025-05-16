@@ -2,11 +2,11 @@ import {
     type PaginationResult,
     type VideoSearchDtoV1,
     VideoSortingOptions,
-} from '../apiModels';
+} from '@/apiModels';
 import { For, type Setter } from 'solid-js';
 import PaginationComponent from './PaginationComponent';
-import { useOnPaginationQueryUpdate } from '../utils/pagination';
-import type { Values } from '../utils';
+import { useOnPaginationQueryUpdate } from '@/utils/pagination';
+import type { Values } from '@/utils';
 
 interface IProps {
     query: VideoSearchDtoV1;

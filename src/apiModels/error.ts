@@ -23,9 +23,10 @@ export interface ErrorResponseDto {
     subErrors: ErrorResponseDto[];
 }
 
-export function isErrorResponseDto(value: any): value is ErrorResponseDto {
+export function isErrorResponseDto(value: unknown): value is ErrorResponseDto {
     if (value === undefined || value === null) {
         return false;
     }
-    return value.errorType && typeof value.errorType === 'string';
+    const potentialErrorValue = value as ErrorResponseDto;
+    return !!potentialErrorValue.errorType && typeof potentialErrorValue.errorType === 'string';
 }

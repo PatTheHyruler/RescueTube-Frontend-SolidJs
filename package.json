@@ -13,27 +13,27 @@
     "license": "MIT",
     "devDependencies": {
         "@eslint/js": "^9.26.0",
-        "@types/node": "^22.1.0",
+        "@types/node": "^22.15.18",
         "css": "^3.0.0",
         "eslint": "^9.26.0",
         "eslint-plugin-no-relative-import-paths": "^1.6.1",
         "fs": "0.0.1-security",
-        "glob": "^11.0.0",
+        "glob": "^11.0.2",
         "globals": "^16.1.0",
         "prettier": "3.3.3",
         "solid-devtools": "^0.29.3",
-        "typescript": "^5.4.5",
+        "typescript": "^5.8.3",
         "typescript-eslint": "^8.32.1",
-        "vite": "^5.2.11",
-        "vite-plugin-solid": "^2.10.2"
+        "vite": "^5.4.19",
+        "vite-plugin-solid": "^2.11.6"
     },
     "type": "module",
     "dependencies": {
-        "@solidjs/router": "^0.13.3",
-        "@tanstack/solid-form": "^1.6.3",
-        "axios": "^1.6.8",
+        "@solidjs/router": "^0.13.6",
+        "@tanstack/solid-form": "^1.11.1",
+        "axios": "^1.9.0",
         "jwt-decode": "^4.0.0",
-        "solid-bootstrap": "^1.0.19",
-        "solid-js": "^1.8.17"
+        "solid-bootstrap": "^1.0.21",
+        "solid-js": "^1.9.7"
     }
 }

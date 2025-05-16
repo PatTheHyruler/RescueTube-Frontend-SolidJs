@@ -12,7 +12,7 @@ const Login = () => {
     const [username, setUsername] = createSignal('');
     const [password, setPassword] = createSignal('');
     const [validationErrors, setValidationErrors] = createSignal(
-        [] as string[]
+        [] as string[],
     );
     const [shouldLogOut, setShouldLogOut] = createSignal(true);
 

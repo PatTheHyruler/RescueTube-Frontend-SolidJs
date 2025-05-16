@@ -9,7 +9,7 @@ import css from 'css';
 function dashesToCamelCase(s) {
     return s.replace(
         /([A-Za-z])-([A-Za-z])/,
-        (_, s1, s2) => s1 + s2.toUpperCase()
+        (_, s1, s2) => s1 + s2.toUpperCase(),
     );
     // Unsure what should be done with names such as --my-class or my--class, so just not touching them for now
 }
@@ -23,8 +23,8 @@ files.forEach((file) => {
         .map(
             (rule) =>
                 rule.selectors?.map(
-                    (selector) => selector.match(/(\.[A-Za-z0-9\-_]+)/g) // extract class selectors
-                ) ?? []
+                    (selector) => selector.match(/(\.[A-Za-z0-9\-_]+)/g), // extract class selectors
+                ) ?? [],
         )
         .flat(2)
         .map((className) => dashesToCamelCase(className.slice(1)))

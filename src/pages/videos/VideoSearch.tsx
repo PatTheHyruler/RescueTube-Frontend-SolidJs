@@ -40,7 +40,7 @@ interface SearchParams extends Params {
 }
 
 function mapSearchToDto(
-    searchParams: Partial<SearchParams>
+    searchParams: Partial<SearchParams>,
 ): Partial<VideoSearchDtoV1> {
     return {
         nameQuery: searchParams.name,
@@ -79,11 +79,11 @@ const VideoSearch = () => {
         searchResultActions.refetch();
     });
     const [searchResults, searchResultActions] = createResource(() =>
-        videosApi.searchVideos(query())
+        videosApi.searchVideos(query()),
     );
     const applySearch = () => {
         setSearchParams(
-            mapDtoToSearch(reduceForSearchParams(query(), defaultSearch))
+            mapDtoToSearch(reduceForSearchParams(query(), defaultSearch)),
         );
         searchResultActions.refetch();
     };
@@ -157,7 +157,7 @@ const VideoSearch = () => {
                                         <div>
                                             Duration:{' '}
                                             {secondsToDurationString(
-                                                video.durationSeconds
+                                                video.durationSeconds,
                                             )}
                                         </div>
                                     </div>

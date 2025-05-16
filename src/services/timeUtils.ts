@@ -5,7 +5,7 @@ interface DurationFormat {
 
 export const secondsToDurationString = (
     totalSeconds: number,
-    format?: DurationFormat
+    format?: DurationFormat,
 ) => {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds - hours * 3600) / 60);

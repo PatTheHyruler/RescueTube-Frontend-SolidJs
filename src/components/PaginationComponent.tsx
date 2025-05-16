@@ -15,7 +15,7 @@ const getPagesSelection = (
     page: number,
     limit: number,
     totalResults: number | null | undefined,
-    amountOnPage: number | null | undefined
+    amountOnPage: number | null | undefined,
 ): number[] => {
     const pages = new Set<number>();
     pages.add(0);
@@ -68,7 +68,7 @@ const PaginationComponent = (props: IProps) => {
             page(),
             limit(),
             props.paginationResult?.totalResults,
-            props.paginationResult?.amountOnPage
+            props.paginationResult?.amountOnPage,
         );
 
     createEffect(() => {
@@ -97,7 +97,7 @@ const PaginationComponent = (props: IProps) => {
     const getMaxPageInput = () => {
         const lastPage = getLastPage(
             props.paginationResult?.totalResults,
-            limit()
+            limit(),
         );
         if (lastPage != null) {
             return lastPage + 1;
@@ -144,7 +144,7 @@ const PaginationComponent = (props: IProps) => {
                     when={
                         getLastPage(
                             props.paginationResult?.totalResults,
-                            limit()
+                            limit(),
                         ) || page() > 0
                     }
                 >

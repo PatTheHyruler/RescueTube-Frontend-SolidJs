@@ -13,12 +13,12 @@ const VideoComments = ({ videoId }: IProps) => {
         {
             page: 0,
             limit: 50,
-        }
+        },
     );
     const [comments, { refetch }] = createResource(async () => {
         const response = await commentsApi.getVideoComments(
             videoId,
-            paginationQuery()
+            paginationQuery(),
         );
         return response.data;
     });

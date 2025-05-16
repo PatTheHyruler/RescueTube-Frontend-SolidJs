@@ -34,7 +34,7 @@ const _refreshToken = async (): Promise<JwtState | null> => {
             !isTimeInPast(interceptorAuthState.jwtState.refreshTokenExpiresAt)
         ) {
             const response = await accountApi.refreshToken(
-                interceptorAuthState.jwtState
+                interceptorAuthState.jwtState,
             );
             const jwtState = processJwtResponse(response.data);
             interceptorAuthState.setJwtState(jwtState);
@@ -106,7 +106,7 @@ export const registerAuthInterceptors = () => {
                         !config.tokenRefreshAttempted &&
                         interceptorAuthState.jwtState &&
                         !isTimeInPast(
-                            interceptorAuthState.jwtState.refreshTokenExpiresAt
+                            interceptorAuthState.jwtState.refreshTokenExpiresAt,
                         )
                     ) {
                         config.tokenRefreshAttempted = true;
@@ -123,7 +123,7 @@ export const registerAuthInterceptors = () => {
             }
 
             throw error;
-        }
+        },
     );
 };
 

@@ -13,7 +13,7 @@ const Register = () => {
     const [password, setPassword] = createSignal('');
     const [confirmPassword, setConfirmPassword] = createSignal('');
     const [validationErrors, setValidationErrors] = createSignal(
-        [] as string[]
+        [] as string[],
     );
 
     const [shouldLogOut, setShouldLogOut] = createSignal(true);

@@ -116,7 +116,7 @@ export interface PaginationBase {
     limit: number;
 }
 
-export type PaginationQuery = PaginationBase
+export type PaginationQuery = PaginationBase;
 
 export interface PaginationResult {
     page: number;
@@ -216,7 +216,7 @@ export const SettingTypes = {
     Long: 'Long',
     String: 'String',
     Bool: 'Bool',
-    DataSizeBytes: 'DataSizeBytes'
+    DataSizeBytes: 'DataSizeBytes',
 } as const;
 
 export type SettingType = typeof SettingTypes[keyof typeof SettingTypes];
@@ -232,10 +232,10 @@ interface SettingValueDtoV1Base<T, TDiscriminator extends SettingType> {
     value: T | null;
 }
 
-export type SettingValueDtoV1_Long = SettingValueDtoV1Base<number, typeof SettingTypes.Long>
-export type SettingValueDtoV1_String = SettingValueDtoV1Base<string, typeof SettingTypes.String>
-export type SettingValueDtoV1_Boolean = SettingValueDtoV1Base<boolean, typeof SettingTypes.Bool>
-export type SettingValueDtoV1_DataSizeBytes = SettingValueDtoV1Base<number, typeof SettingTypes.DataSizeBytes>
+export type SettingValueDtoV1_Long = SettingValueDtoV1Base<number, typeof SettingTypes.Long>;
+export type SettingValueDtoV1_String = SettingValueDtoV1Base<string, typeof SettingTypes.String>;
+export type SettingValueDtoV1_Boolean = SettingValueDtoV1Base<boolean, typeof SettingTypes.Bool>;
+export type SettingValueDtoV1_DataSizeBytes = SettingValueDtoV1Base<number, typeof SettingTypes.DataSizeBytes>;
 
 export type SettingValueDtoV1 =
     SettingValueDtoV1_Long |

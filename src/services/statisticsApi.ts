@@ -3,7 +3,7 @@ import type { VideoDownloadStatisticsByPlatformResponseDtoV1 } from '@/apiModels
 
 const getVideoDownloadStatistics = async () => {
     return await baseApi.axios.get<VideoDownloadStatisticsByPlatformResponseDtoV1>(
-        '/v1/statistics/videoDownloadStatistics'
+        '/v1/statistics/videoDownloadStatistics',
     );
 };
 

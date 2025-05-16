@@ -68,7 +68,7 @@ const SubmissionForm = () => {
                 {
                     url: submittingUrl,
                 },
-                { signal: controller.signal }
+                { signal: controller.signal },
             );
 
             setSubmission((v) => ({

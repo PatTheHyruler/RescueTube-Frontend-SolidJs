@@ -20,7 +20,7 @@ const getTargetUrl = (returnUrlString: string | undefined) => {
             return returnUrl;
         }
         console.warn(
-            `Invalid Hangfire return URL '${returnUrl}', redirecting to '${hangfireUrl}' instead`
+            `Invalid Hangfire return URL '${returnUrl}', redirecting to '${hangfireUrl}' instead`,
         );
     }
 

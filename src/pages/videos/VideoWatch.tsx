@@ -38,7 +38,7 @@ const VideoWatch = () => {
                                 >
                                     <span>
                                         {translationToString(
-                                            video()?.description
+                                            video()?.description,
                                         )}
                                     </span>
                                 </div>

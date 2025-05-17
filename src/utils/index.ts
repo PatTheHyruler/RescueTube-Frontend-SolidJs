@@ -93,15 +93,16 @@ export function tryParseBool(value: string | null | undefined): boolean | null {
     return null;
 }
 
-export function reduceForSearchParams<TValues extends Record<string, any>>(
+export function reduceForSearchParams<TValues extends object>(
     values: TValues,
     defaultValues?: TValues | null,
 ): Partial<TValues> {
-    const result: Partial<TValues> & Record<string, any> = {};
+    const result: Partial<TValues> = {};
     Object.entries(values).forEach(([key, value]) => {
-        const defaultValue = defaultValues?.[key];
+        const typedKey = key as keyof TValues;
+        const defaultValue = defaultValues?.[typedKey];
         if (value !== undefined && value !== defaultValue) {
-            (result as Record<string, any>)[key] = value;
+            result[typedKey] = value;
         }
     });
     return result;
@@ -112,10 +113,10 @@ type ExcludeUndefinedFields<T> = Omit<
     { [K in keyof T]: T[K] extends undefined ? K : never }[keyof T]
 >;
 
-export function excludeUndefinedFields<T extends Record<string, any>>(
+export function excludeUndefinedFields<T extends Record<string, unknown>>(
     obj: T,
 ): ExcludeUndefinedFields<T> {
-    const result: Record<string, any> = {};
+    const result: Record<string, unknown> = {};
     Object.entries(obj).forEach(([key, value]) => {
         if (value !== undefined) {
             result[key] = value;

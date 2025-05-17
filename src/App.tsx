@@ -45,7 +45,7 @@ const App: Component = (props: { children?: JSX.Element }) => {
                 return userDetails;
             }
             return null;
-        }
+        },
     );
 
     createEffect(() => {

@@ -5,7 +5,7 @@ interface DurationFormat {
 
 export const secondsToDurationString = (
     totalSeconds: number,
-    format?: DurationFormat
+    format?: DurationFormat,
 ) => {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds - hours * 3600) / 60);
@@ -21,7 +21,7 @@ export const secondsToDurationString = (
         secondString = secondString.padStart(2, '0');
     }
 
-    let components = [];
+    const components = [];
     if (hours > 0 || format?.includeUnnecessary) {
         components.push(hourString);
     }

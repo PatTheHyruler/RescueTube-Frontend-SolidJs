@@ -1,27 +1,26 @@
-import type { Fetchable, TextTranslationDtoV1 } from '../apiModels';
+import type { Fetchable, TextTranslationDtoV1 } from '@/apiModels';
 
 export const uid = () => {
     return Date.now().toString(36) + Math.random().toString(36).substring(2);
 };
 
-export const isGuid = (value: any): boolean => {
+export const isGuid = (value: unknown): boolean => {
     return (
         typeof value === 'string' &&
         /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-            value
+            value,
         )
     );
 };
 
 export const translationToString = (
-    translations: TextTranslationDtoV1[] | null | undefined
+    translations: TextTranslationDtoV1[] | null | undefined,
 ) => {
     if (!translations || !translations.length || !translations[0]) {
         return '';
     }
     return translations.toSorted((a, b) =>
-        (getDate(b.validSince)?.getTime() ?? 0) - (getDate(a.validSince)?.getTime() ?? 0))
-        [0]?.content ?? '';
+        (getDate(b.validSince)?.getTime() ?? 0) - (getDate(a.validSince)?.getTime() ?? 0))[0]?.content ?? '';
 };
 
 export type DateOrStringNullable = Date | string | null | undefined;
@@ -60,9 +59,9 @@ export type Values<TObject> = TObject[keyof TObject];
 export function tryParseObjEnum<TEnumObj extends Record<string, string>>(
     input: string | null | undefined,
     enumObj: TEnumObj,
-    caseSensitive: boolean = false
+    caseSensitive: boolean = false,
 ): Values<TEnumObj> | null {
-    let values = Object.values(enumObj);
+    const values = Object.values(enumObj);
     const comparer: (value: string) => boolean = caseSensitive
         ? (v) => v === input
         : (v) => v.toLowerCase() === input?.toLowerCase();
@@ -94,15 +93,16 @@ export function tryParseBool(value: string | null | undefined): boolean | null {
     return null;
 }
 
-export function reduceForSearchParams<TValues extends Record<string, any>>(
+export function reduceForSearchParams<TValues extends object>(
     values: TValues,
-    defaultValues?: TValues | null
+    defaultValues?: TValues | null,
 ): Partial<TValues> {
-    const result: Partial<TValues> & Record<string, any> = {};
+    const result: Partial<TValues> = {};
     Object.entries(values).forEach(([key, value]) => {
-        const defaultValue = defaultValues?.[key];
+        const typedKey = key as keyof TValues;
+        const defaultValue = defaultValues?.[typedKey];
         if (value !== undefined && value !== defaultValue) {
-            (result as Record<string, any>)[key] = value;
+            result[typedKey] = value;
         }
     });
     return result;
@@ -113,10 +113,10 @@ type ExcludeUndefinedFields<T> = Omit<
     { [K in keyof T]: T[K] extends undefined ? K : never }[keyof T]
 >;
 
-export function excludeUndefinedFields<T extends Record<string, any>>(
-    obj: T
+export function excludeUndefinedFields<T extends Record<string, unknown>>(
+    obj: T,
 ): ExcludeUndefinedFields<T> {
-    const result: Record<string, any> = {};
+    const result: Record<string, unknown> = {};
     Object.entries(obj).forEach(([key, value]) => {
         if (value !== undefined) {
             result[key] = value;

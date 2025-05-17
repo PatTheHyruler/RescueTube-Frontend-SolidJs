@@ -1,7 +1,7 @@
 import { createResource, createSignal, For, Show } from 'solid-js';
-import { commentsApi } from '../services/commentsApi';
+import { commentsApi } from '@/services/commentsApi';
 import VideoComment from './VideoComment';
-import { type PaginationQuery } from '../apiModels';
+import { type PaginationQuery } from '@/apiModels';
 import PaginationComponent from './PaginationComponent';
 
 interface IProps {
@@ -13,12 +13,12 @@ const VideoComments = ({ videoId }: IProps) => {
         {
             page: 0,
             limit: 50,
-        }
+        },
     );
     const [comments, { refetch }] = createResource(async () => {
         const response = await commentsApi.getVideoComments(
             videoId,
-            paginationQuery()
+            paginationQuery(),
         );
         return response.data;
     });

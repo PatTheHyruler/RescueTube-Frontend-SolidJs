@@ -1,4 +1,4 @@
-import type { PaginationQuery, PaginationResult } from '../apiModels';
+import type { PaginationQuery, PaginationResult } from '@/apiModels';
 import { type Setter } from 'solid-js';
 
 export const useOnPaginationQueryUpdate =
@@ -33,7 +33,7 @@ export const isLastPage = (paginationResult: PaginationResult) => {
     if (paginationResult.totalResults) {
         if (pageRangeEnd > paginationResult.totalResults) {
             console.warn(
-                `pageRangeEnd ${pageRangeEnd} > totalResults ${paginationResult.totalResults}`
+                `pageRangeEnd ${pageRangeEnd} > totalResults ${paginationResult.totalResults}`,
             );
         }
         return pageRangeEnd >= paginationResult.totalResults;
@@ -43,7 +43,7 @@ export const isLastPage = (paginationResult: PaginationResult) => {
 
 export const getLastPage = (
     totalResults: number | null | undefined,
-    limit: number
+    limit: number,
 ) => {
     if (totalResults && totalResults > 1 && limit > 0) {
         return Math.floor((totalResults - 1) / limit);

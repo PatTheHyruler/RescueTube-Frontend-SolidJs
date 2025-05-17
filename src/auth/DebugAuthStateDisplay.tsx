@@ -15,7 +15,9 @@ const DebugAuthStateDisplay = () => {
         try {
             const parsedValue = JSON.parse(storedValue);
             initialState = Object.assign(defaultState, parsedValue);
-        } catch (_) {}
+        } catch (error) {
+            console.error('Failed to parse stored debug auth state', error);
+        }
     }
 
     const [state, setState] = createSignal(initialState);

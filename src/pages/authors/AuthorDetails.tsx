@@ -1,8 +1,8 @@
 import { useParams } from '@solidjs/router';
 import { Show, createResource, For } from 'solid-js';
-import AuthorSettings from '../../components/AuthorSettings';
-import { authorsApi } from '../../services/authorsApi';
-import type { AuthorSimpleDtoV1 } from '../../apiModels';
+import AuthorSettings from '@/components/AuthorSettings';
+import { authorsApi } from '@/services/authorsApi';
+import type { AuthorSimpleDtoV1 } from '@/apiModels';
 
 const AuthorDetails = () => {
     const params = useParams();

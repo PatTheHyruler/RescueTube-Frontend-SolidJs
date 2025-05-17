@@ -1,4 +1,4 @@
-import { baseApi } from '../services/baseApi';
+import { baseApi } from '@/services/baseApi';
 import { type InternalAxiosRequestConfig, isAxiosError } from 'axios';
 import { accountApi } from './accountApi';
 import {
@@ -34,7 +34,7 @@ const _refreshToken = async (): Promise<JwtState | null> => {
             !isTimeInPast(interceptorAuthState.jwtState.refreshTokenExpiresAt)
         ) {
             const response = await accountApi.refreshToken(
-                interceptorAuthState.jwtState
+                interceptorAuthState.jwtState,
             );
             const jwtState = processJwtResponse(response.data);
             interceptorAuthState.setJwtState(jwtState);
@@ -42,6 +42,7 @@ const _refreshToken = async (): Promise<JwtState | null> => {
             return jwtState;
         }
     } catch (error) {
+        console.error('Error refreshing token', error);
         return null;
     }
 
@@ -105,7 +106,7 @@ export const registerAuthInterceptors = () => {
                         !config.tokenRefreshAttempted &&
                         interceptorAuthState.jwtState &&
                         !isTimeInPast(
-                            interceptorAuthState.jwtState.refreshTokenExpiresAt
+                            interceptorAuthState.jwtState.refreshTokenExpiresAt,
                         )
                     ) {
                         config.tokenRefreshAttempted = true;
@@ -122,7 +123,7 @@ export const registerAuthInterceptors = () => {
             }
 
             throw error;
-        }
+        },
     );
 };
 
@@ -130,7 +131,7 @@ const setAuthHeader = (request: InternalAxiosRequestConfig, jwt: string) => {
     request.headers.Authorization = `Bearer ${jwt}`;
 };
 
-export const getValidationErrors = (error: any) => {
+export const getValidationErrors = (error: unknown) => {
     // TODO: better errors (also on API side)
     if (isAxiosError(error) && error.response?.data) {
         return ['Error: ' + JSON.stringify(error.response.data)];

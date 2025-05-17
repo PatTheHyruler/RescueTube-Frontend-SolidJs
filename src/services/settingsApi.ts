@@ -1,5 +1,5 @@
 import { baseApi } from './baseApi';
-import type { SettingValueDtoV1 } from '../apiModels';
+import type { SettingValueDtoV1 } from '@/apiModels';
 
 const getSettings = async () => {
     return await baseApi.axios.get<SettingValueDtoV1[]>('/v1/settings');

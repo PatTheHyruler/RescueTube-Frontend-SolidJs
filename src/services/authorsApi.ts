@@ -1,5 +1,5 @@
 import { baseApi } from './baseApi';
-import type { AuthorArchivalSettingsDtoV1, AuthorArchivalSettingsUpsertDtoV1, AuthorSimpleDtoV1 } from '../apiModels';
+import type { AuthorArchivalSettingsDtoV1, AuthorArchivalSettingsUpsertDtoV1, AuthorSimpleDtoV1 } from '@/apiModels';
 
 const getAuthor = async (authorId: string) => {
     return await baseApi.axios.get<AuthorSimpleDtoV1>(`/v1/authors/${authorId}`);

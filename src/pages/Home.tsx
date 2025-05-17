@@ -1,8 +1,8 @@
-import SubmissionForm from '../components/SubmissionForm';
+import SubmissionForm from '@/components/SubmissionForm';
 import { createResource, onCleanup, Show, useContext } from 'solid-js';
-import { statisticsApi } from '../services/statisticsApi';
-import AuthContext from '../auth/AuthContext';
-import { jobsApi } from '../services/jobsApi';
+import { statisticsApi } from '@/services/statisticsApi';
+import AuthContext from '@/auth/AuthContext';
+import { jobsApi } from '@/services/jobsApi';
 
 const Home = () => {
     const authContext = useContext(AuthContext);

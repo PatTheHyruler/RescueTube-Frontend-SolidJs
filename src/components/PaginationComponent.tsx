@@ -1,8 +1,8 @@
-import type { PaginationQuery, PaginationResult } from '../apiModels';
+import type { PaginationQuery, PaginationResult } from '@/apiModels';
 import PaginationResultsSummary from './PaginationResultsSummary';
 import { createEffect, For, Show } from 'solid-js';
 import PaginationButton from './PaginationButton';
-import { getLastPage, isLastPage } from '../utils/pagination';
+import { getLastPage, isLastPage } from '@/utils/pagination';
 
 interface IProps {
     paginationQuery: PaginationQuery;
@@ -15,14 +15,14 @@ const getPagesSelection = (
     page: number,
     limit: number,
     totalResults: number | null | undefined,
-    amountOnPage: number | null | undefined
+    amountOnPage: number | null | undefined,
 ): number[] => {
     const pages = new Set<number>();
     pages.add(0);
 
     const pageRadius = 2;
-    let lowPage = page - pageRadius;
-    let highPage = page + pageRadius;
+    const lowPage = page - pageRadius;
+    const highPage = page + pageRadius;
     for (let i = lowPage; i <= highPage; i++) {
         pages.add(i);
     }
@@ -68,7 +68,7 @@ const PaginationComponent = (props: IProps) => {
             page(),
             limit(),
             props.paginationResult?.totalResults,
-            props.paginationResult?.amountOnPage
+            props.paginationResult?.amountOnPage,
         );
 
     createEffect(() => {
@@ -97,7 +97,7 @@ const PaginationComponent = (props: IProps) => {
     const getMaxPageInput = () => {
         const lastPage = getLastPage(
             props.paginationResult?.totalResults,
-            limit()
+            limit(),
         );
         if (lastPage != null) {
             return lastPage + 1;
@@ -144,7 +144,7 @@ const PaginationComponent = (props: IProps) => {
                     when={
                         getLastPage(
                             props.paginationResult?.totalResults,
-                            limit()
+                            limit(),
                         ) || page() > 0
                     }
                 >

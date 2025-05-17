@@ -30,12 +30,12 @@ export const persistJwt = (jwtState: JwtState | null) => {
     window.localStorage.setItem(jwtKeys.JWT, jwtState.jwt);
     window.localStorage.setItem(
         jwtKeys.JWT_EXPIRES_AT,
-        jwtState.jwtExpiresAt.toISOString()
+        jwtState.jwtExpiresAt.toISOString(),
     );
     window.localStorage.setItem(jwtKeys.REFRESH_TOKEN, jwtState.refreshToken);
     window.localStorage.setItem(
         jwtKeys.REFRESH_TOKEN_EXPIRES_AT,
-        jwtState.refreshTokenExpiresAt.toISOString()
+        jwtState.refreshTokenExpiresAt.toISOString(),
     );
 };
 
@@ -50,11 +50,11 @@ export const readPersistedJwt = (): JwtState | null => {
 
     const jwt = window.localStorage.getItem(jwtKeys.JWT);
     const jwtExpiresAtString = window.localStorage.getItem(
-        jwtKeys.JWT_EXPIRES_AT
+        jwtKeys.JWT_EXPIRES_AT,
     );
     const refreshToken = window.localStorage.getItem(jwtKeys.REFRESH_TOKEN);
     const refreshTokenExpiresAtString = window.localStorage.getItem(
-        jwtKeys.REFRESH_TOKEN_EXPIRES_AT
+        jwtKeys.REFRESH_TOKEN_EXPIRES_AT,
     );
 
     if (

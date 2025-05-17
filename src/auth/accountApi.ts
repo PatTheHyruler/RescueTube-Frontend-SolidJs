@@ -1,4 +1,4 @@
-import { baseApi } from '../services/baseApi';
+import { baseApi } from '@/services/baseApi';
 import {
     AuthBehavior,
     type JwtResponse,
@@ -35,7 +35,7 @@ const refreshToken = async (data: RefreshRequest) => {
     return await baseApi.axios.post<JwtResponse>(
         '/v1/Account/RefreshToken',
         data,
-        { authBehavior: AuthBehavior.SkipAuth }
+        { authBehavior: AuthBehavior.SkipAuth },
     );
 };
 

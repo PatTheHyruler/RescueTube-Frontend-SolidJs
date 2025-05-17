@@ -1,9 +1,9 @@
 import { useSearchParams } from '@solidjs/router';
 import { createEffect, Show, useContext } from 'solid-js';
-import { accountApi } from '../../auth/accountApi';
-import { baseApi } from '../../services/baseApi';
-import AuthContext from '../../auth/AuthContext';
-import { isAdmin } from '../../auth/authUtils';
+import { accountApi } from '@/auth/accountApi';
+import { baseApi } from '@/services/baseApi';
+import AuthContext from '@/auth/AuthContext';
+import { isAdmin } from '@/auth/authUtils';
 
 const hangfireUrlString = `${baseApi.baseUrlWithoutPrefix}/hangfire`;
 const hangfireAuthUrlString = `${baseApi.baseUrlWithoutPrefix}/auth/hangfire`;
@@ -20,7 +20,7 @@ const getTargetUrl = (returnUrlString: string | undefined) => {
             return returnUrl;
         }
         console.warn(
-            `Invalid Hangfire return URL '${returnUrl}', redirecting to '${hangfireUrl}' instead`
+            `Invalid Hangfire return URL '${returnUrl}', redirecting to '${hangfireUrl}' instead`,
         );
     }
 

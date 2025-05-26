@@ -1,3 +1,4 @@
+import VideoSettings from '@/components/VideoSettings';
 import { useParams } from '@solidjs/router';
 import VideoPlayer from '@/components/VideoPlayer';
 import { createResource, createSignal, Show, Suspense } from 'solid-js';
@@ -25,6 +26,9 @@ const VideoWatch = () => {
                 <div class={styles.container}>
                     <div class={styles.videoPlayer}>
                         <VideoPlayer videoId={videoId()} />
+                    </div>
+                    <div class={styles.videoSettings}>
+                        <VideoSettings videoId={videoId()} />
                     </div>
                     <Suspense fallback={<div>Loading...</div>}>
                         <div class={styles.videoInfo}>

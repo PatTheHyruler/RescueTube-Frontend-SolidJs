@@ -31,7 +31,7 @@ files.forEach((file) => {
         .filter((value, index, array) => array.indexOf(value) === index); // remove duplicates
 
     const types = transformedClassNames
-        .map((name) => `  readonly ${name}: string;`)
+        .map((name) => `    readonly ${name}: string;`)
         .join('\n');
     const dtsContent = `declare const styles: {\n${types}\n};\nexport default styles;\n`;
 

@@ -212,6 +212,10 @@ export interface AuthorArchivalSettingsUpsertDtoV1 {
     archivePlaylists: boolean;
 }
 
+export interface VideoArchivalSettingsDtoV1 {
+    shouldRegularlyFetchVideoData: boolean;
+}
+
 export const SettingTypes = {
     Long: 'Long',
     String: 'String',

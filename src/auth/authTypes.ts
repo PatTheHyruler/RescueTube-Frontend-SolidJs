@@ -1,3 +1,4 @@
+import type { RoleNames } from '@/auth/Roles';
 import { type JwtPayload } from 'jwt-decode';
 
 export interface JwtState {
@@ -35,7 +36,7 @@ export interface RefreshRequest {
 
 export interface Role {
     id: string;
-    name: string;
+    name: keyof typeof RoleNames | string & {};
     normalizedName: string;
 }
 

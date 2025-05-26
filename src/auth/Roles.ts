@@ -1,4 +1,4 @@
-const RoleNames = Object.freeze({
+export const RoleNames = Object.freeze({
     Admin: 'Admin',
     SuperAdmin: 'SuperAdmin',
     Helper: 'Helper',

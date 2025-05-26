@@ -1,5 +1,6 @@
 import type {
     AccessTokenDtoV1,
+    VideoArchivalSettingsDtoV1,
     VideoSearchDtoV1,
     VideoSearchResponseDtoV1,
     VideoSimpleDtoV1,
@@ -24,8 +25,23 @@ const getVideoFileAccessToken = async (videoId: string) => {
     );
 };
 
+const getVideoArchivalSettings = async (videoId: string) => {
+    return await baseApi.axios.get<VideoArchivalSettingsDtoV1>(`/v1/videos/${videoId}/archival-settings`);
+};
+
+interface UpsertVideoArchivalSettingsRequest {
+    videoId: string;
+    settings: VideoArchivalSettingsDtoV1;
+}
+
+const upsertVideoArchivalSettings = async ({ videoId, settings }: UpsertVideoArchivalSettingsRequest) => {
+    return await baseApi.axios.put(`/v1/videos/${videoId}/archival-settings`, settings);
+};
+
 export const videosApi = {
     searchVideos,
     getVideoDetails,
     getVideoFileAccessToken,
+    getVideoArchivalSettings,
+    upsertVideoArchivalSettings,
 };

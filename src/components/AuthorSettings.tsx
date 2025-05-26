@@ -11,7 +11,7 @@ const AuthorSettings = (props: Props) => {
 
     const [archivalSettings, { refetch: refetchArchivalSettings }] = createResource(async () => {
         if (!authorId) {
-            throw new Error('No videoId provided');
+            throw new Error('No authorId provided');
         }
         const response = await authorsApi.getAuthorArchivalSettings(authorId);
         return response.data;

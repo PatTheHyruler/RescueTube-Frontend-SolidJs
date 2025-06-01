@@ -75,3 +75,12 @@ export type DecodedJwt = JwtPayload & {
     [JwtClaims.name]: string;
     [JwtClaims.roles]: string;
 };
+
+export type TokenRefreshResult = {
+    success: true;
+    jwtState: JwtState;
+} | {
+    success: false;
+    isNonAuthError: boolean;
+    error?: unknown;
+};

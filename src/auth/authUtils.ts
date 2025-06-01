@@ -5,6 +5,7 @@ import {
     AuthBehavior,
     type JwtState,
     LoginRequiredError,
+    type TokenRefreshResult,
     type User,
 } from './authTypes';
 import { processJwtResponse } from './jwtStorage';
@@ -13,7 +14,7 @@ import { Roles } from './Roles';
 export const interceptorAuthState = {
     jwtState: null as JwtState | null,
     setJwtState: (() => {}) as (jwtState: JwtState | null) => void,
-    ongoingRefreshPromise: null as Promise<JwtState | null> | null,
+    ongoingRefreshPromise: null as Promise<TokenRefreshResult> | null,
 };
 
 const refreshToken = async () => {
@@ -27,7 +28,17 @@ const refreshToken = async () => {
     return completedRefreshPromise;
 };
 
-const _refreshToken = async (): Promise<JwtState | null> => {
+const isNonAuthError = (error: unknown): boolean => {
+    if (!isAxiosError(error)) {
+        return false;
+    }
+    if (error.code === 'ERR_NETWORK') {
+        return true;
+    }
+    return !!error.status && error.status >= 500 && error.status < 600;
+};
+
+const _refreshToken = async (): Promise<TokenRefreshResult> => {
     try {
         if (
             interceptorAuthState.jwtState &&
@@ -39,14 +50,24 @@ const _refreshToken = async (): Promise<JwtState | null> => {
             const jwtState = processJwtResponse(response.data);
             interceptorAuthState.setJwtState(jwtState);
             interceptorAuthState.jwtState = jwtState;
-            return jwtState;
+            return {
+                success: true,
+                jwtState,
+            };
         }
     } catch (error) {
         console.error('Error refreshing token', error);
-        return null;
+        return {
+            success: false,
+            isNonAuthError: isNonAuthError(error),
+            error,
+        };
     }
 
-    return null;
+    return {
+        success: false,
+        isNonAuthError: false,
+    };
 };
 
 const isTimeInPast = (time: Date) => {
@@ -79,9 +100,13 @@ export const registerAuthInterceptors = () => {
         }
 
         const jwtResponse = await refreshToken();
-        if (jwtResponse) {
-            setAuthHeader(config, jwtResponse.jwt);
+        if (jwtResponse.success) {
+            setAuthHeader(config, jwtResponse.jwtState.jwt);
             return config;
+        }
+
+        if (jwtResponse.isNonAuthError) {
+            throw jwtResponse.error;
         }
 
         if (config.authBehavior === AuthBehavior.RequireAuth) {
@@ -110,12 +135,14 @@ export const registerAuthInterceptors = () => {
                         )
                     ) {
                         config.tokenRefreshAttempted = true;
-                        const jwtResponse = await refreshToken();
-                        if (!jwtResponse) {
-                            throw new LoginRequiredError();
+                        const refreshResult = await refreshToken();
+                        if (refreshResult.success) {
+                            setAuthHeader(error.config, refreshResult.jwtState.jwt);
+                            return await baseApi.axios.request(config);
                         }
-                        setAuthHeader(error.config, jwtResponse.jwt);
-                        return await baseApi.axios.request(config);
+                        if (refreshResult.isNonAuthError) {
+                            throw refreshResult.error;
+                        }
                     }
 
                     throw new LoginRequiredError();

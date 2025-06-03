@@ -1,6 +1,6 @@
-import { createSignal, For, useContext } from 'solid-js';
+import { createSignal, For, onMount, useContext } from 'solid-js';
 import AuthContext from './AuthContext';
-import { useNavigate } from '@solidjs/router';
+import { useNavigate, useSearchParams } from '@solidjs/router';
 import { accountApi } from './accountApi';
 import { processJwtResponse } from './jwtStorage';
 import { getValidationErrors } from './authUtils';
@@ -8,19 +8,20 @@ import { getValidationErrors } from './authUtils';
 const Login = () => {
     const { setAuthState, authState } = useContext(AuthContext)!;
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    onMount(() => {
+        if (authState.jwtState) {
+            void accountApi.logout(authState.jwtState);
+            setAuthState({ jwtState: undefined, userDetails: undefined });
+        }
+    });
 
     const [username, setUsername] = createSignal('');
     const [password, setPassword] = createSignal('');
     const [validationErrors, setValidationErrors] = createSignal(
         [] as string[],
     );
-    const [shouldLogOut, setShouldLogOut] = createSignal(true);
-
-    if (authState.jwtState && shouldLogOut()) {
-        void accountApi.logout(authState.jwtState);
-        setAuthState({ jwtState: undefined, userDetails: undefined });
-        setShouldLogOut(false);
-    }
 
     const onSubmit = async (event: SubmitEvent) => {
         event.preventDefault();
@@ -48,7 +49,13 @@ const Login = () => {
         }
         setAuthState('jwtState', processJwtResponse(jwtResponse.data));
 
+        if (searchParams.returnUrl) {
+            window.location.href = searchParams.returnUrl; // TODO: Open redirect vulnerability?
+            return;
+        }
+
         navigate('/');
+        return;
     };
 
     return (

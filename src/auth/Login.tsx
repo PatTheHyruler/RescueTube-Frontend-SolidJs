@@ -5,6 +5,18 @@ import { accountApi } from './accountApi';
 import { processJwtResponse } from './jwtStorage';
 import { getValidationErrors } from './authUtils';
 
+const getValidRelativePath = (url: string): string | null => {
+    try {
+        const parsedUrl = new URL(url, window.location.origin);
+        if (parsedUrl.origin !== window.location.origin) {
+            return null;
+        }
+        return parsedUrl.pathname + parsedUrl.search + parsedUrl.hash;
+    } catch {
+        return null;
+    }
+};
+
 const Login = () => {
     const { setAuthState, authState } = useContext(AuthContext)!;
     const navigate = useNavigate();
@@ -50,8 +62,11 @@ const Login = () => {
         setAuthState('jwtState', processJwtResponse(jwtResponse.data));
 
         if (searchParams.returnUrl) {
-            window.location.href = searchParams.returnUrl; // TODO: Open redirect vulnerability?
-            return;
+            const relativePath = getValidRelativePath(searchParams.returnUrl);
+            if (relativePath) {
+                navigate(relativePath);
+                return;
+            }
         }
 
         navigate('/');

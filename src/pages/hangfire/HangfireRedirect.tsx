@@ -1,5 +1,5 @@
-import { useSearchParams } from '@solidjs/router';
-import { createEffect, Show, useContext } from 'solid-js';
+import { useNavigate, useSearchParams } from '@solidjs/router';
+import { createEffect, Match, Switch, useContext } from 'solid-js';
 import { accountApi } from '@/auth/accountApi';
 import { baseApi } from '@/services/baseApi';
 import AuthContext from '@/auth/AuthContext';
@@ -31,10 +31,17 @@ const HangfireRedirect = () => {
     const authContext = useContext(AuthContext);
     const authState = authContext?.authState;
 
+    const navigate = useNavigate();
+
     const [searchParams] = useSearchParams();
     const returnUrlString = searchParams.url;
 
     createEffect(async () => {
+        if (!authState?.userDetails?.user) {
+            navigate(`/login?returnUrl=${encodeURIComponent(window.location.href)}`);
+            return;
+        }
+
         if (!isAdmin(authState?.userDetails?.user)) {
             return;
         }
@@ -47,6 +54,7 @@ const HangfireRedirect = () => {
         const hangfireAuthUrl = new URL(hangfireAuthUrlString);
         const appAuthUrl = new URL(window.location.href);
         appAuthUrl.pathname = '/hangfire/redirect';
+        appAuthUrl.search = '';
 
         hangfireAuthUrl.searchParams.set('targetUrl', targetUrl.toString());
         hangfireAuthUrl.searchParams.set('hangfireToken', hangfireToken);
@@ -56,12 +64,14 @@ const HangfireRedirect = () => {
     });
 
     return (
-        <Show
-            when={isAdmin(authState?.userDetails?.user)}
-            fallback={<p class="text-danger">Access to Hangfire denied</p>}
-        >
-            <p>Redirecting to Hangfire...</p>
-        </Show>
+        <Switch fallback={<p class="text-danger">Access to Hangfire denied</p>}>
+            <Match when={isAdmin(authState?.userDetails?.user)}>
+                <p>Redirecting to Hangfire...</p>
+            </Match>
+            <Match when={!authState?.userDetails?.user}>
+                TODO login (but maybe wait a bit for it to load?)
+            </Match>
+        </Switch>
     );
 };
 

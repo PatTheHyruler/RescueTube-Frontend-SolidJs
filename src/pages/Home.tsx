@@ -1,12 +1,12 @@
 import SubmissionForm from '@/components/SubmissionForm';
-import { createResource, onCleanup, Show, useContext } from 'solid-js';
+import { createResource, onCleanup, Show } from 'solid-js';
 import { statisticsApi } from '@/services/statisticsApi';
-import AuthContext from '@/auth/AuthContext';
+import { useAuthContext } from '@/auth/AuthContext';
 import { jobsApi } from '@/services/jobsApi';
 
 const Home = () => {
-    const authContext = useContext(AuthContext);
-    const isAuthenticated = () => !!authContext?.authState.jwtState;
+    const authContext = useAuthContext();
+    const isAuthenticated = () => !!authContext.authState.jwtState;
 
     const [videoDownloadStats, { refetch: refetchVideoStats }] =
         createResource(isAuthenticated(), async () => {

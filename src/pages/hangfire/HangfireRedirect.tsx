@@ -1,8 +1,8 @@
 import { useNavigate, useSearchParams } from '@solidjs/router';
-import { createEffect, Match, Switch, useContext } from 'solid-js';
+import { createEffect, Match, Switch } from 'solid-js';
 import { accountApi } from '@/auth/accountApi';
 import { baseApi } from '@/services/baseApi';
-import AuthContext from '@/auth/AuthContext';
+import { useAuthContext } from '@/auth/AuthContext';
 import { isAdmin } from '@/auth/authUtils';
 
 const hangfireUrlString = `${baseApi.baseUrlWithoutPrefix}/hangfire`;
@@ -28,8 +28,8 @@ const getTargetUrl = (returnUrlString: string | undefined) => {
 };
 
 const HangfireRedirect = () => {
-    const authContext = useContext(AuthContext);
-    const authState = authContext?.authState;
+    const authContext = useAuthContext();
+    const authState = authContext.authState;
 
     const navigate = useNavigate();
 

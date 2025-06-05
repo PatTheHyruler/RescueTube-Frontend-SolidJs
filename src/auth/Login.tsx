@@ -1,5 +1,5 @@
-import { createSignal, For, onMount, useContext } from 'solid-js';
-import AuthContext from './AuthContext';
+import { createSignal, For, onMount } from 'solid-js';
+import { useAuthContext } from './AuthContext';
 import { useNavigate, useSearchParams } from '@solidjs/router';
 import { accountApi } from './accountApi';
 import { processJwtResponse } from './jwtStorage';
@@ -18,7 +18,7 @@ const getValidRelativePath = (url: string): string | null => {
 };
 
 const Login = () => {
-    const { setAuthState, authState } = useContext(AuthContext)!;
+    const { setAuthState, authState } = useAuthContext();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 

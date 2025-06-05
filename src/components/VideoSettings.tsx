@@ -1,9 +1,9 @@
 import type { VideoArchivalSettingsDtoV1 } from '@/apiModels';
-import AuthContext from '@/auth/AuthContext';
+import { useAuthContext } from '@/auth/AuthContext';
 import { Roles } from '@/auth/Roles';
 import { videosApi } from '@/services/videosApi';
 import { createForm } from '@tanstack/solid-form';
-import { createResource, useContext } from 'solid-js';
+import { createResource } from 'solid-js';
 
 interface Props {
     videoId: string;
@@ -34,7 +34,7 @@ const VideoSettings = (props: Props) => {
         },
     }));
 
-    const { authState } = useContext(AuthContext)!;
+    const { authState } = useAuthContext();
     const isAllowedToEdit = () => authState.userDetails?.user.roles.some(r => Roles.AdminRoles.some(ar => ar === r.name)) ?? false;
 
     const isSubmitting = form.useStore((state) => state.isSubmitting);

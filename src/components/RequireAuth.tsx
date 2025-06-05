@@ -1,6 +1,6 @@
-import { type JSX, Match, Switch, useContext } from 'solid-js';
+import { type JSX, Match, Switch } from 'solid-js';
 
-import AuthContext from '@/auth/AuthContext';
+import { useAuthContext } from '@/auth/AuthContext';
 
 type Props = {
     roles?: string[];
@@ -8,15 +8,15 @@ type Props = {
 };
 
 const RequireAuth = (props: Props) => {
-    const authContext = useContext(AuthContext);
+    const authContext = useAuthContext();
 
-    const lacksAuth = () => !authContext?.authState.userDetails;
+    const lacksAuth = () => !authContext.authState.userDetails;
     const lacksRoles = () => {
         if (!props.roles?.length) {
             return false;
         }
 
-        const userRoles = authContext?.authState.userDetails?.user.roles;
+        const userRoles = authContext.authState.userDetails?.user.roles;
         return !userRoles || userRoles.findIndex(role => props.roles?.includes(role.name)) === -1;
     };
 

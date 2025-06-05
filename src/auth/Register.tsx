@@ -1,12 +1,12 @@
-import { createSignal, For, useContext } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 import { accountApi } from './accountApi';
-import AuthContext from './AuthContext';
+import { useAuthContext } from './AuthContext';
 import { processJwtResponse } from './jwtStorage';
 import { useNavigate } from '@solidjs/router';
 import { getValidationErrors } from './authUtils';
 
 const Register = () => {
-    const { setAuthState, authState } = useContext(AuthContext)!;
+    const { setAuthState, authState } = useAuthContext();
     const navigate = useNavigate();
 
     const [username, setUsername] = createSignal('');

@@ -1,5 +1,5 @@
 /* @refresh reload */
-import { render } from 'solid-js/web';
+import { ErrorBoundary, render } from 'solid-js/web';
 
 import './index.css';
 import App from './App';
@@ -15,6 +15,7 @@ import AuthorDetails from './pages/authors/AuthorDetails';
 import Settings from './pages/settings/Settings';
 import RequireAuth from './components/RequireAuth';
 import { Roles } from './auth/Roles';
+import { RootErrorHandler } from '@/components/RootErrorHandler';
 
 const root = document.getElementById('root');
 
@@ -26,31 +27,33 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 
 render(
     () => (
-        <Router root={App}>
-            <Route path="/" component={Home}></Route>
-            <Route path="/login" component={Login}></Route>
-            <Route path="/register" component={Register}></Route>
-            <Route path="/videos">
-                <Route path="/search" component={VideoSearch}></Route>
-                <Route
-                    path="/watch/:id"
-                    component={VideoWatch}
-                    matchFilters={{ id: (id) => isGuid(id) }}
-                ></Route>
-            </Route>
-            <Route path="/authors">
-                <Route
-                    path=":id"
-                    component={AuthorDetails}
-                    matchFilters={{ id: (id) => isGuid(id) }}>
+        <ErrorBoundary fallback={RootErrorHandler}>
+            <Router root={App}>
+                <Route path="/" component={Home}></Route>
+                <Route path="/login" component={Login}></Route>
+                <Route path="/register" component={Register}></Route>
+                <Route path="/videos">
+                    <Route path="/search" component={VideoSearch}></Route>
+                    <Route
+                        path="/watch/:id"
+                        component={VideoWatch}
+                        matchFilters={{ id: (id) => isGuid(id) }}
+                    ></Route>
                 </Route>
-            </Route>
-            <Route path="/settings" component={() => <RequireAuth roles={Roles.AdminRoles}><Settings/></RequireAuth>} />
-            <Route
-                path="/hangfire/redirect"
-                component={HangfireRedirect}
-            ></Route>
-        </Router>
+                <Route path="/authors">
+                    <Route
+                        path=":id"
+                        component={AuthorDetails}
+                        matchFilters={{ id: (id) => isGuid(id) }}>
+                    </Route>
+                </Route>
+                <Route path="/settings" component={() => <RequireAuth roles={Roles.AdminRoles}><Settings/></RequireAuth>} />
+                <Route
+                    path="/hangfire/redirect"
+                    component={HangfireRedirect}
+                ></Route>
+            </Router>
+        </ErrorBoundary>
     ),
     root!,
 );

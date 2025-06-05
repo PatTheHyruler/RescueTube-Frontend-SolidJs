@@ -2,7 +2,6 @@ import {
     type Component,
     createEffect,
     createResource,
-    ErrorBoundary,
     type JSX,
     Show,
 } from 'solid-js';
@@ -18,7 +17,6 @@ import { type AuthState } from './auth/authTypes';
 import { accountApi } from './auth/accountApi';
 import DebugAuthStateDisplay from './auth/DebugAuthStateDisplay';
 import { persistJwt, readPersistedJwt } from './auth/jwtStorage';
-import { RootErrorHandler } from './components/RootErrorHandler';
 
 const App: Component = (props: { children?: JSX.Element }) => {
     const persistedJwt = readPersistedJwt();
@@ -55,20 +53,18 @@ const App: Component = (props: { children?: JSX.Element }) => {
     });
 
     return (
-        <ErrorBoundary fallback={RootErrorHandler}>
-            <AuthContext.Provider value={{ authState, setAuthState, userDetailsResource }}>
-                <div class={styles.App}>
-                    <header class={styles.header}>
-                        {/*<img src={logo} class={styles.logo} alt="logo"/>*/}
-                        <NavBar></NavBar>
-                    </header>
-                    {props.children}
-                </div>
-                <Show when={import.meta.env.DEV}>
-                    <DebugAuthStateDisplay></DebugAuthStateDisplay>
-                </Show>
-            </AuthContext.Provider>
-        </ErrorBoundary>
+        <AuthContext.Provider value={{ authState, setAuthState, userDetailsResource }}>
+            <div class={styles.App}>
+                <header class={styles.header}>
+                    {/*<img src={logo} class={styles.logo} alt="logo"/>*/}
+                    <NavBar></NavBar>
+                </header>
+                {props.children}
+            </div>
+            <Show when={import.meta.env.DEV}>
+                <DebugAuthStateDisplay></DebugAuthStateDisplay>
+            </Show>
+        </AuthContext.Provider>
     );
 };
 

@@ -1,10 +1,10 @@
-import { Show, useContext } from 'solid-js';
-import AuthContext from '@/auth/AuthContext';
+import { Show } from 'solid-js';
+import { useAuthContext } from '@/auth/AuthContext';
 import { A, useNavigate } from '@solidjs/router';
 import { accountApi } from '@/auth/accountApi';
 
 const AccountHeader = () => {
-    const { authState, setAuthState } = useContext(AuthContext)!;
+    const { authState, setAuthState } = useAuthContext();
     const navigate = useNavigate();
 
     const logOut = async () => {

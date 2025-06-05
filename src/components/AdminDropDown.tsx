@@ -1,10 +1,10 @@
-import { Show, useContext } from 'solid-js';
-import AuthContext from '@/auth/AuthContext';
+import { Show } from 'solid-js';
+import { useAuthContext } from '@/auth/AuthContext';
 import { isAdmin } from '@/auth/authUtils';
 import { A } from '@solidjs/router';
 
 const AdminDropDown = () => {
-    const { authState } = useContext(AuthContext)!;
+    const { authState } = useAuthContext();
 
     return (
         <Show when={isAdmin(authState.userDetails?.user)}>

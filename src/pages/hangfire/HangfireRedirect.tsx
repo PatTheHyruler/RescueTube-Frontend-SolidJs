@@ -1,8 +1,8 @@
-import { useSearchParams } from '@solidjs/router';
-import { createEffect, Show, useContext } from 'solid-js';
+import { useNavigate, useSearchParams } from '@solidjs/router';
+import { createEffect, Match, Switch } from 'solid-js';
 import { accountApi } from '@/auth/accountApi';
 import { baseApi } from '@/services/baseApi';
-import AuthContext from '@/auth/AuthContext';
+import { useAuthContext } from '@/auth/AuthContext';
 import { isAdmin } from '@/auth/authUtils';
 
 const hangfireUrlString = `${baseApi.baseUrlWithoutPrefix}/hangfire`;
@@ -28,14 +28,27 @@ const getTargetUrl = (returnUrlString: string | undefined) => {
 };
 
 const HangfireRedirect = () => {
-    const authContext = useContext(AuthContext);
-    const authState = authContext?.authState;
+    const authContext = useAuthContext();
+    const authState = authContext.authState;
+
+    const navigate = useNavigate();
 
     const [searchParams] = useSearchParams();
     const returnUrlString = searchParams.url;
 
     createEffect(async () => {
-        if (!isAdmin(authState?.userDetails?.user)) {
+        const userDetailsResource = authContext.userDetailsResource;
+        if (!userDetailsResource || userDetailsResource.loading) {
+            return;
+        }
+
+        const userDetails = userDetailsResource();
+        if (!userDetails?.user) {
+            navigate(`/login?returnUrl=${encodeURIComponent(window.location.href)}`);
+            return;
+        }
+
+        if (!isAdmin(userDetails?.user)) {
             return;
         }
 
@@ -47,6 +60,7 @@ const HangfireRedirect = () => {
         const hangfireAuthUrl = new URL(hangfireAuthUrlString);
         const appAuthUrl = new URL(window.location.href);
         appAuthUrl.pathname = '/hangfire/redirect';
+        appAuthUrl.search = '';
 
         hangfireAuthUrl.searchParams.set('targetUrl', targetUrl.toString());
         hangfireAuthUrl.searchParams.set('hangfireToken', hangfireToken);
@@ -56,12 +70,17 @@ const HangfireRedirect = () => {
     });
 
     return (
-        <Show
-            when={isAdmin(authState?.userDetails?.user)}
-            fallback={<p class="text-danger">Access to Hangfire denied</p>}
-        >
-            <p>Redirecting to Hangfire...</p>
-        </Show>
+        <Switch fallback={<p class="text-danger">Access to Hangfire denied</p>}>
+            <Match when={isAdmin(authState?.userDetails?.user)}>
+                <p>Redirecting to Hangfire...</p>
+            </Match>
+            <Match when={!authState?.userDetails}>
+                Waiting for user details fetch...
+            </Match>
+            <Match when={!authState?.userDetails?.user}>
+                Redirecting to login...
+            </Match>
+        </Switch>
     );
 };
 

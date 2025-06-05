@@ -54,7 +54,7 @@ export interface UserDetails {
 
 export interface AuthState {
     jwtState: JwtState | null;
-    userDetails: UserDetails | null;
+    userDetails: UserDetails | null | undefined;
 }
 
 export class LoginRequiredError extends Error {}
@@ -74,4 +74,13 @@ export const JwtClaims = Object.freeze({
 export type DecodedJwt = JwtPayload & {
     [JwtClaims.name]: string;
     [JwtClaims.roles]: string;
+};
+
+export type TokenRefreshResult = {
+    success: true;
+    jwtState: JwtState;
+} | {
+    success: false;
+    isNonAuthError: boolean;
+    error?: unknown;
 };

@@ -1,26 +1,39 @@
-import { createSignal, For, useContext } from 'solid-js';
-import AuthContext from './AuthContext';
-import { useNavigate } from '@solidjs/router';
+import { createSignal, For, onMount } from 'solid-js';
+import { useAuthContext } from './AuthContext';
+import { useNavigate, useSearchParams } from '@solidjs/router';
 import { accountApi } from './accountApi';
 import { processJwtResponse } from './jwtStorage';
 import { getValidationErrors } from './authUtils';
 
+const getValidRelativePath = (url: string): string | null => {
+    try {
+        const parsedUrl = new URL(url, window.location.origin);
+        if (parsedUrl.origin !== window.location.origin) {
+            return null;
+        }
+        return parsedUrl.pathname + parsedUrl.search + parsedUrl.hash;
+    } catch {
+        return null;
+    }
+};
+
 const Login = () => {
-    const { setAuthState, authState } = useContext(AuthContext)!;
+    const { setAuthState, authState } = useAuthContext();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    onMount(() => {
+        if (authState.jwtState) {
+            void accountApi.logout(authState.jwtState);
+            setAuthState({ jwtState: undefined, userDetails: undefined });
+        }
+    });
 
     const [username, setUsername] = createSignal('');
     const [password, setPassword] = createSignal('');
     const [validationErrors, setValidationErrors] = createSignal(
         [] as string[],
     );
-    const [shouldLogOut, setShouldLogOut] = createSignal(true);
-
-    if (authState.jwtState && shouldLogOut()) {
-        void accountApi.logout(authState.jwtState);
-        setAuthState({ jwtState: undefined, userDetails: undefined });
-        setShouldLogOut(false);
-    }
 
     const onSubmit = async (event: SubmitEvent) => {
         event.preventDefault();
@@ -48,7 +61,16 @@ const Login = () => {
         }
         setAuthState('jwtState', processJwtResponse(jwtResponse.data));
 
+        if (searchParams.returnUrl) {
+            const relativePath = getValidRelativePath(searchParams.returnUrl);
+            if (relativePath) {
+                navigate(relativePath);
+                return;
+            }
+        }
+
         navigate('/');
+        return;
     };
 
     return (

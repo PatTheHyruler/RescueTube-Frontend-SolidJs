@@ -54,7 +54,7 @@ export interface UserDetails {
 
 export interface AuthState {
     jwtState: JwtState | null;
-    userDetails: UserDetails | null;
+    userDetails: UserDetails | null | undefined;
 }
 
 export class LoginRequiredError extends Error {}

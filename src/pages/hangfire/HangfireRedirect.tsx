@@ -37,12 +37,18 @@ const HangfireRedirect = () => {
     const returnUrlString = searchParams.url;
 
     createEffect(async () => {
-        if (!authState?.userDetails?.user) {
+        const userDetailsResource = authContext.userDetailsResource;
+        if (!userDetailsResource || userDetailsResource.loading) {
+            return;
+        }
+
+        const userDetails = userDetailsResource();
+        if (!userDetails?.user) {
             navigate(`/login?returnUrl=${encodeURIComponent(window.location.href)}`);
             return;
         }
 
-        if (!isAdmin(authState?.userDetails?.user)) {
+        if (!isAdmin(userDetails?.user)) {
             return;
         }
 
@@ -68,8 +74,11 @@ const HangfireRedirect = () => {
             <Match when={isAdmin(authState?.userDetails?.user)}>
                 <p>Redirecting to Hangfire...</p>
             </Match>
+            <Match when={!authState?.userDetails}>
+                Waiting for user details fetch...
+            </Match>
             <Match when={!authState?.userDetails?.user}>
-                TODO login (but maybe wait a bit for it to load?)
+                Redirecting to login...
             </Match>
         </Switch>
     );

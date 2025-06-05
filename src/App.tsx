@@ -35,14 +35,12 @@ const App: Component = (props: { children?: JSX.Element }) => {
     });
     registerAuthInterceptors();
 
-    createResource(
+    const [userDetailsResource] = createResource(
         () => authState.jwtState,
         async () => {
             if (authState.jwtState) {
                 const response = await accountApi.getCurrentUserDetails();
-                const userDetails = response.data;
-                setAuthState('userDetails', userDetails);
-                return userDetails;
+                return response.data;
             }
             return null;
         },
@@ -52,9 +50,13 @@ const App: Component = (props: { children?: JSX.Element }) => {
         persistJwt(authState.jwtState);
     });
 
+    createEffect(() => {
+        setAuthState('userDetails', userDetailsResource());
+    });
+
     return (
         <ErrorBoundary fallback={RootErrorHandler}>
-            <AuthContext.Provider value={{ authState, setAuthState }}>
+            <AuthContext.Provider value={{ authState, setAuthState, userDetailsResource }}>
                 <div class={styles.App}>
                     <header class={styles.header}>
                         {/*<img src={logo} class={styles.logo} alt="logo"/>*/}

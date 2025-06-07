@@ -16,6 +16,7 @@ import Settings from './pages/settings/Settings';
 import RequireAuth from './components/RequireAuth';
 import { Roles } from './auth/Roles';
 import { RootErrorHandler } from '@/components/RootErrorHandler';
+import DataFetches from '@/pages/data-fetches/DataFetches';
 
 const root = document.getElementById('root');
 
@@ -47,6 +48,7 @@ render(
                         matchFilters={{ id: (id) => isGuid(id) }}>
                     </Route>
                 </Route>
+                <Route path="/data-fetches" component={() => <RequireAuth><DataFetches /></RequireAuth>} />
                 <Route path="/settings" component={() => <RequireAuth roles={Roles.AdminRoles}><Settings/></RequireAuth>} />
                 <Route
                     path="/hangfire/redirect"

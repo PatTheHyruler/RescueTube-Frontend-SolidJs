@@ -246,3 +246,16 @@ export type SettingValueDtoV1 =
     SettingValueDtoV1_String |
     SettingValueDtoV1_Boolean |
     SettingValueDtoV1_DataSizeBytes;
+
+export interface DataFetchDtoV1 {
+    id: string;
+    occurredAt: string;
+    success: boolean;
+    type: string;
+    shouldAffectValidity: boolean;
+    source: string;
+}
+
+export interface DataFetchesResponseDtoV1 extends PaginationResult {
+    dataFetches: DataFetchDtoV1[];
+}

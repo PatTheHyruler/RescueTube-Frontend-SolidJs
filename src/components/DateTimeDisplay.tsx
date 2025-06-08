@@ -1,15 +1,17 @@
-import { type DateOrStringNullable, getDate } from '@/utils';
+import { type DateOrStringNullable, getDateTime } from '@/utils';
+import type { DateTime } from 'luxon';
 
 interface IProps {
     value?: DateOrStringNullable;
+    customDisplay?: (dateTime: DateTime | null) => string | null | undefined;
 }
 
 export const DateTimeDisplay = (props: IProps) => {
-    const dateValue = getDate(props.value);
+    const dateTime = getDateTime(props.value);
 
     return (
-        <span title={dateValue?.toLocaleString('swe')}>
-            {dateValue?.toLocaleDateString('swe')}
-        </span>
+        <time dateTime={dateTime?.toISO() ?? undefined} title={dateTime?.toISO() ?? undefined}>
+            {props.customDisplay ? props.customDisplay(dateTime) : dateTime?.toFormat('yyyy-MM-dd')}
+        </time>
     );
 };

@@ -1,8 +1,5 @@
 import type { Fetchable, TextTranslationDtoV1 } from '@/apiModels';
-
-export const uid = () => {
-    return Date.now().toString(36) + Math.random().toString(36).substring(2);
-};
+import { DateTime } from 'luxon';
 
 export const isGuid = (value: unknown): boolean => {
     return (
@@ -35,16 +32,21 @@ export const getDate = (value: DateOrStringNullable) => {
     return dateValue;
 };
 
-export const getUnixTimeMillisOrMinimum = (value: Date | null | undefined) => {
-    return value?.getTime() ?? Number.MIN_VALUE;
+export const getDateTime = (value: DateOrStringNullable) => {
+    if (value instanceof Date) {
+        return DateTime.fromJSDate(value);
+    }
+    if (typeof value === 'string' && value) {
+        return DateTime.fromISO(value);
+    }
+    if (!value) {
+        return null;
+    }
+    return DateTime.invalid('Unknown parameter type', `Value: ${value}`);
 };
 
-export const getLatest = (a: DateOrStringNullable, b: DateOrStringNullable) => {
-    const aDate = getDate(a);
-    const bDate = getDate(b);
-    return getUnixTimeMillisOrMinimum(aDate) > getUnixTimeMillisOrMinimum(bDate)
-        ? aDate
-        : (bDate ?? aDate);
+export const getUnixTimeMillisOrMinimum = (value: Date | null | undefined) => {
+    return value?.getTime() ?? Number.MIN_VALUE;
 };
 
 export const isLikelyDeleted = (entity: Fetchable) => {

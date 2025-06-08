@@ -12,7 +12,7 @@ const DataFetch = (props: DataFetchProps) => {
 
     return (
         <div>
-            <DateTimeDisplay value={dataFetch.occurredAt} />
+            <DateTimeDisplay value={dataFetch.occurredAt} customDisplay={dt => dt?.toFormat('yyyy-MM-dd HH:mm:ss')} />
             &nbsp;-&nbsp;
             {dataFetch.type} by {dataFetch.source}
             &nbsp;-&nbsp;

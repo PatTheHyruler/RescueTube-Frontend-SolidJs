@@ -19,6 +19,7 @@ const DataFetches = () => {
         <div>
             <PaginationComponent
                 paginationQuery={paginationQuery()}
+                paginationResult={dataFetches()}
                 onUpdate={p => setPaginationQuery(p)}
                 onSubmit={refetch}
             />

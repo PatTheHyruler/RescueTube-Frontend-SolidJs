@@ -6,7 +6,7 @@ import { getLastPage, isLastPage } from '@/utils/pagination';
 
 interface IProps {
     paginationQuery: PaginationQuery;
-    paginationResult?: PaginationResult | null;
+    paginationResult: PaginationResult | null | undefined;
     onUpdate: (paginationQuery: PaginationQuery) => void;
     onSubmit: () => void;
 }

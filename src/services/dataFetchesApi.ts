@@ -18,6 +18,9 @@ export const getDataFetches = async (query: DataFetchesQueryDtoV1) => {
     if (query.type) {
         urlParams.append('type', query.type);
     }
+    if (query.success !== undefined) {
+        urlParams.append('success', query.success.toString());
+    }
     return await baseApi.axios.get<DataFetchesResponseDtoV1>(`/v1/data-fetches?${urlParams.toString()}`);
 };
 

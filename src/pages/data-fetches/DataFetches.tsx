@@ -16,6 +16,11 @@ const DataFetches = () => {
         return response.data;
     });
 
+    const updateQueryAndRefetch = async <TKey extends keyof DataFetchesQueryDtoV1, TValue extends DataFetchesQueryDtoV1[TKey]>(key: TKey, value: TValue | ((previous: DataFetchesQueryDtoV1) => TValue)) => {
+        setQuery(q => ({ ...q, [key]: typeof value === 'function' ? value(q) : value }));
+        await refetch();
+    };
+
     return (
         <div>
             <PaginationComponent
@@ -29,16 +34,42 @@ const DataFetches = () => {
                     <tr>
                         <th>
                             Occurred at
-                            <button onClick={() => {
-                                setQuery(q => ({ ...q, orderByDescending: !q.orderByDescending }));
-                                refetch();
-                            }}>
+                            <button onClick={() => updateQueryAndRefetch('orderByDescending', q => !q.orderByDescending)}>
                                 {query().orderByDescending ? '↓' : '↑'}
                             </button>
                         </th>
-                        <th>Type</th>
-                        <th>Source</th>
-                        <th>Status</th>
+                        <th>
+                            Type
+                            <input
+                                type="text"
+                                value={query().type ?? ''}
+                                onChange={e => updateQueryAndRefetch('type', e.currentTarget.value)} />
+                        </th>
+                        <th>
+                            Source
+                            <input
+                                type="text"
+                                value={query().source ?? ''}
+                                onChange={e => updateQueryAndRefetch('source', e.currentTarget.value)} />
+                        </th>
+                        <th>
+                            Status
+                            <input
+                                type="checkbox"
+                                /* @ts-expect-error TODO Figure out a way to declare indeterminate as a valid attribute */
+                                indeterminate={query().success === undefined}
+                                checked={query().success}
+                                onClick={() => updateQueryAndRefetch('success', q => {
+                                    if (q.success === undefined) {
+                                        return true;
+                                    }
+                                    if (q.success) {
+                                        return false;
+                                    }
+                                    return undefined;
+                                })}
+                            />
+                        </th>
                         <th></th>
                     </tr>
                 </thead>

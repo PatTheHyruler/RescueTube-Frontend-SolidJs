@@ -259,3 +259,12 @@ export interface DataFetchDtoV1 {
 export interface DataFetchesResponseDtoV1 extends PaginationResult {
     dataFetches: DataFetchDtoV1[];
 }
+
+export interface DataFetchesQueryDtoV1 extends PaginationQuery{
+    type?: string;
+    source?: string;
+    occurredAtFrom?: string;
+    occurredAtTo?: string;
+    success?: boolean;
+    orderByDescending: boolean;
+}

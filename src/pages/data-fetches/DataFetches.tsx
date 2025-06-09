@@ -1,33 +1,55 @@
 import { createResource, createSignal, For } from 'solid-js';
 import { dataFetchesApi } from '@/services/dataFetchesApi';
-import type { PaginationQuery } from '@/apiModels';
+import type { DataFetchesQueryDtoV1 } from '@/apiModels';
 import PaginationComponent from '@/components/PaginationComponent';
-import DataFetch from '@/pages/data-fetches/DataFetch';
+import DataFetchRow from '@/pages/data-fetches/DataFetchRow';
 
 const DataFetches = () => {
-    const [paginationQuery, setPaginationQuery] = createSignal<PaginationQuery>({
+    const [query, setQuery] = createSignal<DataFetchesQueryDtoV1>({
         page: 0,
         limit: 50,
+        orderByDescending: true,
     });
 
     const [dataFetches, { refetch }] = createResource(async () => {
-        const response = await dataFetchesApi.getDataFetches(paginationQuery());
+        const response = await dataFetchesApi.getDataFetches(query());
         return response.data;
     });
 
     return (
         <div>
             <PaginationComponent
-                paginationQuery={paginationQuery()}
+                paginationQuery={query()}
                 paginationResult={dataFetches()}
-                onUpdate={p => setPaginationQuery(p)}
+                onUpdate={p => setQuery(q => ({ ...q, ...p }))}
                 onSubmit={refetch}
             />
-            <For each={dataFetches()?.dataFetches}>
-                {(dataFetch) => (
-                    <DataFetch dataFetch={dataFetch} />
-                )}
-            </For>
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Occurred at
+                            <button onClick={() => {
+                                setQuery(q => ({ ...q, orderByDescending: !q.orderByDescending }));
+                                refetch();
+                            }}>
+                                {query().orderByDescending ? '↓' : '↑'}
+                            </button>
+                        </th>
+                        <th>Type</th>
+                        <th>Source</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <For each={dataFetches()?.dataFetches}>
+                        {(dataFetch) => (
+                            <DataFetchRow dataFetch={dataFetch} />
+                        )}
+                    </For>
+                </tbody>
+            </table>
         </div>
     );
 };

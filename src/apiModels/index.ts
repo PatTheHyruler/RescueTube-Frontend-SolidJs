@@ -254,6 +254,9 @@ export interface DataFetchDtoV1 {
     type: string;
     shouldAffectValidity: boolean;
     source: string;
+
+    videoId: string | null;
+    authorId: string | null;
 }
 
 export interface DataFetchesResponseDtoV1 extends PaginationResult {

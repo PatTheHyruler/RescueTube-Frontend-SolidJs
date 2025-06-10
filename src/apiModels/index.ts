@@ -246,3 +246,28 @@ export type SettingValueDtoV1 =
     SettingValueDtoV1_String |
     SettingValueDtoV1_Boolean |
     SettingValueDtoV1_DataSizeBytes;
+
+export interface DataFetchDtoV1 {
+    id: string;
+    occurredAt: string;
+    success: boolean;
+    type: string;
+    shouldAffectValidity: boolean;
+    source: string;
+
+    videoId: string | null;
+    authorId: string | null;
+}
+
+export interface DataFetchesResponseDtoV1 extends PaginationResult {
+    dataFetches: DataFetchDtoV1[];
+}
+
+export interface DataFetchesQueryDtoV1 extends PaginationQuery{
+    type?: string;
+    source?: string;
+    occurredAtFrom?: string;
+    occurredAtTo?: string;
+    success?: boolean;
+    orderByDescending: boolean;
+}

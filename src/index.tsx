@@ -17,6 +17,7 @@ import RequireAuth from './components/RequireAuth';
 import { Roles } from './auth/Roles';
 import { RootErrorHandler } from '@/components/RootErrorHandler';
 import DataFetches from '@/pages/data-fetches/DataFetches';
+import AuthorSearch from '@/pages/authors/AuthorSearch';
 
 const root = document.getElementById('root');
 
@@ -42,6 +43,7 @@ render(
                     ></Route>
                 </Route>
                 <Route path="/authors">
+                    <Route path="/" component={AuthorSearch} />
                     <Route
                         path=":id"
                         component={AuthorDetails}

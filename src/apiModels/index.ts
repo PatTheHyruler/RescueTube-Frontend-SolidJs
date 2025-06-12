@@ -32,6 +32,14 @@ export interface Fetchable {
     lastUnsuccessfulFetch?: string;
 }
 
+export interface AuthorSearchRequestDtoV1 extends PaginationQuery {
+    name?: string | null;
+}
+
+export interface AuthorSearchResponseDtoV1 extends PaginationResult {
+    authors: AuthorSimpleDtoV1[];
+}
+
 export interface AuthorSimpleDtoV1 {
     id: string;
     userName: string | null;

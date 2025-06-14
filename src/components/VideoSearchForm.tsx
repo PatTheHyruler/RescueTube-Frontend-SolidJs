@@ -7,6 +7,8 @@ import { For, type Setter } from 'solid-js';
 import PaginationComponent from './PaginationComponent';
 import { useOnPaginationQueryUpdate } from '@/utils/pagination';
 import type { Values } from '@/utils';
+import { authorsApi } from '@/services/authorsApi';
+import Select from '@/components/Select/Select';
 
 interface IProps {
     query: VideoSearchDtoV1;
@@ -47,6 +49,20 @@ const VideoSearchForm = (props: IProps) => {
                             authorQuery: e.target.value,
                         }))
                     }
+                />
+                <Select
+                    fetchOptions={async (search) => {
+                        const response = await authorsApi.searchAuthors({
+                            name: search,
+                            limit: 10,
+                            page: 0,
+                        });
+                        return response.data.authors.map(author => ({ id: author.id, name: author.userName }));
+                    }}
+                    selectedOptions={props.query.authorIds?.map(authorId => ({ id: authorId, name: authorId }))}
+                    onChange={selectedAuthors => {
+                        props.setQuery(q => ({ ...q, authorIds: selectedAuthors.map(author => author.id) }));
+                    }}
                 />
                 <label for="sortingOptions">Sort by:</label>
                 <select

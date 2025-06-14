@@ -24,6 +24,7 @@ import AuthorSummary from '@/components/AuthorSummary';
 const defaultSearch: VideoSearchDtoV1 = {
     nameQuery: '',
     authorQuery: '',
+    authorIds: null,
     sortingOptions: VideoSortingOptions.CreatedAt,
     descending: true,
     page: 0,
@@ -33,6 +34,7 @@ const defaultSearch: VideoSearchDtoV1 = {
 interface SearchParams extends Params {
     name: string;
     author: string;
+    authorIds: string;
     sortingOptions: string;
     descending: string;
     page: string;
@@ -45,6 +47,7 @@ function mapSearchToDto(
     return {
         nameQuery: searchParams.name,
         authorQuery: searchParams.author,
+        authorIds: searchParams.authorIds?.split(','),
         sortingOptions:
             tryParseObjEnum(searchParams.sort, VideoSortingOptions) ??
             undefined,
@@ -58,6 +61,7 @@ function mapDtoToSearch(dto: Partial<VideoSearchDtoV1>): Partial<SearchParams> {
     return {
         name: dto.nameQuery ?? undefined,
         author: dto.authorQuery ?? undefined,
+        authorIds: dto.authorIds?.join(','),
         sort: dto.sortingOptions,
         descending: dto.descending?.toString() ?? undefined,
         page: dto.page?.toString() ?? undefined,

@@ -85,6 +85,7 @@ export const VideoSortingOptions = {
 export interface VideoSearchDtoV1 extends PaginationQuery {
     nameQuery: string | null;
     authorQuery: string | null;
+    authorIds: string[] | null;
 
     sortingOptions: Values<typeof VideoSortingOptions>;
     descending: boolean;

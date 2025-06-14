@@ -8,7 +8,7 @@ import css from 'css';
  */
 function dashesToCamelCase(s) {
     return s.replace(
-        /([A-Za-z])-([A-Za-z])/,
+        /([A-Za-z])-([A-Za-z])/g,
         (_, s1, s2) => s1 + s2.toUpperCase(),
     );
     // Unsure what should be done with names such as --my-class or my--class, so just not touching them for now

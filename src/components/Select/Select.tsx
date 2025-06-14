@@ -1,7 +1,7 @@
 import { createEffect, createResource, createSignal, For, Show } from 'solid-js';
 import styles from './Select.module.css';
 
-interface Option {
+export interface Option {
     id: string;
     name?: string | null;
 }

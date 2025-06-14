@@ -1,14 +1,15 @@
 import {
+    type AuthorSimpleDtoV1,
     type PaginationResult,
     type VideoSearchDtoV1,
     VideoSortingOptions,
 } from '@/apiModels';
-import { For, type Setter } from 'solid-js';
+import { createResource, For, type Setter } from 'solid-js';
 import PaginationComponent from './PaginationComponent';
 import { useOnPaginationQueryUpdate } from '@/utils/pagination';
 import type { Values } from '@/utils';
 import { authorsApi } from '@/services/authorsApi';
-import Select from '@/components/Select/Select';
+import Select, { type Option } from '@/components/Select/Select';
 
 interface IProps {
     query: VideoSearchDtoV1;
@@ -17,6 +18,18 @@ interface IProps {
     onSubmit: (() => Promise<void>) | (() => void);
 }
 
+interface AuthorOption extends Option {
+    author: AuthorSimpleDtoV1 | null;
+}
+
+const mapAuthorToAuthorOption = (author: AuthorSimpleDtoV1): AuthorOption => {
+    return {
+        id: author.id,
+        name: author.displayName ?? author.userName,
+        author: author,
+    };
+};
+
 const VideoSearchForm = (props: IProps) => {
     const onSubmit = (e: SubmitEvent) => {
         e.preventDefault();
@@ -24,6 +37,30 @@ const VideoSearchForm = (props: IProps) => {
     };
 
     const onPaginationQueryUpdate = useOnPaginationQueryUpdate(props.setQuery);
+
+    const [fetchedSelectedAuthors] = createResource(() => props.query.authorIds, async (authorIds) => {
+        if (!authorIds?.length) {
+            return [];
+        }
+        const response = await authorsApi.searchAuthors({ limit: authorIds.length, page: 0, authorIds });
+        return response.data.authors;
+    });
+    const selectedAuthors = () => {
+        if (!props.query.authorIds?.length) {
+            return [];
+        }
+        const authors = fetchedSelectedAuthors();
+        if (!authors) {
+            return null;
+        }
+        const options: AuthorOption[] = authors.map(mapAuthorToAuthorOption);
+        for (const authorId of props.query.authorIds) {
+            if (authors.findIndex(x => x.id == authorId) === -1) {
+                options.push({ id: authorId, name: `id: ${authorId}`, author: null });
+            }
+        }
+        return options;
+    };
 
     return (
         <>
@@ -58,9 +95,9 @@ const VideoSearchForm = (props: IProps) => {
                             limit: 10,
                             page: 0,
                         });
-                        return response.data.authors.map(author => ({ id: author.id, name: author.userName }));
+                        return response.data.authors.map(mapAuthorToAuthorOption);
                     }}
-                    selectedOptions={props.query.authorIds?.map(authorId => ({ id: authorId, name: authorId }))}
+                    selectedOptions={selectedAuthors()}
                     onChange={selectedAuthors => {
                         props.setQuery(q => ({ ...q, authorIds: selectedAuthors.map(author => author.id) }));
                     }}

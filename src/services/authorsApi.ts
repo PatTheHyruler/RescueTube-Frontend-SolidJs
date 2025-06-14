@@ -21,6 +21,9 @@ const searchAuthors = async (query: AuthorSearchRequestDtoV1) => {
     if (query.name) {
         urlParams.append('name', query.name);
     }
+    if (query.authorIds) {
+        urlParams.append('authorIds', query.authorIds.join(','));
+    }
     if (query.excludeAuthorIds) {
         urlParams.append('excludeAuthorIds', query.excludeAuthorIds.join(','));
     }

@@ -1,4 +1,4 @@
-import { createResource, createSignal, For, Show } from 'solid-js';
+import { createEffect, createResource, createSignal, For, Show } from 'solid-js';
 import styles from './Select.module.css';
 
 interface Option {
@@ -22,6 +22,13 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
     });
 
     const [isOpen, setIsOpen] = createSignal(false);
+
+    const [searchClearedAt, setSearchClearedAt] = createSignal(0);
+    createEffect(() => {
+        if (search() === '') {
+            setSearchClearedAt(Date.now());
+        }
+    });
 
     const removeValue = (index: number) => {
         if (!props.selectedOptions) {
@@ -85,6 +92,20 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                         const value = e.currentTarget.value;
                         setSearch(value);
                         setIsOpen(!!value);
+                    }}
+                    onKeyUp={e => {
+                        if (search() || !props.selectedOptions?.length) {
+                            return;
+                        }
+                        if (searchClearedAt() + 1000 > Date.now()) {
+                            return;
+                        }
+                        if (e.key === 'Delete') {
+                            removeValue(0);
+                        }
+                        else if (e.key === 'Backspace') {
+                            removeValue(props.selectedOptions.length - 1);
+                        }
                     }}
                 />
             </div>

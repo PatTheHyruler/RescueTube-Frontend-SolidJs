@@ -15,12 +15,16 @@ interface SelectProps<TOption extends Option> {
 
 const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) => {
     const [search, setSearch] = createSignal<string>('');
-    const [result] = createResource(search, async (search) => {
-        if (!search) {
-            return [];
-        }
-        return await props.fetchOptions(search);
-    });
+    const [result] = createResource(
+        () => ({ search: search(), selectedIds: props.selectedOptions?.map(x => x.id) }),
+        async (deps) => {
+            const search = deps.search;
+            if (!search) {
+                return [];
+            }
+            return await props.fetchOptions(search);
+        },
+    );
 
     const [isOpen, setIsOpen] = createSignal(false);
 
@@ -31,11 +35,15 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
         }
     });
 
+    const setSelectedOptions = (options: TOption[]) => {
+        props.onChange(options);
+    };
+
     const removeValue = (index: number) => {
         if (!props.selectedOptions) {
             return;
         }
-        props.onChange([
+        setSelectedOptions([
             ...props.selectedOptions.slice(0, index),
             ...props.selectedOptions.slice(index + 1),
         ]);
@@ -43,7 +51,7 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
 
     const toggleSelected = (option: TOption) => {
         if (!props.selectedOptions) {
-            props.onChange([option]);
+            setSelectedOptions([option]);
             return;
         }
         const index = props.selectedOptions?.findIndex(o => o.id === option.id);
@@ -51,7 +59,7 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
             removeValue(index);
         }
         else {
-            props.onChange([
+            setSelectedOptions([
                 ...props.selectedOptions,
                 option,
             ]);

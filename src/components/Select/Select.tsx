@@ -15,6 +15,9 @@ interface SelectProps<TOption extends Option> {
 const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) => {
     const [search, setSearch] = createSignal<string>('');
     const [result] = createResource(search, async (search) => {
+        if (!search) {
+            return [];
+        }
         return await props.fetchOptions(search);
     });
 
@@ -52,8 +55,7 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
             <div
                 class={styles.solidSelectControl}
                 data-multiple={true}
-                data-has-value={true}
-                data-disabled={false}
+                data-has-value={props.selectedOptions?.length}
             >
                 <For each={props.selectedOptions}>
                     {(option, index) => (
@@ -79,7 +81,7 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                     }}
                 />
             </div>
-            <Show when={isOpen()}>
+            <Show when={isOpen() && result()?.length}>
                 <div class={styles.solidSelectList}>
                     <Show when={result()}>
                         {result => (

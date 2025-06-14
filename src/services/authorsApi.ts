@@ -21,6 +21,9 @@ const searchAuthors = async (query: AuthorSearchRequestDtoV1) => {
     if (query.name) {
         urlParams.append('name', query.name);
     }
+    if (query.excludeAuthorIds) {
+        urlParams.append('excludeAuthorIds', query.excludeAuthorIds.join(','));
+    }
 
     return await baseApi.axios.get<AuthorSearchResponseDtoV1>(`/v1/authors?${urlParams.toString()}`);
 };

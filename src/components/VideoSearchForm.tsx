@@ -54,6 +54,7 @@ const VideoSearchForm = (props: IProps) => {
                     fetchOptions={async (search) => {
                         const response = await authorsApi.searchAuthors({
                             name: search,
+                            excludeAuthorIds: props.query.authorIds,
                             limit: 10,
                             page: 0,
                         });

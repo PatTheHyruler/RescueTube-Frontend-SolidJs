@@ -34,6 +34,7 @@ export interface Fetchable {
 
 export interface AuthorSearchRequestDtoV1 extends PaginationQuery {
     name?: string | null;
+    excludeAuthorIds?: string[] | null;
 }
 
 export interface AuthorSearchResponseDtoV1 extends PaginationResult {

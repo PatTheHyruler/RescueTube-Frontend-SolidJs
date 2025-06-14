@@ -50,6 +50,13 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
         }
     };
 
+    const isSelected = (option: TOption) => {
+        if (!props.selectedOptions) {
+            return false;
+        }
+        return props.selectedOptions.findIndex(o => o.id === option.id) >= 0;
+    };
+
     return (
         <>
             <div
@@ -88,6 +95,7 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                             <For each={result()}>
                                 {option => (
                                     <div
+                                        data-selected={isSelected(option)}
                                         role="button"
                                         class={styles.solidSelectOption}
                                         onClick={() => toggleSelected(option)}

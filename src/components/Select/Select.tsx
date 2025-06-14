@@ -10,6 +10,7 @@ interface SelectProps<TOption extends Option> {
     fetchOptions: (search: string | null) => Promise<TOption[]>;
     selectedOptions: TOption[] | null | undefined;
     onChange: (options: TOption[]) => Promise<void> | void;
+    disabled?: boolean | null;
 }
 
 const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) => {
@@ -68,6 +69,7 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
         <>
             <div
                 class={styles.solidSelectControl}
+                data-disabled={props.disabled ?? false}
                 data-multiple={true}
                 data-has-value={props.selectedOptions?.length}
             >
@@ -77,6 +79,7 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                             {option.name ?? option.id}
                             <button
                                 type="button"
+                                disabled={props.disabled ?? false}
                                 class={styles.solidSelectMultiValueRemove}
                                 onClick={() => removeValue(index())}
                             >
@@ -88,6 +91,7 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                 <input
                     type="search"
                     class={styles.solidSelectInput}
+                    disabled={props.disabled ?? false}
                     onInput={e => {
                         const value = e.currentTarget.value;
                         setSearch(value);

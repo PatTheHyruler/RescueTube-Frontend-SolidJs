@@ -101,6 +101,7 @@ const VideoSearchForm = (props: IProps) => {
                     onChange={selectedAuthors => {
                         props.setQuery(q => ({ ...q, authorIds: selectedAuthors.map(author => author.id) }));
                     }}
+                    disabled={fetchedSelectedAuthors.loading}
                 />
                 <label for="sortingOptions">Sort by:</label>
                 <select

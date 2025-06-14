@@ -10,6 +10,7 @@
     border-radius: 0.25rem;
     min-width: 5rem;
 }
+
 .solid-select-control {
     border: 1px solid rgb(229, 231, 235);
     border-radius: inherit;
@@ -19,15 +20,20 @@
     outline: 1px solid transparent;
     max-width: fit-content;
 }
+.solid-select-control[data-disabled="true"] {
+    background-color: rgb(243, 244, 246);
+    cursor: not-allowed;
+}
 .solid-select-control[data-multiple="true"][data-has-value="true"] {
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
     gap: 0.25rem;
 }
-.solid-select-control:focus-within {
+.solid-select-control:focus-within:not([data-disabled="true"]) {
     outline-color: black;
 }
+
 .solid-select-multi-value {
     background-color: rgb(243, 244, 246);
     border-radius: 0.25rem;
@@ -38,15 +44,14 @@
     padding-right: 4px;
     min-width: 20px;
 }
-.solid-select-multi-value > span {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 .solid-select-multi-value-remove {
     padding-left: 0.25rem;
     padding-right: 0.25rem;
 }
+.solid-select-multi-value-remove:disabled {
+    cursor: not-allowed;
+}
+
 .solid-select-input {
     background-color: transparent;
     border-width: 0;
@@ -58,12 +63,16 @@
     font: inherit;
     outline: none;
 }
+.solid-select-input:disabled {
+    cursor: not-allowed;
+}
 .solid-select-input[data-multiple="true"] {
     caret-color: currentColor;
 }
 .solid-select-input[data-is-active="true"] {
     caret-color: currentColor;
 }
+
 .solid-select-list {
     background-color: white;
     border-radius: 0.125rem;
@@ -76,6 +85,7 @@
     z-index: 1;
     max-width: fit-content;
 }
+
 .solid-select-option:hover {
     background-color: rgb(229, 231, 235);
 }

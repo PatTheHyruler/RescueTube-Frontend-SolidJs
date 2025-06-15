@@ -71,6 +71,7 @@
 
 .solid-select-list {
     background-color: white;
+    border: 1px solid lightgray;
     border-radius: 0.125rem;
     margin-top: 0.25rem;
     max-height: 50vh;

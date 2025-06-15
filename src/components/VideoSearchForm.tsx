@@ -10,6 +10,7 @@ import { useOnPaginationQueryUpdate } from '@/utils/pagination';
 import type { Values } from '@/utils';
 import { authorsApi } from '@/services/authorsApi';
 import Select, { type Option } from '@/components/Select/Select';
+import { createStore } from 'solid-js/store';
 
 interface IProps {
     query: VideoSearchDtoV1;
@@ -38,13 +39,29 @@ const VideoSearchForm = (props: IProps) => {
 
     const onPaginationQueryUpdate = useOnPaginationQueryUpdate(props.setQuery);
 
-    const [fetchedSelectedAuthors] = createResource(() => props.query.authorIds, async (authorIds) => {
-        if (!authorIds?.length) {
-            return [];
-        }
-        const response = await authorsApi.searchAuthors({ limit: authorIds.length, page: 0, authorIds });
-        return response.data.authors;
-    });
+    const [authorCache, setAuthorCache] = createStore<Record<string, AuthorSimpleDtoV1>>({});
+    const [fetchedSelectedAuthors] = createResource(
+        () => props.query.authorIds,
+        async (authorIds) => {
+            if (!authorIds?.length) {
+                return [];
+            }
+            const uncachedIds = authorIds.filter(id => !authorCache[id]);
+            if (uncachedIds.length > 0) {
+                const response = await authorsApi.searchAuthors({
+                    limit: uncachedIds.length,
+                    page: 0,
+                    authorIds: uncachedIds,
+                });
+                response.data.authors.forEach(author => {
+                    setAuthorCache(cache => ({ ...cache, [author.id]: author }));
+                });
+            }
+            return authorIds
+                .map(id => authorCache[id])
+                .filter<AuthorSimpleDtoV1>(x => !!x);
+        },
+    );
     const selectedAuthors = () => {
         if (!props.query.authorIds?.length) {
             return [];
@@ -95,7 +112,12 @@ const VideoSearchForm = (props: IProps) => {
                             limit: 10,
                             page: 0,
                         });
-                        return response.data.authors.map(mapAuthorToAuthorOption);
+                        const authors = response.data.authors;
+                        setAuthorCache(cache => ({
+                            ...cache,
+                            ...Object.fromEntries(authors.map(author => [author.id, author])),
+                        }));
+                        return authors.map(mapAuthorToAuthorOption);
                     }}
                     selectedOptions={selectedAuthors()}
                     onChange={selectedAuthors => {

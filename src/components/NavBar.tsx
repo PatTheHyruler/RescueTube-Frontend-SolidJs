@@ -32,6 +32,11 @@ const NavBar = () => {
                                 Videos
                             </A>
                         </li>
+                        <li class="nav-item">
+                            <A href="/authors" class="nav-link text-dark">
+                                Authors
+                            </A>
+                        </li>
                         <AdminDropDown></AdminDropDown>
                     </ul>
                     <ul class="navbar-nav">

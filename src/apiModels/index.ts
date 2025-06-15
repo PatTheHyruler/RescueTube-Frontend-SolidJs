@@ -32,6 +32,16 @@ export interface Fetchable {
     lastUnsuccessfulFetch?: string;
 }
 
+export interface AuthorSearchRequestDtoV1 extends PaginationQuery {
+    name?: string | null;
+    authorIds?: string[] | null;
+    excludeAuthorIds?: string[] | null;
+}
+
+export interface AuthorSearchResponseDtoV1 extends PaginationResult {
+    authors: AuthorSimpleDtoV1[];
+}
+
 export interface AuthorSimpleDtoV1 {
     id: string;
     userName: string | null;
@@ -77,6 +87,7 @@ export const VideoSortingOptions = {
 export interface VideoSearchDtoV1 extends PaginationQuery {
     nameQuery: string | null;
     authorQuery: string | null;
+    authorIds: string[] | null;
 
     sortingOptions: Values<typeof VideoSortingOptions>;
     descending: boolean;

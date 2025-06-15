@@ -11,6 +11,7 @@ interface SelectProps<TOption extends Option> {
     selectedOptions: TOption[] | null | undefined;
     onChange: (options: TOption[]) => Promise<void> | void;
     disabled?: boolean | null;
+    keepSelectedOptions?: boolean;
 }
 
 const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) => {
@@ -125,7 +126,7 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                 <div class={styles.solidSelectList}>
                     <Show when={result()}>
                         {result => (
-                            <For each={result()}>
+                            <For each={result().filter(option => props.keepSelectedOptions || !isSelected(option))}>
                                 {option => (
                                     <div
                                         data-selected={isSelected(option)}

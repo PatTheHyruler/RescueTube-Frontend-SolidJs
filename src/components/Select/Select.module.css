@@ -20,10 +20,6 @@
     outline: 1px solid transparent;
     max-width: fit-content;
 }
-.solid-select-control[data-disabled="true"] {
-    background-color: rgb(243, 244, 246);
-    cursor: not-allowed;
-}
 .solid-select-control[data-multiple="true"][data-has-value="true"] {
     display: flex;
     flex-wrap: wrap;
@@ -100,4 +96,9 @@
     cursor: pointer;
     padding: 0.5rem 1rem;
     user-select: none;
+}
+
+.solid-select-control[data-disabled="true"], .solid-select-option[data-disabled="true"] {
+    background-color: rgb(243, 244, 246);
+    cursor: not-allowed;
 }

@@ -129,9 +129,15 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                                 {option => (
                                     <div
                                         data-selected={isSelected(option)}
+                                        data-disabled={props.disabled}
                                         role="button"
                                         class={styles.solidSelectOption}
-                                        onClick={() => toggleSelected(option)}
+                                        onClick={() => {
+                                            if (props.disabled) {
+                                                return;
+                                            }
+                                            toggleSelected(option);
+                                        }}
                                     >
                                         {option.name ?? option.id}
                                     </div>

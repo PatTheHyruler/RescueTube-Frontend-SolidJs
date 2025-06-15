@@ -13,6 +13,7 @@ interface SelectProps<TOption extends Option> {
     onChange: (options: TOption[]) => Promise<void> | void;
     disabled?: boolean | null;
     keepSelectedOptions?: boolean;
+    id?: string;
 }
 
 const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) => {

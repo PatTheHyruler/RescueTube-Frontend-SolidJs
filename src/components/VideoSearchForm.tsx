@@ -81,81 +81,80 @@ const VideoSearchForm = (props: IProps) => {
 
     return (
         <>
-            <form onSubmit={onSubmit}>
-                <label for="nameQuery">Name:</label>
-                <input
-                    id="nameQuery"
-                    value={props.query.nameQuery ?? ''}
-                    onInput={(e) =>
-                        props.setQuery((v) => ({
-                            ...v,
-                            nameQuery: e.target.value,
-                        }))
-                    }
-                />
-                <label for="authorQuery">Author:</label>
-                <input
-                    id="authorQuery"
-                    value={props.query.authorQuery ?? ''}
-                    onInput={(e) =>
-                        props.setQuery((v) => ({
-                            ...v,
-                            authorQuery: e.target.value,
-                        }))
-                    }
-                />
-                <Select
-                    fetchOptions={async (search) => {
-                        const response = await authorsApi.searchAuthors({
-                            name: search,
-                            excludeAuthorIds: props.query.authorIds,
-                            limit: 10,
-                            page: 0,
-                        });
-                        const authors = response.data.authors;
-                        setAuthorCache(cache => ({
-                            ...cache,
-                            ...Object.fromEntries(authors.map(author => [author.id, author])),
-                        }));
-                        return authors.map(mapAuthorToAuthorOption);
-                    }}
-                    selectedOptions={selectedAuthors()}
-                    onChange={selectedAuthors => {
-                        props.setQuery(q => ({ ...q, authorIds: selectedAuthors.map(author => author.id) }));
-                    }}
-                    disabled={fetchedSelectedAuthors.loading}
-                />
-                <label for="sortingOptions">Sort by:</label>
-                <select
-                    id="sortingOptions"
-                    value={props.query.sortingOptions}
-                    onChange={(e) =>
-                        props.setQuery((p) => ({
-                            ...p,
-                            sortingOptions: e.target.value as Values<typeof VideoSortingOptions>,
-                        }))
-                    }
-                >
-                    <For each={Object.values(VideoSortingOptions)}>
-                        {(item) => (
-                            <>
-                                <option>{item.toString()}</option>
-                            </>
-                        )}
-                    </For>
-                </select>
-                <label for="descending">Descending?</label>
-                <input
-                    type="checkbox"
-                    id="descending"
-                    checked={props.query.descending}
-                    onChange={() =>
-                        props.setQuery((p) => ({
-                            ...p,
-                            descending: !p.descending,
-                        }))
-                    }
-                />
+            <form onSubmit={onSubmit} class="d-inline-flex gap-1">
+                <label for="nameQuery">
+                    Name:
+                    <input
+                        id="nameQuery"
+                        value={props.query.nameQuery ?? ''}
+                        onInput={(e) =>
+                            props.setQuery((v) => ({
+                                ...v,
+                                nameQuery: e.target.value,
+                            }))
+                        }
+                    />
+                </label>
+                <label for="authorIds">
+                    Author:
+                    <Select
+                        id="authorIds"
+                        fetchOptions={async (search) => {
+                            const response = await authorsApi.searchAuthors({
+                                name: search,
+                                excludeAuthorIds: props.query.authorIds,
+                                limit: 10,
+                                page: 0,
+                            });
+                            const authors = response.data.authors;
+                            setAuthorCache(cache => ({
+                                ...cache,
+                                ...Object.fromEntries(authors.map(author => [author.id, author])),
+                            }));
+                            return authors.map(mapAuthorToAuthorOption);
+                        }}
+                        selectedOptions={selectedAuthors()}
+                        onChange={selectedAuthors => {
+                            props.setQuery(q => ({ ...q, authorIds: selectedAuthors.map(author => author.id) }));
+                        }}
+                        disabled={fetchedSelectedAuthors.loading}
+                    />
+                </label>
+                <label for="sortingOptions">
+                    Sort by:
+                    <select
+                        id="sortingOptions"
+                        value={props.query.sortingOptions}
+                        onChange={(e) =>
+                            props.setQuery((p) => ({
+                                ...p,
+                                sortingOptions: e.target.value as Values<typeof VideoSortingOptions>,
+                            }))
+                        }
+                    >
+                        <For each={Object.values(VideoSortingOptions)}>
+                            {(item) => (
+                                <>
+                                    <option>{item.toString()}</option>
+                                </>
+                            )}
+                        </For>
+                    </select>
+                </label>
+                <label for="descending">
+                    Descending?
+                    <input
+                        type="checkbox"
+                        id="descending"
+                        checked={props.query.descending}
+                        onChange={() =>
+                            props.setQuery((p) => ({
+                                ...p,
+                                descending: !p.descending,
+                            }))
+                        }
+                    />
+                </label>
                 <button type="submit">Apply</button>
             </form>
             <PaginationComponent

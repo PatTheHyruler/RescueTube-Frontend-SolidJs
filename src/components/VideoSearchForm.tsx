@@ -41,8 +41,10 @@ const VideoSearchForm = (props: IProps) => {
 
     const [authorCache, setAuthorCache] = createStore<Record<string, AuthorSimpleDtoV1>>({});
     const [fetchedSelectedAuthors] = createResource(
-        () => props.query.authorIds,
-        async (authorIds) => {
+        // Wrapping authorIds in an object, because otherwise the resource won't be fetched if authorIds is falsy
+        () => ({ authorIds: props.query.authorIds }),
+        async (source) => {
+            const authorIds = source.authorIds;
             if (!authorIds?.length) {
                 return [];
             }
@@ -117,7 +119,7 @@ const VideoSearchForm = (props: IProps) => {
                         onChange={selectedAuthors => {
                             props.setQuery(q => ({ ...q, authorIds: selectedAuthors.map(author => author.id) }));
                         }}
-                        disabled={fetchedSelectedAuthors.loading}
+                        disabled={fetchedSelectedAuthors() === undefined}
                     />
                 </label>
                 <label for="sortingOptions">

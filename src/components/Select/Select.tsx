@@ -38,8 +38,11 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
         }
     });
 
+    let inputRef!: HTMLInputElement;
+
     const setSelectedOptions = (options: TOption[]) => {
         props.onChange(options);
+        inputRef.focus();
     };
 
     const removeValue = (index: number) => {
@@ -100,6 +103,7 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                 data-has-value={props.selectedOptions?.length}
             >
                 <input
+                    ref={inputRef}
                     type="search"
                     class={styles.solidSelectInput}
                     disabled={props.disabled ?? false}

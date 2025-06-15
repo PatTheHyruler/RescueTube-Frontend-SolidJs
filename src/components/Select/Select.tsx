@@ -74,6 +74,21 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
         return props.selectedOptions.findIndex(o => o.id === option.id) >= 0;
     };
 
+    const tryHandleKeyboardClear = (e: KeyboardEvent) => {
+        if (search() || !props.selectedOptions?.length) {
+            return;
+        }
+        if (searchClearedAt() + 1000 > Date.now()) {
+            return;
+        }
+        if (e.key === 'Delete') {
+            removeValue(0);
+        }
+        else if (e.key === 'Backspace') {
+            removeValue(props.selectedOptions.length - 1);
+        }
+    };
+
     return (
         <>
             <div
@@ -107,31 +122,22 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                         setIsOpen(!!value);
                     }}
                     onKeyUp={e => {
-                        if (search() || !props.selectedOptions?.length) {
-                            return;
-                        }
-                        if (searchClearedAt() + 1000 > Date.now()) {
-                            return;
-                        }
-                        if (e.key === 'Delete') {
-                            removeValue(0);
-                        }
-                        else if (e.key === 'Backspace') {
-                            removeValue(props.selectedOptions.length - 1);
-                        }
+                        tryHandleKeyboardClear(e);
                     }}
                 />
             </div>
             <Show when={isOpen() && result()?.length}>
-                <div class={styles.solidSelectList}>
+                <div 
+                    class={styles.solidSelectList}
+                    role="listbox"
+                >
                     <Show when={result()}>
                         {result => (
                             <For each={result().filter(option => props.keepSelectedOptions || !isSelected(option))}>
                                 {option => (
-                                    <div
-                                        data-selected={isSelected(option)}
-                                        data-disabled={props.disabled}
-                                        role="button"
+                                    <button
+                                        type="button"
+                                        disabled={props.disabled ?? false}
                                         class={styles.solidSelectOption}
                                         onClick={() => {
                                             if (props.disabled) {
@@ -141,7 +147,7 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                                         }}
                                     >
                                         {option.name ?? option.id}
-                                    </div>
+                                    </button>
                                 )}
                             </For>
                         )}

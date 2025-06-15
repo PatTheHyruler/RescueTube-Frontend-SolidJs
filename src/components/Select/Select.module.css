@@ -96,9 +96,13 @@
     cursor: pointer;
     padding: 0.5rem 1rem;
     user-select: none;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: none;
 }
 
-.solid-select-control[data-disabled="true"], .solid-select-option[data-disabled="true"] {
+.solid-select-control[data-disabled="true"], .solid-select-option:disabled {
     background-color: rgb(243, 244, 246);
     cursor: not-allowed;
 }

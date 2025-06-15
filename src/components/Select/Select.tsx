@@ -1,5 +1,6 @@
 import { createEffect, createResource, createSignal, For, Show } from 'solid-js';
 import styles from './Select.module.css';
+import { isButtonElement } from '@/utils/dom';
 
 export interface Option {
     id: string;
@@ -144,6 +145,22 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                                                 return;
                                             }
                                             toggleSelected(option);
+                                        }}
+                                        onKeyDown={e => {
+                                            if (e.key === 'ArrowDown') {
+                                                e.preventDefault();
+                                                const next = e.currentTarget.nextElementSibling;
+                                                if (isButtonElement(next)) {
+                                                    next.focus();
+                                                }
+                                            }
+                                            else if (e.key === 'ArrowUp') {
+                                                e.preventDefault();
+                                                const previous = e.currentTarget.previousElementSibling;
+                                                if (isButtonElement(previous)) {
+                                                    previous.focus();
+                                                }
+                                            }
                                         }}
                                     >
                                         {option.name ?? option.id}

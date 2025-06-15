@@ -98,6 +98,19 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                 data-multiple={true}
                 data-has-value={props.selectedOptions?.length}
             >
+                <input
+                    type="search"
+                    class={styles.solidSelectInput}
+                    disabled={props.disabled ?? false}
+                    onInput={e => {
+                        const value = e.currentTarget.value;
+                        setSearch(value);
+                        setIsOpen(!!value);
+                    }}
+                    onKeyUp={e => {
+                        tryHandleKeyboardClear(e);
+                    }}
+                />
                 <For each={props.selectedOptions}>
                     {(option, index) => (
                         <div class={styles.solidSelectMultiValue}>
@@ -113,19 +126,6 @@ const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) =>
                         </div>
                     )}
                 </For>
-                <input
-                    type="search"
-                    class={styles.solidSelectInput}
-                    disabled={props.disabled ?? false}
-                    onInput={e => {
-                        const value = e.currentTarget.value;
-                        setSearch(value);
-                        setIsOpen(!!value);
-                    }}
-                    onKeyUp={e => {
-                        tryHandleKeyboardClear(e);
-                    }}
-                />
             </div>
             <Show when={isOpen() && result()?.length}>
                 <div 

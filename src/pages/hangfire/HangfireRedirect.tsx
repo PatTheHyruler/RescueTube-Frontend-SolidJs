@@ -6,7 +6,7 @@ import { useAuthContext } from '@/auth/AuthContext';
 import { isAdmin } from '@/auth/authUtils';
 
 const hangfireUrlString = `${baseApi.baseUrlWithoutPrefix}/hangfire`;
-const hangfireAuthUrlString = `${baseApi.baseUrlWithoutPrefix}/auth/hangfire`;
+const hangfireAuthUrlString = `${baseApi.baseUrl}/v1/auth/hangfire`;
 
 const getTargetUrl = (returnUrlString: string | undefined) => {
     const hangfireUrl = new URL(hangfireUrlString);

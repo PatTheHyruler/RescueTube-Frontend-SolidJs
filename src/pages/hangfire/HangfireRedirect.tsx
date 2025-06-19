@@ -5,7 +5,7 @@ import { baseApi } from '@/services/baseApi';
 import { useAuthContext } from '@/auth/AuthContext';
 import { isAdmin } from '@/auth/authUtils';
 
-const hangfireUrlString = `${baseApi.baseUrlWithoutPrefix}/hangfire`;
+const hangfireUrlString = `${baseApi.baseUrlWithoutPrefix}/hangfire-dashboard`;
 const hangfireAuthUrlString = `${baseApi.baseUrl}/v1/auth/hangfire`;
 
 const getTargetUrl = (returnUrlString: string | undefined) => {

@@ -5,11 +5,11 @@ import { baseApi } from '@/services/baseApi';
 import { useAuthContext } from '@/auth/AuthContext';
 import { isAdmin } from '@/auth/authUtils';
 
-const hangfireUrlString = `${baseApi.baseUrlWithoutPrefix}/hangfire`;
-const hangfireAuthUrlString = `${baseApi.baseUrlWithoutPrefix}/auth/hangfire`;
+const hangfireUrlString = `${baseApi.baseUrlWithoutPrefix}/hangfire-dashboard`;
+const hangfireAuthUrlString = `${baseApi.baseUrl}/v1/auth/hangfire`;
 
 const getTargetUrl = (returnUrlString: string | undefined) => {
-    const hangfireUrl = new URL(hangfireUrlString);
+    const hangfireUrl = new URL(hangfireUrlString, window.location.origin);
 
     if (returnUrlString) {
         const returnUrl = new URL(returnUrlString);
@@ -57,7 +57,7 @@ const HangfireRedirect = () => {
 
         const targetUrl = getTargetUrl(returnUrlString);
 
-        const hangfireAuthUrl = new URL(hangfireAuthUrlString);
+        const hangfireAuthUrl = new URL(hangfireAuthUrlString, window.location.origin);
         const appAuthUrl = new URL(window.location.href);
         appAuthUrl.pathname = '/hangfire/redirect';
         appAuthUrl.search = '';

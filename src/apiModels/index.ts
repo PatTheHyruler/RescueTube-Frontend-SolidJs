@@ -282,3 +282,12 @@ export interface DataFetchesQueryDtoV1 extends PaginationQuery{
     success?: boolean;
     orderByDescending: boolean;
 }
+
+export interface CreateCookieFileDtoV1 {
+    fileName?: string | null;
+    content: string;
+}
+
+export interface CookieFileInfoDtoV1 {
+    fileName: string;
+}

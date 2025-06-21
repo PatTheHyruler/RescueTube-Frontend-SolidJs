@@ -3,6 +3,7 @@ import { settingsApi } from '@/services/settingsApi';
 import DataSizeInput from '@/components/DataSizeInput';
 import { SettingTypes } from '@/apiModels';
 import { createForm } from '@tanstack/solid-form';
+import YouTubeCookieSettings from '@/pages/settings/YouTubeCookieSettings';
 
 
 const Settings = () => {
@@ -91,6 +92,7 @@ const Settings = () => {
                 </button>
                 </fieldset>
             </form>
+            <YouTubeCookieSettings />
         </div>
     );
 };

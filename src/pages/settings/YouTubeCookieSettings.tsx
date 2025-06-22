@@ -25,6 +25,11 @@ const YouTubeCookieSettings = () => {
         },
     }));
 
+    const deleteCookieFile = async (fileName: string) => {
+        await settingsApi.deleteYouTubeCookieFile(fileName);
+        await refetch();
+    };
+
     const isSubmitting = form.useStore((state) => state.isSubmitting);
 
     return (
@@ -113,7 +118,14 @@ const YouTubeCookieSettings = () => {
                 {(cookieFiles) => (
                     <ul>
                         <For each={cookieFiles()}>
-                            {(cookieFile) => <li>{cookieFile.fileName}</li>}
+                            {(cookieFile) => (
+                                <li>
+                                    {cookieFile.fileName}
+                                    <button onClick={() => deleteCookieFile(cookieFile.fileName)}>
+                                        Delete
+                                    </button>
+                                </li>
+                            )}
                         </For>
                     </ul>
                 )}

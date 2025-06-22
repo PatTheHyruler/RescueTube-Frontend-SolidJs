@@ -24,9 +24,14 @@ const getYouTubeCookieFiles = async (): Promise<AxiosResponse<CookieFileInfoDtoV
     return await baseApi.axios.get<CookieFileInfoDtoV1[]>('/v1/settings/youtube/cookie-files');
 };
 
+const deleteYouTubeCookieFile = async (fileName: string) => {
+    await baseApi.axios.delete(`/v1/settings/youtube/cookie-files?fileName=${fileName}`);
+};
+
 export const settingsApi = {
     getSettings,
     upsertSettings,
     createYouTubeCookieFile,
     getYouTubeCookieFiles,
+    deleteYouTubeCookieFile,
 };

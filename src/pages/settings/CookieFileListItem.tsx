@@ -7,6 +7,7 @@ import {
     validateYouTubeCookieFileName,
     youTubeCookieFileNameMaxLength,
 } from '@/pages/settings/validationUtils';
+import FieldErrors from '@/components/FieldErrors';
 
 interface Props {
     cookieFile: CookieFileInfoDtoV1;
@@ -84,13 +85,7 @@ const CookieFileListItem = (props: Props) => {
                                         pattern={limitedFileNameRegex.source}
                                         maxlength={youTubeCookieFileNameMaxLength}
                                     />
-                                    {!field().state.meta.isValid ? (
-                                        <em role="alert" class="text-danger">
-                                            {field().state.meta.errors.join(
-                                                ', ',
-                                            )}
-                                        </em>
-                                    ) : null}
+                                    <FieldErrors field={field()} />
                                 </div>
                             )}
                         />

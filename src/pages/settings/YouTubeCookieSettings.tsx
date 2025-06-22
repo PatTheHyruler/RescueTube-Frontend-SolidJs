@@ -7,6 +7,7 @@ import {
     validateYouTubeCookieFileName,
     youTubeCookieFileNameMaxLength,
 } from '@/pages/settings/validationUtils';
+import FieldErrors from '@/components/FieldErrors';
 
 const YouTubeCookieSettings = () => {
     const [cookieFiles, { refetch }] = createResource(async () => {
@@ -67,11 +68,7 @@ const YouTubeCookieSettings = () => {
                                     pattern={limitedFileNameRegex.source}
                                     maxLength={youTubeCookieFileNameMaxLength}
                                 />
-                                {!field().state.meta.isValid ? (
-                                    <em role="alert" class="text-danger">
-                                        {field().state.meta.errors.join(', ')}
-                                    </em>
-                                ) : null}
+                                <FieldErrors field={field()} />
                             </div>
                         )}
                     />
@@ -96,11 +93,7 @@ const YouTubeCookieSettings = () => {
                                         )
                                     }
                                 />
-                                {!field().state.meta.isValid ? (
-                                    <em role="alert" class="text-danger">
-                                        {field().state.meta.errors.join(', ')}
-                                    </em>
-                                ) : null}
+                                <FieldErrors field={field()} />
                             </div>
                         )}
                     />

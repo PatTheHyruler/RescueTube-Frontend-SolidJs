@@ -1,5 +1,5 @@
 import { baseApi } from './baseApi';
-import type { CookieFileInfoDtoV1, CreateCookieFileDtoV1, SettingValueDtoV1 } from '@/apiModels';
+import type { CookieFileInfoDtoV1, CreateCookieFileDtoV1, RenameCookieFileDtoV1, SettingValueDtoV1 } from '@/apiModels';
 import type { AxiosResponse } from 'axios';
 
 const getSettings = async () => {
@@ -28,10 +28,15 @@ const deleteYouTubeCookieFile = async (fileName: string) => {
     await baseApi.axios.delete(`/v1/settings/youtube/cookie-files?fileName=${fileName}`);
 };
 
+const renameYouTubeCookieFile = async (data: RenameCookieFileDtoV1) => {
+    await baseApi.axios.post('/v1/settings/youtube/cookie-files/rename', data);
+};
+
 export const settingsApi = {
     getSettings,
     upsertSettings,
     createYouTubeCookieFile,
     getYouTubeCookieFiles,
     deleteYouTubeCookieFile,
+    renameYouTubeCookieFile,
 };

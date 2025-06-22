@@ -291,3 +291,8 @@ export interface CreateCookieFileDtoV1 {
 export interface CookieFileInfoDtoV1 {
     fileName: string;
 }
+
+export interface RenameCookieFileDtoV1 {
+    oldFileName: string;
+    newFileName: string;
+}

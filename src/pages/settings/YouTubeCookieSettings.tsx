@@ -1,6 +1,7 @@
 import { createResource, For, Show } from 'solid-js';
 import { settingsApi } from '@/services/settingsApi';
 import { createForm } from '@tanstack/solid-form';
+import CookieFileListItem from '@/pages/settings/CookieFileListItem';
 
 const YouTubeCookieSettings = () => {
     const [cookieFiles, { refetch }] = createResource(async () => {
@@ -8,12 +9,9 @@ const YouTubeCookieSettings = () => {
         return response.data;
     });
 
-    const form = createForm<{
-        fileName: string | null;
-        content: string;
-    }>(() => ({
+    const form = createForm(() => ({
         defaultValues: {
-            fileName: null,
+            fileName: null as string | null,
             content: '',
         },
         onSubmit: async ({ value: { fileName, content } }) => {
@@ -24,11 +22,6 @@ const YouTubeCookieSettings = () => {
             await refetch();
         },
     }));
-
-    const deleteCookieFile = async (fileName: string) => {
-        await settingsApi.deleteYouTubeCookieFile(fileName);
-        await refetch();
-    };
 
     const isSubmitting = form.useStore((state) => state.isSubmitting);
 
@@ -67,7 +60,7 @@ const YouTubeCookieSettings = () => {
                                     type="text"
                                     name={field().name}
                                     placeholder="cookies.txt"
-                                    value={field().state.value}
+                                    value={field().state.value ?? ''}
                                     onChange={(e) =>
                                         field().handleChange(
                                             e.currentTarget.value,
@@ -119,12 +112,9 @@ const YouTubeCookieSettings = () => {
                     <ul>
                         <For each={cookieFiles()}>
                             {(cookieFile) => (
-                                <li>
-                                    {cookieFile.fileName}
-                                    <button onClick={() => deleteCookieFile(cookieFile.fileName)}>
-                                        Delete
-                                    </button>
-                                </li>
+                                <CookieFileListItem
+                                    cookieFile={cookieFile}
+                                    refetch={async () => await refetch()} />
                             )}
                         </For>
                     </ul>

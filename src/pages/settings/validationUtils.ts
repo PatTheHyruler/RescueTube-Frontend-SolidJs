@@ -1,4 +1,5 @@
-export const limitedFileNameRegex = /^[a-zA-Z0-9_-][a-zA-Z0-9_\-.]*$/;
+// eslint-disable-next-line no-useless-escape -- ESLint is wrong here, \ is required before -, otherwise browser native validation will error.
+export const limitedFileNameRegex = /^[a-zA-Z0-9_\-][a-zA-Z0-9_\-.]*$/;
 
 export const youTubeCookieFileNameMaxLength = 30;
 

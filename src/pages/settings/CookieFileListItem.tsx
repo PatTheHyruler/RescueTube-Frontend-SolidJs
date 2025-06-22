@@ -67,7 +67,7 @@ const CookieFileListItem = (props: Props) => {
                             name="newFileName"
                             validators={{
                                 onSubmit: ({ value }) => {
-                                    validateYouTubeCookieFileName(value);
+                                    return validateYouTubeCookieFileName(value);
                                 },
                             }}
                             children={(field) => (

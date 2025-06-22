@@ -49,7 +49,7 @@ const YouTubeCookieSettings = () => {
                         name="fileName"
                         validators={{
                             onSubmit: ({ value }) => {
-                                validateYouTubeCookieFileName(value);
+                                return validateYouTubeCookieFileName(value);
                             },
                         }}
                         children={(field) => (

@@ -2,6 +2,11 @@ import type { CookieFileInfoDtoV1 } from '@/apiModels';
 import { createForm } from '@tanstack/solid-form';
 import { settingsApi } from '@/services/settingsApi';
 import { createSignal, Match, Switch } from 'solid-js';
+import {
+    limitedFileNameRegex,
+    validateYouTubeCookieFileName,
+    youTubeCookieFileNameMaxLength,
+} from '@/pages/settings/validationUtils';
 
 interface Props {
     cookieFile: CookieFileInfoDtoV1;
@@ -59,6 +64,11 @@ const CookieFileListItem = (props: Props) => {
                     >
                         <form.Field
                             name="newFileName"
+                            validators={{
+                                onSubmit: ({ value }) => {
+                                    validateYouTubeCookieFileName(value);
+                                },
+                            }}
                             children={(field) => (
                                 <div>
                                     <input
@@ -71,6 +81,8 @@ const CookieFileListItem = (props: Props) => {
                                                 e.currentTarget.value,
                                             )
                                         }
+                                        pattern={limitedFileNameRegex.source}
+                                        maxlength={youTubeCookieFileNameMaxLength}
                                     />
                                     {!field().state.meta.isValid ? (
                                         <em role="alert" class="text-danger">

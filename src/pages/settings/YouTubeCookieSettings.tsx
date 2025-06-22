@@ -2,6 +2,11 @@ import { createResource, For, Show } from 'solid-js';
 import { settingsApi } from '@/services/settingsApi';
 import { createForm } from '@tanstack/solid-form';
 import CookieFileListItem from '@/pages/settings/CookieFileListItem';
+import {
+    limitedFileNameRegex,
+    validateYouTubeCookieFileName,
+    youTubeCookieFileNameMaxLength,
+} from '@/pages/settings/validationUtils';
 
 const YouTubeCookieSettings = () => {
     const [cookieFiles, { refetch }] = createResource(async () => {
@@ -43,14 +48,7 @@ const YouTubeCookieSettings = () => {
                         name="fileName"
                         validators={{
                             onSubmit: ({ value }) => {
-                                if (!value) return undefined;
-                                if (value.length > 30) {
-                                    return 'Filename must be less than 30 characters long.';
-                                }
-                                if (!/^[a-zA-Z0-9_\-.]+$/.test(value)) {
-                                    return 'Filename can only contain letters, numbers, underscores, hyphens, and dots.';
-                                }
-                                return undefined;
+                                validateYouTubeCookieFileName(value);
                             },
                         }}
                         children={(field) => (
@@ -66,6 +64,8 @@ const YouTubeCookieSettings = () => {
                                             e.currentTarget.value,
                                         )
                                     }
+                                    pattern={limitedFileNameRegex.source}
+                                    maxLength={youTubeCookieFileNameMaxLength}
                                 />
                                 {!field().state.meta.isValid ? (
                                     <em role="alert" class="text-danger">

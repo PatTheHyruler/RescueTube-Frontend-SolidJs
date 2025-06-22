@@ -1,5 +1,6 @@
 import { baseApi } from './baseApi';
-import type { SettingValueDtoV1 } from '@/apiModels';
+import type { CookieFileInfoDtoV1, CreateCookieFileDtoV1, RenameCookieFileDtoV1, SettingValueDtoV1 } from '@/apiModels';
+import type { AxiosResponse } from 'axios';
 
 const getSettings = async () => {
     return await baseApi.axios.get<SettingValueDtoV1[]>('/v1/settings');
@@ -15,7 +16,27 @@ const upsertSettings = async (settingValues: SettingValueDtoV1[]) => {
     await baseApi.axios.put('/v1/settings/bulk', settingValues.map(mapSettingValueToUpdateDto));   
 };
 
+const createYouTubeCookieFile = async (data: CreateCookieFileDtoV1) => {
+    await baseApi.axios.put('/v1/settings/youtube/cookie-files', data);
+};
+
+const getYouTubeCookieFiles = async (): Promise<AxiosResponse<CookieFileInfoDtoV1[]>> => {
+    return await baseApi.axios.get<CookieFileInfoDtoV1[]>('/v1/settings/youtube/cookie-files');
+};
+
+const deleteYouTubeCookieFile = async (fileName: string) => {
+    await baseApi.axios.delete(`/v1/settings/youtube/cookie-files?fileName=${fileName}`);
+};
+
+const renameYouTubeCookieFile = async (data: RenameCookieFileDtoV1) => {
+    await baseApi.axios.post('/v1/settings/youtube/cookie-files/rename', data);
+};
+
 export const settingsApi = {
     getSettings,
     upsertSettings,
+    createYouTubeCookieFile,
+    getYouTubeCookieFiles,
+    deleteYouTubeCookieFile,
+    renameYouTubeCookieFile,
 };

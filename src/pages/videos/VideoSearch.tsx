@@ -22,6 +22,7 @@ import {
 import AuthorSummary from '@/components/AuthorSummary';
 import VideoBulkActions from '@/components/VideoBulkActions';
 import { useResultListSelect } from '@/components/ResultListSelect';
+import SelectAllCheckbox from '@/components/ResultListSelect/SelectAllCheckbox';
 
 const defaultSearch: VideoSearchDtoV1 = {
     nameQuery: '',
@@ -104,25 +105,7 @@ const VideoSearch = () => {
                 setQuery={setQuery}
                 paginationResult={searchResults()?.data.paginationResult}
             />
-            <input
-                type="checkbox"
-                checked={videoSelection.allSelected()}
-                /* @ts-expect-error TODO Figure out a way to declare indeterminate as a valid attribute */
-                indeterminate={videoSelection.allSelected() && videoSelection.selectedIds().length > 0}
-                onChange={e => {
-                    if (videoSelection.allSelected()) {
-                        if (videoSelection.selectedIds().length > 0) {
-                            videoSelection.setSelectedIds([]);
-                        } else {
-                            videoSelection.setAllSelected(false);
-                        }
-                    } else {
-                        videoSelection.setSelectedIds([]);
-                        videoSelection.setAllSelected(true);
-                    }
-                    e.currentTarget.checked = videoSelection.allSelected();
-                }}
-            />
+            <SelectAllCheckbox {...videoSelection} />
             <Show when={videoSelection.areAnyResultsSelected()}>
                 <VideoBulkActions videoIds={videoSelection.selectedIds()} selectAll={videoSelection.allSelected()} />
             </Show>

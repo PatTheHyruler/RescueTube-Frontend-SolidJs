@@ -20,6 +20,7 @@ import {
     excludeUndefinedFields,
 } from '@/utils';
 import AuthorSummary from '@/components/AuthorSummary';
+import VideoBulkActions from '@/components/VideoBulkActions';
 
 const defaultSearch: VideoSearchDtoV1 = {
     nameQuery: '',
@@ -92,6 +93,20 @@ const VideoSearch = () => {
         searchResultActions.refetch();
     };
 
+    const [selectedVideoIds, setSelectedVideoIds] = createSignal<string[]>([]);
+    const isVideoSelected = (videoId: string) => {
+        return selectedVideoIds().includes(videoId);
+    };
+    const toggleVideoSelected = (videoId: string) => {
+        setSelectedVideoIds(videoIds => {
+            if (videoIds.includes(videoId)) {
+                return videoIds.filter(id => id !== videoId);
+            } else {
+                return [...videoIds, videoId];
+            }
+        });
+    };
+
     return (
         <>
             <VideoSearchForm
@@ -100,11 +115,21 @@ const VideoSearch = () => {
                 setQuery={setQuery}
                 paginationResult={searchResults()?.data.paginationResult}
             />
+            <Show when={selectedVideoIds().length > 0}>
+                <VideoBulkActions videoIds={selectedVideoIds()} selectAll={false} />
+            </Show>
             <Show when={searchResults()?.data}>
                 <div>
                     <For each={searchResults()!.data.videos}>
                         {(video) => (
                             <div style={{ margin: '8px', display: 'flex' }}>
+                                <input
+                                    type="checkbox"
+                                    checked={isVideoSelected(video.id)}
+                                    onChange={() =>
+                                        toggleVideoSelected(video.id)
+                                    }
+                                />
                                 <div
                                     style={{
                                         'border-radius': '6px',

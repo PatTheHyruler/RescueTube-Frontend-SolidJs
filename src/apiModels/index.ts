@@ -296,3 +296,9 @@ export interface RenameCookieFileDtoV1 {
     oldFileName: string;
     newFileName: string;
 }
+
+export interface VideoArchivalSettingsBulkUpdateDtoV1 {
+    selectAll: boolean;
+    videoIds?: string[];
+    settings: Partial<VideoArchivalSettingsDtoV1>;
+}

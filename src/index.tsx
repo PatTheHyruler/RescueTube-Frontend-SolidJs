@@ -13,7 +13,7 @@ import { isGuid } from './utils';
 import HangfireRedirect from './pages/hangfire/HangfireRedirect';
 import AuthorDetails from './pages/authors/AuthorDetails';
 import Settings from './pages/settings/Settings';
-import RequireAuth from './components/RequireAuth';
+import RequireAuth from './auth/RequireAuth';
 import { Roles } from './auth/Roles';
 import { RootErrorHandler } from '@/components/RootErrorHandler';
 import DataFetches from '@/pages/data-fetches/DataFetches';

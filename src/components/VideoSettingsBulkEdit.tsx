@@ -1,51 +1,32 @@
 import type { VideoArchivalSettingsDtoV1 } from '@/apiModels';
-import { useAuthContext } from '@/auth/AuthContext';
 import { Roles } from '@/auth/Roles';
 import { videosApi } from '@/services/videosApi';
 import { createForm } from '@tanstack/solid-form';
-import { createEffect, createResource } from 'solid-js';
+import { requireAuth } from '@/auth/RequireAuth';
 
 interface Props {
-    videoId: string;
+    videoIds: string[];
+    selectAll: boolean;
 }
 
-const defaultValues: VideoArchivalSettingsDtoV1 = {
-    shouldRegularlyFetchVideoData: true,
+const defaultValues: Partial<VideoArchivalSettingsDtoV1> = {
+    shouldRegularlyFetchVideoData: false,
 };
 
-const VideoSettings = (props: Props) => {
-    const videoId = props.videoId;
-
-    const [archivalSettings, { refetch: refetchArchivalSettings }] = createResource(async () => {
-        if (!videoId) {
-            throw new Error('No videoId provided');       
-        }
-        const response = await videosApi.getVideoArchivalSettings(videoId);
-        return response.data;
-    });
-
+const VideoSettingsBulkEdit = (props: Props) => {
     const form = createForm(() => ({
         defaultValues,
         onSubmit: async ({ value }) => {
-            await videosApi.upsertVideoArchivalSettings({
-                videoId, settings: value,
+            await videosApi.bulkUpdateVideoArchivalSettings({
+                videoIds: props.videoIds,
+                selectAll: props.selectAll,
+                settings: value,
             });
-            await refetchArchivalSettings();
         },
     }));
 
-    createEffect(() => {
-        const archivalSettingsValue = archivalSettings();
-        if (archivalSettingsValue) {
-            form.reset(archivalSettingsValue);
-        }
-    });
-
-    const { authState } = useAuthContext();
-    const isAllowedToEdit = () => authState.userDetails?.user.roles.some(r => Roles.AdminRoles.some(ar => ar === r.name)) ?? false;
-
     const isSubmitting = form.useStore((state) => state.isSubmitting);
-    const isDisabled = () => archivalSettings.loading || isSubmitting() || !isAllowedToEdit();
+    const isDisabled = () => isSubmitting();
 
     return (
         <div class="card" style={{ 'width': 'fit-content' }}>
@@ -83,4 +64,4 @@ const VideoSettings = (props: Props) => {
     );
 };
 
-export default VideoSettings;
+export default requireAuth(VideoSettingsBulkEdit, { roles: Roles.AdminRoles });

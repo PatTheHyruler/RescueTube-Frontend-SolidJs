@@ -4,6 +4,7 @@ import { videosApi } from '@/services/videosApi';
 import { createForm } from '@tanstack/solid-form';
 import { requireAuth } from '@/auth/RequireAuth';
 import { Show } from 'solid-js';
+import { getNextIndeterminateBooleanState } from '@/utils';
 
 interface Props {
     videoIds: string[];
@@ -12,7 +13,7 @@ interface Props {
 }
 
 const defaultValues: Partial<VideoArchivalSettingsDtoV1> = {
-    shouldRegularlyFetchVideoData: false,
+    shouldRegularlyFetchVideoData: undefined,
 };
 
 const VideoSettingsBulkEdit = (props: Props) => {
@@ -47,9 +48,13 @@ const VideoSettingsBulkEdit = (props: Props) => {
                                     class="form-check-input"
                                     id="shouldRegularlyFetchVideoData"
                                     name={field().name}
+                                    /* @ts-expect-error TODO Figure out a way to declare indeterminate as a valid attribute */
+                                    indeterminate={field().state.value === undefined}
                                     checked={field().state.value}
                                     onBlur={field().handleBlur}
-                                    onChange={(e) => field().handleChange(e.target.checked)}
+                                    onChange={() => {
+                                        field().handleChange(getNextIndeterminateBooleanState(field().state.value));
+                                    }}
                                 />
                                 <label class="form-check-label" for="shouldRegularlyFetchVideoData">
                                     Regularly fetch video data?

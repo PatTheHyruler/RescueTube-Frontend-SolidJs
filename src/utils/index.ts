@@ -126,3 +126,13 @@ export function excludeUndefinedFields<T extends Record<string, unknown>>(
     });
     return result as ExcludeUndefinedFields<T>;
 }
+
+export function getNextIndeterminateBooleanState(current: boolean | undefined) {
+    if (current === undefined) {
+        return true;
+    }
+    if (current) {
+        return false;
+    }
+    return undefined;
+}

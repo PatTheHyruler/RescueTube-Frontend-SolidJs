@@ -93,10 +93,15 @@ const VideoSearch = () => {
         searchResultActions.refetch();
     };
 
+    const [allSelected, setAllSelected] = createSignal(false);
     const [selectedVideoIds, setSelectedVideoIds] = createSignal<string[]>([]);
     const isVideoSelected = (videoId: string) => {
-        return selectedVideoIds().includes(videoId);
+        if (!allSelected()) {
+            return selectedVideoIds().includes(videoId);
+        }
+        return !selectedVideoIds().includes(videoId);
     };
+    const areAnyVideosSelected = () => allSelected() || (selectedVideoIds().length > 0);
     const toggleVideoSelected = (videoId: string) => {
         setSelectedVideoIds(videoIds => {
             if (videoIds.includes(videoId)) {
@@ -115,8 +120,26 @@ const VideoSearch = () => {
                 setQuery={setQuery}
                 paginationResult={searchResults()?.data.paginationResult}
             />
-            <Show when={selectedVideoIds().length > 0}>
-                <VideoBulkActions videoIds={selectedVideoIds()} selectAll={false} />
+            <input
+                type="checkbox"
+                checked={allSelected()}
+                /* @ts-expect-error TODO Figure out a way to declare indeterminate as a valid attribute */
+                indeterminate={allSelected() && selectedVideoIds().length > 0}
+                onChange={() => {
+                    if (allSelected()) {
+                        if (selectedVideoIds().length > 0) {
+                            setSelectedVideoIds([]);
+                        } else {
+                            setAllSelected(false);
+                        }
+                    } else {
+                        setSelectedVideoIds([]);
+                        setAllSelected(true);
+                    }
+                }}
+            />
+            <Show when={areAnyVideosSelected()}>
+                <VideoBulkActions videoIds={selectedVideoIds()} selectAll={allSelected()} />
             </Show>
             <Show when={searchResults()?.data}>
                 <div>

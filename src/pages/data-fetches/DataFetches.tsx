@@ -60,7 +60,7 @@ const DataFetches = () => {
                                 /* @ts-expect-error TODO Figure out a way to declare indeterminate as a valid attribute */
                                 indeterminate={query().success === undefined}
                                 checked={query().success}
-                                onClick={() => updateQueryAndRefetch('success', q => {
+                                onChange={() => updateQueryAndRefetch('success', q => {
                                     return getNextIndeterminateBooleanState(q.success);
                                 })}
                             />

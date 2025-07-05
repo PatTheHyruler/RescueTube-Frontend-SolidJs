@@ -21,6 +21,7 @@ import {
 } from '@/utils';
 import AuthorSummary from '@/components/AuthorSummary';
 import VideoBulkActions from '@/components/VideoBulkActions';
+import { useResultListSelect } from '@/components/ResultListSelect';
 
 const defaultSearch: VideoSearchDtoV1 = {
     nameQuery: '',
@@ -93,24 +94,7 @@ const VideoSearch = () => {
         searchResultActions.refetch();
     };
 
-    const [allSelected, setAllSelected] = createSignal(false);
-    const [selectedVideoIds, setSelectedVideoIds] = createSignal<string[]>([]);
-    const isVideoSelected = (videoId: string) => {
-        if (!allSelected()) {
-            return selectedVideoIds().includes(videoId);
-        }
-        return !selectedVideoIds().includes(videoId);
-    };
-    const areAnyVideosSelected = () => allSelected() || (selectedVideoIds().length > 0);
-    const toggleVideoSelected = (videoId: string) => {
-        setSelectedVideoIds(videoIds => {
-            if (videoIds.includes(videoId)) {
-                return videoIds.filter(id => id !== videoId);
-            } else {
-                return [...videoIds, videoId];
-            }
-        });
-    };
+    const videoSelection = useResultListSelect();
 
     return (
         <>
@@ -122,24 +106,25 @@ const VideoSearch = () => {
             />
             <input
                 type="checkbox"
-                checked={allSelected()}
+                checked={videoSelection.allSelected()}
                 /* @ts-expect-error TODO Figure out a way to declare indeterminate as a valid attribute */
-                indeterminate={allSelected() && selectedVideoIds().length > 0}
-                onChange={() => {
-                    if (allSelected()) {
-                        if (selectedVideoIds().length > 0) {
-                            setSelectedVideoIds([]);
+                indeterminate={videoSelection.allSelected() && videoSelection.selectedIds().length > 0}
+                onChange={e => {
+                    if (videoSelection.allSelected()) {
+                        if (videoSelection.selectedIds().length > 0) {
+                            videoSelection.setSelectedIds([]);
                         } else {
-                            setAllSelected(false);
+                            videoSelection.setAllSelected(false);
                         }
                     } else {
-                        setSelectedVideoIds([]);
-                        setAllSelected(true);
+                        videoSelection.setSelectedIds([]);
+                        videoSelection.setAllSelected(true);
                     }
+                    e.currentTarget.checked = videoSelection.allSelected();
                 }}
             />
-            <Show when={areAnyVideosSelected()}>
-                <VideoBulkActions videoIds={selectedVideoIds()} selectAll={allSelected()} />
+            <Show when={videoSelection.areAnyResultsSelected()}>
+                <VideoBulkActions videoIds={videoSelection.selectedIds()} selectAll={videoSelection.allSelected()} />
             </Show>
             <Show when={searchResults()?.data}>
                 <div>
@@ -148,9 +133,9 @@ const VideoSearch = () => {
                             <div style={{ margin: '8px', display: 'flex' }}>
                                 <input
                                     type="checkbox"
-                                    checked={isVideoSelected(video.id)}
+                                    checked={videoSelection.isSelected(video.id)}
                                     onChange={() =>
-                                        toggleVideoSelected(video.id)
+                                        videoSelection.toggleSelected(video.id)
                                     }
                                 />
                                 <div

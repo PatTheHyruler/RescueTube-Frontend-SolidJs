@@ -6,20 +6,24 @@ interface VideoBulkActionsProps {
 }
 
 const VideoBulkActions = (props: VideoBulkActionsProps) => {
-    let dialog!: HTMLDialogElement;
+    let videoSettingsBulkEditDialog!: HTMLDialogElement;
 
     return (
         <div>
             Video bulk actions
             <div class="d-flex">
                 <button
-                    onClick={() => dialog.showModal()}
+                    onClick={() => videoSettingsBulkEditDialog.showModal()}
                 >
                     Edit archival settings
                 </button>
             </div>
-            <dialog ref={dialog}>
-                <VideoSettingsBulkEdit videoIds={props.videoIds} selectAll={props.selectAll} />
+            <dialog ref={videoSettingsBulkEditDialog}>
+                <VideoSettingsBulkEdit
+                    videoIds={props.videoIds}
+                    selectAll={props.selectAll}
+                    onClose={() => videoSettingsBulkEditDialog.close()}
+                />
             </dialog>
         </div>
     );

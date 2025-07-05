@@ -3,10 +3,12 @@ import { Roles } from '@/auth/Roles';
 import { videosApi } from '@/services/videosApi';
 import { createForm } from '@tanstack/solid-form';
 import { requireAuth } from '@/auth/RequireAuth';
+import { Show } from 'solid-js';
 
 interface Props {
     videoIds: string[];
     selectAll: boolean;
+    onClose?: () => void;
 }
 
 const defaultValues: Partial<VideoArchivalSettingsDtoV1> = {
@@ -54,10 +56,19 @@ const VideoSettingsBulkEdit = (props: Props) => {
                                 </label>
                             </div>
                         )} />
-                        <button type="submit" class="btn btn-primary align-self-start">
+                    </fieldset>
+                    <div class="d-inline-flex gap-1">
+                        <Show when={props.onClose}>
+                            {onClose => (
+                                <button type="button" class="btn btn-secondary" onClick={() => onClose()()}>
+                                    Close
+                                </button>
+                            )}
+                        </Show>
+                        <button type="submit" class="btn btn-primary align-self-start" disabled={isDisabled()}>
                             Save
                         </button>
-                    </fieldset>
+                    </div>
                 </form>
             </div>
         </div>

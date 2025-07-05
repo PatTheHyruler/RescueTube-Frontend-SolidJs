@@ -1,4 +1,4 @@
-import type { VideoArchivalSettingsDtoV1 } from '@/apiModels';
+import type { VideoArchivalSettingsDtoV1, VideoSearchFilterDtoV1 } from '@/apiModels';
 import { Roles } from '@/auth/Roles';
 import { videosApi } from '@/services/videosApi';
 import { createForm } from '@tanstack/solid-form';
@@ -7,6 +7,7 @@ import { Show } from 'solid-js';
 import { getNextIndeterminateBooleanState } from '@/utils';
 
 interface Props {
+    filter?: VideoSearchFilterDtoV1;
     videoIds: string[];
     selectAll: boolean;
     onClose?: () => void;
@@ -21,6 +22,7 @@ const VideoSettingsBulkEdit = (props: Props) => {
         defaultValues,
         onSubmit: async ({ value }) => {
             await videosApi.bulkUpdateVideoArchivalSettings({
+                filter: props.filter,
                 videoIds: props.videoIds,
                 selectAll: props.selectAll,
                 settings: value,

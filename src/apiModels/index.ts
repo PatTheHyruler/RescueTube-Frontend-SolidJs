@@ -84,11 +84,13 @@ export const VideoSortingOptions = {
     Duration: 'Duration',
 } as const;
 
-export interface VideoSearchDtoV1 extends PaginationQuery {
+export interface VideoSearchFilterDtoV1 {
     nameQuery: string | null;
     authorQuery: string | null;
     authorIds: string[] | null;
+}
 
+export interface VideoSearchDtoV1 extends VideoSearchFilterDtoV1, PaginationQuery {
     sortingOptions: Values<typeof VideoSortingOptions>;
     descending: boolean;
 }
@@ -298,6 +300,7 @@ export interface RenameCookieFileDtoV1 {
 }
 
 export interface VideoArchivalSettingsBulkUpdateDtoV1 {
+    filter?: VideoSearchFilterDtoV1;
     selectAll: boolean;
     videoIds?: string[];
     settings: Partial<VideoArchivalSettingsDtoV1>;

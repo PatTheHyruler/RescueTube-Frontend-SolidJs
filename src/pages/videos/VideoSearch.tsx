@@ -97,6 +97,11 @@ const VideoSearch = () => {
     };
 
     const videoSelection = useResultListSelect();
+    createEffect(() => {
+        if (searchResults.loading) {
+            videoSelection.clear();
+        }
+    });
 
     return (
         <>
@@ -108,7 +113,11 @@ const VideoSearch = () => {
             />
             <SelectAllCheckbox context={videoSelection} />
             <Show when={videoSelection.areAnyResultsSelected()}>
-                <VideoBulkActions videoIds={videoSelection.selectedIds()} selectAll={videoSelection.allSelected()} />
+                <VideoBulkActions
+                    query={query()}
+                    videoIds={videoSelection.selectedIds()}
+                    selectAll={videoSelection.allSelected()}
+                />
             </Show>
             <Show when={searchResults()?.data}>
                 <div>

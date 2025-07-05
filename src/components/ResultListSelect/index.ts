@@ -3,6 +3,10 @@ import { createSignal } from 'solid-js';
 export function useResultListSelect<TId extends string = string>() {
     const [allSelected, setAllSelected] = createSignal(false);
     const [selectedIds, setSelectedIds] = createSignal<TId[]>([]);
+    const clear = () => {
+        setAllSelected(false);
+        setSelectedIds([]);
+    };
 
     const isSelected = (id: TId) => {
         if (!allSelected()) {
@@ -29,6 +33,7 @@ export function useResultListSelect<TId extends string = string>() {
         setAllSelected,
         areAnyResultsSelected,
         toggleSelected,
+        clear,
     };
 }
 

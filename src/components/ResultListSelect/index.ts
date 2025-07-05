@@ -31,3 +31,5 @@ export function useResultListSelect<TId extends string = string>() {
         toggleSelected,
     };
 }
+
+export type SelectListContext<TId extends string> = ReturnType<typeof useResultListSelect<TId>>;

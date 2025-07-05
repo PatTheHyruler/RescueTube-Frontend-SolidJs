@@ -23,6 +23,7 @@ import AuthorSummary from '@/components/AuthorSummary';
 import VideoBulkActions from '@/components/VideoBulkActions';
 import { useResultListSelect } from '@/components/ResultListSelect';
 import SelectAllCheckbox from '@/components/ResultListSelect/SelectAllCheckbox';
+import SelectItemCheckbox from '@/components/SelectItemCheckbox';
 
 const defaultSearch: VideoSearchDtoV1 = {
     nameQuery: '',
@@ -105,7 +106,7 @@ const VideoSearch = () => {
                 setQuery={setQuery}
                 paginationResult={searchResults()?.data.paginationResult}
             />
-            <SelectAllCheckbox {...videoSelection} />
+            <SelectAllCheckbox context={videoSelection} />
             <Show when={videoSelection.areAnyResultsSelected()}>
                 <VideoBulkActions videoIds={videoSelection.selectedIds()} selectAll={videoSelection.allSelected()} />
             </Show>
@@ -114,13 +115,7 @@ const VideoSearch = () => {
                     <For each={searchResults()!.data.videos}>
                         {(video) => (
                             <div style={{ margin: '8px', display: 'flex' }}>
-                                <input
-                                    type="checkbox"
-                                    checked={videoSelection.isSelected(video.id)}
-                                    onChange={() =>
-                                        videoSelection.toggleSelected(video.id)
-                                    }
-                                />
+                                <SelectItemCheckbox context={videoSelection} id={video.id} />
                                 <div
                                     style={{
                                         'border-radius': '6px',

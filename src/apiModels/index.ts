@@ -90,7 +90,8 @@ export interface VideoSearchFilterDtoV1 {
     authorIds: string[] | null;
 }
 
-export interface VideoSearchDtoV1 extends VideoSearchFilterDtoV1, PaginationQuery {
+export interface VideoSearchDtoV1 extends PaginationQuery {
+    filter: VideoSearchFilterDtoV1;
     sortingOptions: Values<typeof VideoSortingOptions>;
     descending: boolean;
 }
@@ -300,7 +301,7 @@ export interface RenameCookieFileDtoV1 {
 }
 
 export interface VideoArchivalSettingsBulkUpdateDtoV1 {
-    filter?: VideoSearchFilterDtoV1;
+    filter: VideoSearchFilterDtoV1 | null;
     selectAll: boolean;
     videoIds?: string[];
     settings: Partial<VideoArchivalSettingsDtoV1>;

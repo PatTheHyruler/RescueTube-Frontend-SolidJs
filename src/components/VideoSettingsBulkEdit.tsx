@@ -7,7 +7,7 @@ import { Show } from 'solid-js';
 import { getNextIndeterminateBooleanState } from '@/utils';
 
 interface Props {
-    filter?: VideoSearchFilterDtoV1;
+    filter: VideoSearchFilterDtoV1 | null;
     videoIds: string[];
     selectAll: boolean;
     onClose?: () => void;

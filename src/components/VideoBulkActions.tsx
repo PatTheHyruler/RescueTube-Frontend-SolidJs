@@ -22,11 +22,7 @@ const VideoBulkActions = (props: VideoBulkActionsProps) => {
             </div>
             <dialog ref={videoSettingsBulkEditDialog}>
                 <VideoSettingsBulkEdit
-                    filter={{
-                        nameQuery: props.query.nameQuery,
-                        authorQuery: props.query.authorQuery,
-                        authorIds: props.query.authorIds,
-                    }}
+                    filter={props.query.filter}
                     videoIds={props.videoIds}
                     selectAll={props.selectAll}
                     onClose={() => videoSettingsBulkEditDialog.close()}

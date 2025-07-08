@@ -42,7 +42,7 @@ const VideoSearchForm = (props: IProps) => {
     const [authorCache, setAuthorCache] = createStore<Record<string, AuthorSimpleDtoV1>>({});
     const [fetchedSelectedAuthors] = createResource(
         // Wrapping authorIds in an object, because otherwise the resource won't be fetched if authorIds is falsy
-        () => ({ authorIds: props.query.authorIds }),
+        () => ({ authorIds: props.query.filter?.authorIds }),
         async (source) => {
             const authorIds = source.authorIds;
             if (!authorIds?.length) {
@@ -65,7 +65,7 @@ const VideoSearchForm = (props: IProps) => {
         },
     );
     const selectedAuthors = () => {
-        if (!props.query.authorIds?.length) {
+        if (!props.query.filter?.authorIds?.length) {
             return [];
         }
         const authors = fetchedSelectedAuthors();
@@ -73,7 +73,7 @@ const VideoSearchForm = (props: IProps) => {
             return null;
         }
         const options: AuthorOption[] = authors.map(mapAuthorToAuthorOption);
-        for (const authorId of props.query.authorIds) {
+        for (const authorId of props.query.filter?.authorIds) {
             if (authors.findIndex(x => x.id == authorId) === -1) {
                 options.push({ id: authorId, name: `id: ${authorId}`, author: null });
             }
@@ -88,12 +88,16 @@ const VideoSearchForm = (props: IProps) => {
                     Name:
                     <input
                         id="nameQuery"
-                        value={props.query.nameQuery ?? ''}
-                        onInput={(e) =>
+                        value={props.query.filter?.nameQuery ?? ''}
+                        onChange={(e) => {
                             props.setQuery((v) => ({
                                 ...v,
-                                nameQuery: e.target.value,
-                            }))
+                                filter: {
+                                    ...v.filter,
+                                    nameQuery: e.target.value,
+                                },
+                            }));
+                        }
                         }
                     />
                 </label>
@@ -104,7 +108,7 @@ const VideoSearchForm = (props: IProps) => {
                         fetchOptions={async (search) => {
                             const response = await authorsApi.searchAuthors({
                                 name: search,
-                                excludeAuthorIds: props.query.authorIds,
+                                excludeAuthorIds: props.query.filter?.authorIds,
                                 limit: 10,
                                 page: 0,
                             });
@@ -117,7 +121,15 @@ const VideoSearchForm = (props: IProps) => {
                         }}
                         selectedOptions={selectedAuthors()}
                         onChange={selectedAuthors => {
-                            props.setQuery(q => ({ ...q, authorIds: selectedAuthors.map(author => author.id) }));
+                            props.setQuery((q) => ({
+                                ...q,
+                                filter: {
+                                    ...q.filter,
+                                    authorIds: selectedAuthors.map(
+                                        (author) => author.id,
+                                    ),
+                                },
+                            }));
                         }}
                         disabled={fetchedSelectedAuthors() === undefined}
                     />

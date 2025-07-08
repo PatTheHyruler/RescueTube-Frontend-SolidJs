@@ -17,7 +17,7 @@ import {
     tryParseBool,
     tryParseInt,
     tryParseObjEnum,
-    excludeUndefinedFields,
+    excludeUndefinedFields, type DeepPartial,
 } from '@/utils';
 import AuthorSummary from '@/components/AuthorSummary';
 import VideoBulkActions from '@/components/VideoBulkActions';
@@ -26,9 +26,11 @@ import SelectAllCheckbox from '@/components/ResultListSelect/SelectAllCheckbox';
 import SelectItemCheckbox from '@/components/SelectItemCheckbox';
 
 const defaultSearch: VideoSearchDtoV1 = {
-    nameQuery: '',
-    authorQuery: '',
-    authorIds: null,
+    filter: {
+        nameQuery: '',
+        authorQuery: '',
+        authorIds: null,
+    },
     sortingOptions: VideoSortingOptions.CreatedAt,
     descending: true,
     page: 0,
@@ -47,11 +49,13 @@ interface SearchParams extends Params {
 
 function mapSearchToDto(
     searchParams: Partial<SearchParams>,
-): Partial<VideoSearchDtoV1> {
+): DeepPartial<VideoSearchDtoV1> {
     return {
-        nameQuery: searchParams.name,
-        authorQuery: searchParams.author,
-        authorIds: searchParams.authorIds?.split(','),
+        filter: {
+            nameQuery: searchParams.name,
+            authorQuery: searchParams.author,
+            authorIds: searchParams.authorIds?.split(','),
+        },
         sortingOptions:
             tryParseObjEnum(searchParams.sort, VideoSortingOptions) ??
             undefined,
@@ -63,9 +67,9 @@ function mapSearchToDto(
 
 function mapDtoToSearch(dto: Partial<VideoSearchDtoV1>): Partial<SearchParams> {
     return {
-        name: dto.nameQuery ?? undefined,
-        author: dto.authorQuery ?? undefined,
-        authorIds: dto.authorIds?.join(','),
+        name: dto.filter?.nameQuery ?? undefined,
+        author: dto.filter?.authorQuery ?? undefined,
+        authorIds: dto.filter?.authorIds?.join(','),
         sort: dto.sortingOptions,
         descending: dto.descending?.toString() ?? undefined,
         page: dto.page?.toString() ?? undefined,

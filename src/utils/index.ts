@@ -110,22 +110,38 @@ export function reduceForSearchParams<TValues extends object>(
     return result;
 }
 
-type ExcludeUndefinedFields<T> = Omit<
-    T,
-    { [K in keyof T]: T[K] extends undefined ? K : never }[keyof T]
->;
+type ExcludeUndefinedFields<T> = T extends unknown[]
+    ? T
+    : T extends object
+      ? {
+            [K in keyof T]-?: Exclude<ExcludeUndefinedFields<T[K]>, undefined>;
+        }
+      : T;
 
 export function excludeUndefinedFields<T extends Record<string, unknown>>(
     obj: T,
 ): ExcludeUndefinedFields<T> {
+    if (Array.isArray(obj)) {
+        return obj as ExcludeUndefinedFields<T>;
+    }
     const result: Record<string, unknown> = {};
     Object.entries(obj).forEach(([key, value]) => {
         if (value !== undefined) {
-            result[key] = value;
+            if (value !== null && typeof value === 'object') {
+                result[key] = excludeUndefinedFields(value as Record<string, unknown>);
+            } else {
+                result[key] = value;
+            }
         }
     });
     return result as ExcludeUndefinedFields<T>;
 }
+
+export type DeepPartial<T> = T extends unknown[]
+    ? T
+    : T extends object
+      ? { [P in keyof T]?: DeepPartial<T[P]> }
+      : T;
 
 export function getNextIndeterminateBooleanState(current: boolean | undefined) {
     if (current === undefined) {

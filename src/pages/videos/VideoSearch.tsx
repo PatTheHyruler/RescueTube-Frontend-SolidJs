@@ -3,7 +3,6 @@ import { type VideoSearchDtoV1, VideoSortingOptions } from '@/apiModels';
 import {
     createEffect,
     createResource,
-    createSignal,
     For,
     Show,
 } from 'solid-js';
@@ -24,6 +23,7 @@ import VideoBulkActions from '@/components/VideoBulkActions';
 import { useResultListSelect } from '@/components/ResultListSelect';
 import SelectItemCheckbox from '@/components/SelectItemCheckbox';
 import SelectionSummary from '@/components/ResultListSelect/SelectionSummary';
+import { createStore } from 'solid-js/store';
 
 const defaultSearch: VideoSearchDtoV1 = {
     filter: {
@@ -79,7 +79,7 @@ function mapDtoToSearch(dto: Partial<VideoSearchDtoV1>): Partial<SearchParams> {
 
 const VideoSearch = () => {
     const [searchParams, setSearchParams] = useSearchParams<SearchParams>();
-    const [query, setQuery] = createSignal<VideoSearchDtoV1>({
+    const [query, setQuery] = createStore<VideoSearchDtoV1>({
         ...defaultSearch,
         ...excludeUndefinedFields(mapSearchToDto(searchParams)),
     });
@@ -91,11 +91,11 @@ const VideoSearch = () => {
         searchResultActions.refetch();
     });
     const [searchResults, searchResultActions] = createResource(() =>
-        videosApi.searchVideos(query()),
+        videosApi.searchVideos(query),
     );
     const applySearch = () => {
         setSearchParams(
-            mapDtoToSearch(reduceForSearchParams(query(), defaultSearch)),
+            mapDtoToSearch(reduceForSearchParams(query, defaultSearch)),
         );
         searchResultActions.refetch();
     };
@@ -110,7 +110,7 @@ const VideoSearch = () => {
     return (
         <>
             <VideoSearchForm
-                query={query()}
+                query={query}
                 onSubmit={applySearch}
                 setQuery={setQuery}
                 paginationResult={searchResults()?.data.paginationResult}
@@ -118,7 +118,7 @@ const VideoSearch = () => {
             <SelectionSummary context={videoSelection} />
             <Show when={videoSelection.areAnyResultsSelected()}>
                 <VideoBulkActions
-                    query={query()}
+                    query={query}
                     videoIds={videoSelection.selectedIds()}
                     selectAll={videoSelection.allSelected()}
                 />

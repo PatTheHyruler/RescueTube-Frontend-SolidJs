@@ -4,17 +4,17 @@ import {
     type VideoSearchDtoV1,
     VideoSortingOptions,
 } from '@/apiModels';
-import { createResource, For, type Setter } from 'solid-js';
+import { createResource, For } from 'solid-js';
 import PaginationComponent from './PaginationComponent';
 import { useOnPaginationQueryUpdate } from '@/utils/pagination';
 import type { Values } from '@/utils';
 import { authorsApi } from '@/services/authorsApi';
 import Select, { type Option } from '@/components/Select/Select';
-import { createStore } from 'solid-js/store';
+import { createStore, type SetStoreFunction } from 'solid-js/store';
 
 interface IProps {
     query: VideoSearchDtoV1;
-    setQuery: Setter<VideoSearchDtoV1>;
+    setQuery: SetStoreFunction<VideoSearchDtoV1>;
     paginationResult?: PaginationResult | null;
     onSubmit: (() => Promise<void>) | (() => void);
 }
@@ -90,15 +90,8 @@ const VideoSearchForm = (props: IProps) => {
                         id="nameQuery"
                         value={props.query.filter?.nameQuery ?? ''}
                         onChange={(e) => {
-                            props.setQuery((v) => ({
-                                ...v,
-                                filter: {
-                                    ...v.filter,
-                                    nameQuery: e.target.value,
-                                },
-                            }));
-                        }
-                        }
+                            props.setQuery('filter', 'nameQuery', e.target.value);
+                        }}
                     />
                 </label>
                 <label for="authorIds">
@@ -121,15 +114,9 @@ const VideoSearchForm = (props: IProps) => {
                         }}
                         selectedOptions={selectedAuthors()}
                         onChange={selectedAuthors => {
-                            props.setQuery((q) => ({
-                                ...q,
-                                filter: {
-                                    ...q.filter,
-                                    authorIds: selectedAuthors.map(
-                                        (author) => author.id,
-                                    ),
-                                },
-                            }));
+                            props.setQuery('filter', 'authorIds', selectedAuthors.map(
+                                (author) => author.id,
+                            ));
                         }}
                         disabled={fetchedSelectedAuthors() === undefined}
                     />
@@ -140,10 +127,7 @@ const VideoSearchForm = (props: IProps) => {
                         id="sortingOptions"
                         value={props.query.sortingOptions}
                         onChange={(e) =>
-                            props.setQuery((p) => ({
-                                ...p,
-                                sortingOptions: e.target.value as Values<typeof VideoSortingOptions>,
-                            }))
+                            props.setQuery('sortingOptions', e.target.value as Values<typeof VideoSortingOptions>)
                         }
                     >
                         <For each={Object.values(VideoSortingOptions)}>
@@ -162,10 +146,7 @@ const VideoSearchForm = (props: IProps) => {
                         id="descending"
                         checked={props.query.descending}
                         onChange={() =>
-                            props.setQuery((p) => ({
-                                ...p,
-                                descending: !p.descending,
-                            }))
+                            props.setQuery('descending', v => !v)
                         }
                     />
                 </label>

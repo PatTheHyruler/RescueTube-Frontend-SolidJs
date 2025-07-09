@@ -22,8 +22,8 @@ import {
 import AuthorSummary from '@/components/AuthorSummary';
 import VideoBulkActions from '@/components/VideoBulkActions';
 import { useResultListSelect } from '@/components/ResultListSelect';
-import SelectAllCheckbox from '@/components/ResultListSelect/SelectAllCheckbox';
 import SelectItemCheckbox from '@/components/SelectItemCheckbox';
+import SelectionSummary from '@/components/ResultListSelect/SelectionSummary';
 
 const defaultSearch: VideoSearchDtoV1 = {
     filter: {
@@ -115,7 +115,7 @@ const VideoSearch = () => {
                 setQuery={setQuery}
                 paginationResult={searchResults()?.data.paginationResult}
             />
-            <SelectAllCheckbox context={videoSelection} />
+            <SelectionSummary context={videoSelection} />
             <Show when={videoSelection.areAnyResultsSelected()}>
                 <VideoBulkActions
                     query={query()}

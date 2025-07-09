@@ -40,7 +40,7 @@ const upsertVideoArchivalSettings = async ({ videoId, settings }: UpsertVideoArc
 };
 
 const bulkUpdateVideoArchivalSettings = async (settings: VideoArchivalSettingsBulkUpdateDtoV1) => {
-    return await baseApi.axios.patch('/v1/videos/archival-settings/bulk', settings);
+    return await baseApi.axios.patch<number>('/v1/videos/archival-settings/bulk', settings);
 };
 
 export const videosApi = {

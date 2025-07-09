@@ -21,12 +21,13 @@ const VideoSettingsBulkEdit = (props: Props) => {
     const form = createForm(() => ({
         defaultValues,
         onSubmit: async ({ value }) => {
-            await videosApi.bulkUpdateVideoArchivalSettings({
+            const response = await videosApi.bulkUpdateVideoArchivalSettings({
                 filter: props.filter,
                 videoIds: props.videoIds,
                 selectAll: props.selectAll,
                 settings: value,
             });
+            console.log(`Updated archival settings for ${response.data} videos`);
         },
     }));
 

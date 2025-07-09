@@ -17,6 +17,7 @@ import { type AuthState } from './auth/authTypes';
 import { accountApi } from './auth/accountApi';
 import DebugAuthStateDisplay from './auth/DebugAuthStateDisplay';
 import { persistJwt, readPersistedJwt } from './auth/jwtStorage';
+import { Toaster, ToastProvider } from 'solid-notifications';
 
 const App: Component = (props: { children?: JSX.Element }) => {
     const persistedJwt = readPersistedJwt();
@@ -53,7 +54,9 @@ const App: Component = (props: { children?: JSX.Element }) => {
     });
 
     return (
+        <ToastProvider>
         <AuthContext.Provider value={{ authState, setAuthState, userDetailsResource }}>
+            <Toaster />
             <div class={styles.App}>
                 <header class={styles.header}>
                     {/*<img src={logo} class={styles.logo} alt="logo"/>*/}
@@ -65,6 +68,7 @@ const App: Component = (props: { children?: JSX.Element }) => {
                 <DebugAuthStateDisplay></DebugAuthStateDisplay>
             </Show>
         </AuthContext.Provider>
+        </ToastProvider>
     );
 };
 

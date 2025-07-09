@@ -5,6 +5,7 @@ import { createForm } from '@tanstack/solid-form';
 import { requireAuth } from '@/auth/RequireAuth';
 import { Show } from 'solid-js';
 import { getNextIndeterminateBooleanState } from '@/utils';
+import { useToast } from 'solid-notifications';
 
 interface Props {
     filter: VideoSearchFilterDtoV1 | null;
@@ -18,6 +19,8 @@ const defaultValues: Partial<VideoArchivalSettingsDtoV1> = {
 };
 
 const VideoSettingsBulkEdit = (props: Props) => {
+    const { notify } = useToast();
+
     const form = createForm(() => ({
         defaultValues,
         onSubmit: async ({ value }) => {
@@ -27,7 +30,8 @@ const VideoSettingsBulkEdit = (props: Props) => {
                 selectAll: props.selectAll,
                 settings: value,
             });
-            console.log(`Updated archival settings for ${response.data} videos`);
+            props.onClose?.();
+            notify(`Updated archival settings for ${response.data} videos`);
         },
     }));
 

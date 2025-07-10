@@ -33,3 +33,17 @@ const RequireAuth = (props: Props) => {
 };
 
 export default RequireAuth;
+
+interface RequireAuthWrapperConfig {
+    roles?: string[];
+}
+
+export function requireAuth<TProps>(component: (props: TProps) => JSX.Element, config?: RequireAuthWrapperConfig) {
+    return (childProps: TProps) => {
+        return (
+            <RequireAuth roles={config?.roles}>
+                {component(childProps)}
+            </RequireAuth>
+        );
+    };
+}

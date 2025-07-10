@@ -1,5 +1,6 @@
 import type {
     AccessTokenDtoV1,
+    VideoArchivalSettingsBulkUpdateDtoV1,
     VideoArchivalSettingsDtoV1,
     VideoSearchDtoV1,
     VideoSearchResponseDtoV1,
@@ -38,10 +39,15 @@ const upsertVideoArchivalSettings = async ({ videoId, settings }: UpsertVideoArc
     return await baseApi.axios.put(`/v1/videos/${videoId}/archival-settings`, settings);
 };
 
+const bulkUpdateVideoArchivalSettings = async (settings: VideoArchivalSettingsBulkUpdateDtoV1) => {
+    return await baseApi.axios.patch<number>('/v1/videos/archival-settings/bulk', settings);
+};
+
 export const videosApi = {
     searchVideos,
     getVideoDetails,
     getVideoFileAccessToken,
     getVideoArchivalSettings,
     upsertVideoArchivalSettings,
+    bulkUpdateVideoArchivalSettings,
 };

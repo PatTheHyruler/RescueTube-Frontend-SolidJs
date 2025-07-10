@@ -38,6 +38,7 @@
         "jwt-decode": "^4.0.0",
         "luxon": "^3.6.1",
         "solid-bootstrap": "^1.0.21",
-        "solid-js": "^1.9.7"
+        "solid-js": "^1.9.7",
+        "solid-notifications": "^1.2.0"
     }
 }

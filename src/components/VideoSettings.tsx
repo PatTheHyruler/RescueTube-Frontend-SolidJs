@@ -3,7 +3,7 @@ import { useAuthContext } from '@/auth/AuthContext';
 import { Roles } from '@/auth/Roles';
 import { videosApi } from '@/services/videosApi';
 import { createForm } from '@tanstack/solid-form';
-import { createResource } from 'solid-js';
+import { createEffect, createResource } from 'solid-js';
 
 interface Props {
     videoId: string;
@@ -33,6 +33,13 @@ const VideoSettings = (props: Props) => {
             await refetchArchivalSettings();
         },
     }));
+
+    createEffect(() => {
+        const archivalSettingsValue = archivalSettings();
+        if (archivalSettingsValue) {
+            form.reset(archivalSettingsValue);
+        }
+    });
 
     const { authState } = useAuthContext();
     const isAllowedToEdit = () => authState.userDetails?.user.roles.some(r => Roles.AdminRoles.some(ar => ar === r.name)) ?? false;

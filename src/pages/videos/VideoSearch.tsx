@@ -1,9 +1,8 @@
 import { videosApi } from '@/services/videosApi';
-import { type VideoSearchDtoV1, VideoSortingOptions } from '@/apiModels';
+import { type VideoSearchDtoV1, type VideoSearchFilterDtoV1, VideoSortingOptions } from '@/apiModels';
 import {
     createEffect,
     createResource,
-    createSignal,
     For,
     Show,
 } from 'solid-js';
@@ -18,13 +17,22 @@ import {
     tryParseInt,
     tryParseObjEnum,
     excludeUndefinedFields,
+    type DeepPartial,
+    isDeepEqual,
 } from '@/utils';
 import AuthorSummary from '@/components/AuthorSummary';
+import VideoBulkActions from '@/components/VideoBulkActions';
+import { useResultListSelect } from '@/components/ResultListSelect';
+import SelectItemCheckbox from '@/components/SelectItemCheckbox';
+import SelectionSummary from '@/components/ResultListSelect/SelectionSummary';
+import { createStore } from 'solid-js/store';
 
 const defaultSearch: VideoSearchDtoV1 = {
-    nameQuery: '',
-    authorQuery: '',
-    authorIds: null,
+    filter: {
+        nameQuery: '',
+        authorQuery: '',
+        authorIds: null,
+    },
     sortingOptions: VideoSortingOptions.CreatedAt,
     descending: true,
     page: 0,
@@ -43,11 +51,13 @@ interface SearchParams extends Params {
 
 function mapSearchToDto(
     searchParams: Partial<SearchParams>,
-): Partial<VideoSearchDtoV1> {
+): DeepPartial<VideoSearchDtoV1> {
     return {
-        nameQuery: searchParams.name,
-        authorQuery: searchParams.author,
-        authorIds: searchParams.authorIds?.split(','),
+        filter: {
+            nameQuery: searchParams.name,
+            authorQuery: searchParams.author,
+            authorIds: searchParams.authorIds?.split(','),
+        },
         sortingOptions:
             tryParseObjEnum(searchParams.sort, VideoSortingOptions) ??
             undefined,
@@ -59,9 +69,9 @@ function mapSearchToDto(
 
 function mapDtoToSearch(dto: Partial<VideoSearchDtoV1>): Partial<SearchParams> {
     return {
-        name: dto.nameQuery ?? undefined,
-        author: dto.authorQuery ?? undefined,
-        authorIds: dto.authorIds?.join(','),
+        name: dto.filter?.nameQuery ?? undefined,
+        author: dto.filter?.authorQuery ?? undefined,
+        authorIds: dto.filter?.authorIds?.join(','),
         sort: dto.sortingOptions,
         descending: dto.descending?.toString() ?? undefined,
         page: dto.page?.toString() ?? undefined,
@@ -71,7 +81,7 @@ function mapDtoToSearch(dto: Partial<VideoSearchDtoV1>): Partial<SearchParams> {
 
 const VideoSearch = () => {
     const [searchParams, setSearchParams] = useSearchParams<SearchParams>();
-    const [query, setQuery] = createSignal<VideoSearchDtoV1>({
+    const [query, setQuery] = createStore<VideoSearchDtoV1>({
         ...defaultSearch,
         ...excludeUndefinedFields(mapSearchToDto(searchParams)),
     });
@@ -83,28 +93,45 @@ const VideoSearch = () => {
         searchResultActions.refetch();
     });
     const [searchResults, searchResultActions] = createResource(() =>
-        videosApi.searchVideos(query()),
+        videosApi.searchVideos(query),
     );
+    let previousFilter: VideoSearchFilterDtoV1 = query.filter;
     const applySearch = () => {
+        if (!isDeepEqual(previousFilter, query.filter)) {
+            videoSelection.clear();
+            setQuery('page', 0);
+        }
+        previousFilter = query.filter;
         setSearchParams(
-            mapDtoToSearch(reduceForSearchParams(query(), defaultSearch)),
+            mapDtoToSearch(reduceForSearchParams(query, defaultSearch)),
         );
         searchResultActions.refetch();
     };
 
+    const videoSelection = useResultListSelect();
+
     return (
         <>
             <VideoSearchForm
-                query={query()}
+                query={query}
                 onSubmit={applySearch}
                 setQuery={setQuery}
                 paginationResult={searchResults()?.data.paginationResult}
             />
+            <SelectionSummary selection={videoSelection} />
+            <Show when={videoSelection.areAnyResultsSelected()}>
+                <VideoBulkActions
+                    query={query}
+                    videoIds={videoSelection.selectedIds()}
+                    selectAll={videoSelection.allSelected()}
+                />
+            </Show>
             <Show when={searchResults()?.data}>
                 <div>
                     <For each={searchResults()!.data.videos}>
                         {(video) => (
                             <div style={{ margin: '8px', display: 'flex' }}>
+                                <SelectItemCheckbox selection={videoSelection} id={video.id} />
                                 <div
                                     style={{
                                         'border-radius': '6px',

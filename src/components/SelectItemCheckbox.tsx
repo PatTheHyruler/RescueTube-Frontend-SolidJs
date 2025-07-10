@@ -1,19 +1,19 @@
 import type { SelectListContext } from '@/components/ResultListSelect';
 
 interface Props<TId extends string> {
-    context: SelectListContext<TId>;
+    selection: SelectListContext<TId>;
     id: TId;
 }
 
 function SelectItemCheckbox<TId extends string>(props: Props<TId>) {
-    const context = props.context;
+    const selection = props.selection;
 
     return (
         <input
             type="checkbox"
-            checked={context.isSelected(props.id)}
+            checked={selection.isSelected(props.id)}
             onChange={() =>
-                context.toggleSelected(props.id)
+                selection.toggleSelected(props.id)
             }
         />
     );

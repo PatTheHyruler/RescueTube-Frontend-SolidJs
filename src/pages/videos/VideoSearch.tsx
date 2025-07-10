@@ -118,7 +118,7 @@ const VideoSearch = () => {
                 setQuery={setQuery}
                 paginationResult={searchResults()?.data.paginationResult}
             />
-            <SelectionSummary context={videoSelection} />
+            <SelectionSummary selection={videoSelection} />
             <Show when={videoSelection.areAnyResultsSelected()}>
                 <VideoBulkActions
                     query={query}
@@ -131,7 +131,7 @@ const VideoSearch = () => {
                     <For each={searchResults()!.data.videos}>
                         {(video) => (
                             <div style={{ margin: '8px', display: 'flex' }}>
-                                <SelectItemCheckbox context={videoSelection} id={video.id} />
+                                <SelectItemCheckbox selection={videoSelection} id={video.id} />
                                 <div
                                     style={{
                                         'border-radius': '6px',

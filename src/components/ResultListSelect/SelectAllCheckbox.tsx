@@ -1,30 +1,30 @@
 import type { SelectListContext } from '@/components/ResultListSelect/index';
 
 interface Props<TId extends string> {
-    context: SelectListContext<TId>;
+    selection: SelectListContext<TId>;
 }
 
 function SelectAllCheckbox<TId extends string = string>(props: Props<TId>) {
-    const context = props.context;
+    const selection = props.selection;
 
     return (
         <input
             type="checkbox"
-            checked={context.allSelected()}
+            checked={selection.allSelected()}
             /* @ts-expect-error TODO Figure out a way to declare indeterminate as a valid attribute */
-            indeterminate={context.allSelected() && context.selectedIds().length > 0}
+            indeterminate={selection.allSelected() && selection.selectedIds().length > 0}
             onChange={e => {
-                if (context.allSelected()) {
-                    if (context.selectedIds().length > 0) {
-                        context.setSelectedIds([]);
+                if (selection.allSelected()) {
+                    if (selection.selectedIds().length > 0) {
+                        selection.setSelectedIds([]);
                     } else {
-                        context.setAllSelected(false);
+                        selection.setAllSelected(false);
                     }
                 } else {
-                    context.setSelectedIds([]);
-                    context.setAllSelected(true);
+                    selection.setSelectedIds([]);
+                    selection.setAllSelected(true);
                 }
-                e.currentTarget.checked = context.allSelected();
+                e.currentTarget.checked = selection.allSelected();
             }}
         />
     );

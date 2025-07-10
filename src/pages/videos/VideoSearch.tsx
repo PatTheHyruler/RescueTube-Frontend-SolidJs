@@ -1,5 +1,5 @@
 import { videosApi } from '@/services/videosApi';
-import { type VideoSearchDtoV1, VideoSortingOptions } from '@/apiModels';
+import { type VideoSearchDtoV1, type VideoSearchFilterDtoV1, VideoSortingOptions } from '@/apiModels';
 import {
     createEffect,
     createResource,
@@ -16,7 +16,9 @@ import {
     tryParseBool,
     tryParseInt,
     tryParseObjEnum,
-    excludeUndefinedFields, type DeepPartial,
+    excludeUndefinedFields,
+    type DeepPartial,
+    isDeepEqual,
 } from '@/utils';
 import AuthorSummary from '@/components/AuthorSummary';
 import VideoBulkActions from '@/components/VideoBulkActions';
@@ -93,7 +95,13 @@ const VideoSearch = () => {
     const [searchResults, searchResultActions] = createResource(() =>
         videosApi.searchVideos(query),
     );
+    let previousFilter: VideoSearchFilterDtoV1 = query.filter;
     const applySearch = () => {
+        if (!isDeepEqual(previousFilter, query.filter)) {
+            videoSelection.clear();
+            setQuery('page', 0);
+        }
+        previousFilter = query.filter;
         setSearchParams(
             mapDtoToSearch(reduceForSearchParams(query, defaultSearch)),
         );
@@ -101,11 +109,6 @@ const VideoSearch = () => {
     };
 
     const videoSelection = useResultListSelect();
-    createEffect(() => {
-        if (searchResults.loading) {
-            videoSelection.clear();
-        }
-    });
 
     return (
         <>

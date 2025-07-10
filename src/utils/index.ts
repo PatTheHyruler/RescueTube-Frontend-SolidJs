@@ -152,3 +152,43 @@ export function getNextIndeterminateBooleanState(current: boolean | undefined) {
     }
     return undefined;
 }
+
+function isPrimitive(value: unknown) {
+    return value !== Object(value);
+}
+
+export function isDeepEqual<T>(value: T, other: T): boolean {
+    if (value === other) {
+        return true;
+    }
+    if (value === null || value === undefined || other === null || other === undefined) {
+        return false;
+    }
+    if (isPrimitive(value)) {
+        return isPrimitive(other) && value === other;
+    }
+    if (typeof value === 'object') {
+        if (Array.isArray(value)) {
+            if (!Array.isArray(other)) {
+                return false;
+            }
+            if (value.length !== other.length) {
+                return false;
+            }
+            for (let i = 0; i < value.length; i++) {
+                if (!isDeepEqual(value[i], other[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        for (const [propertyKey, propertyValue] of Object.entries(value)) {
+            // @ts-expect-error propertyKey might indeed not exist on `other`, yes, good job TypeScript
+            if (!isDeepEqual(propertyValue, other[propertyKey])) {
+                return false;
+            }
+        }
+        return true;
+    }
+    throw new Error(`Failed to compare values - this should never be reached. Value: ${JSON.stringify(value)}, other: ${JSON.stringify(other)}`);
+}

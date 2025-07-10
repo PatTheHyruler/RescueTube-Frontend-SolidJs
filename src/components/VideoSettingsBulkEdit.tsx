@@ -31,7 +31,7 @@ const VideoSettingsBulkEdit = (props: Props) => {
                 settings: value,
             });
             props.onClose?.();
-            notify(`Updated archival settings for ${response.data} videos`);
+            notify(`Updated archival settings for ${response.data} video(s)`);
         },
     }));
 

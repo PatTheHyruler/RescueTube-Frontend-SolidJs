@@ -213,7 +213,7 @@ describe('clone', () => {
             });
         });
 
-        test('Allows slightly nested array + object combo', () => {
+        test('allows slightly nested array + object combo', () => {
             clone({
                 d1: [{
                     d2: [{

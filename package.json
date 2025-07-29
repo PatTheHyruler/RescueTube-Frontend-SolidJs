@@ -10,7 +10,8 @@
         "typecheck": "tsc --noEmit",
         "serve": "vite preview",
         "gen:csstypes": "node ./generate-css-types.js",
-        "test": "vitest --typecheck"
+        "test": "vitest --typecheck",
+        "lint": "eslint . --max-warnings=0"
     },
     "license": "MIT",
     "devDependencies": {

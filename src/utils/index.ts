@@ -190,5 +190,76 @@ export function isDeepEqual<T>(value: T, other: T): boolean {
         }
         return true;
     }
-    throw new Error(`Failed to compare values - this should never be reached. Value: ${JSON.stringify(value)}, other: ${JSON.stringify(other)}`);
+    throw new Error(`Failed to compare values. Value: (${typeof value}) ${JSON.stringify(value)}, (${typeof other}) other: ${JSON.stringify(other)}`);
+}
+
+type Depth = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+type IncrementDepth<TDepth extends Depth> = TDepth extends 10
+    ? never
+    : TDepth extends 9
+      ? 10
+      : TDepth extends 8
+        ? 9
+        : TDepth extends 7
+          ? 8
+          : TDepth extends 6
+            ? 7
+            : TDepth extends 5
+              ? 6
+              : TDepth extends 4
+                ? 5
+                : TDepth extends 3
+                  ? 4
+                  : TDepth extends 2
+                    ? 3
+                    : TDepth extends 1
+                      ? 2
+                      : TDepth extends 0
+                        ? 1
+                        : never;
+
+type ClonablePrimitiveValue = string | number | boolean | null | undefined;
+
+type ClonableValue<T, TDepth extends Depth = 0> =
+    TDepth extends 10
+        ? never
+        :
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+    T extends Function
+        ? never
+        : T extends
+                | ClonablePrimitiveValue
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                | ClonableValue<infer _U, IncrementDepth<TDepth>>[]
+                | (T extends object ? ClonableObject<T, TDepth> : never)
+          ? T
+          : never;
+type ClonableObject<T extends object, TDepth extends Depth = 0> =
+    TDepth extends 10
+        ? never
+        :
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+    T extends Function | (unknown)[]
+        ? never
+        : {
+              [key in keyof T]: ClonableValue<T[key], IncrementDepth<TDepth>>;
+          };
+
+export function clone<T>(value: T & ClonableValue<T>): T {
+    if (value === null || value === undefined || isPrimitive(value)) {
+        return value;
+    }
+    if (Array.isArray(value)) {
+        return value.map((v) => clone(v)) as T;
+    }
+    if (typeof value === 'object') {
+        const result: Record<string, unknown> = {};
+        for (const [propertyKey, propertyValue] of Object.entries(value)) {
+            result[propertyKey] = clone(propertyValue);
+        }
+        return result as unknown as T;
+    }
+    throw new Error(
+        `Failed to clone value. Type: ${typeof value}, Value: ${JSON.stringify(value)}`,
+    );
 }

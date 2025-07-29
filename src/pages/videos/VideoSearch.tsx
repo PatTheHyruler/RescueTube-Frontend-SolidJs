@@ -19,6 +19,7 @@ import {
     excludeUndefinedFields,
     type DeepPartial,
     isDeepEqual,
+    clone,
 } from '@/utils';
 import AuthorSummary from '@/components/AuthorSummary';
 import VideoBulkActions from '@/components/VideoBulkActions';
@@ -95,13 +96,13 @@ const VideoSearch = () => {
     const [searchResults, searchResultActions] = createResource(() =>
         videosApi.searchVideos(query),
     );
-    let previousFilter: VideoSearchFilterDtoV1 = query.filter;
+    let previousFilter: VideoSearchFilterDtoV1 = clone(query.filter);
     const applySearch = () => {
         if (!isDeepEqual(previousFilter, query.filter)) {
             videoSelection.clear();
             setQuery('page', 0);
         }
-        previousFilter = query.filter;
+        previousFilter = clone(query.filter);
         setSearchParams(
             mapDtoToSearch(reduceForSearchParams(query, defaultSearch)),
         );

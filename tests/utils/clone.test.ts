@@ -18,7 +18,9 @@ describe('clone', () => {
         // Assert
         expect(result).toEqual(source);
         expect(result).not.toBe(source);
-        // (Sanity check; should already be covered by previous assertions)
+
+        expect(result.a.b.c).toBe(1);
+
         expect(result.a.b).toEqual(source.a.b);
         expect(result.a.b).not.toBe(source.a.b);
     });
@@ -35,7 +37,10 @@ describe('clone', () => {
         // Assert
         expect(result).toEqual(source);
         expect(result).not.toBe(source);
-        // (Sanity check; should already be covered by previous assertions)
+
+        expect(result.a.length).toBe(3);
+        expect(result.a[1]).toBe(2);
+
         expect(result.a.length).toEqual(source.a.length);
         expect(result.a).not.toBe(source.a);
     });
@@ -52,7 +57,9 @@ describe('clone', () => {
         // Assert
         expect(result).toEqual(source);
         expect(result).not.toBe(source);
-        // (Sanity checks; should already be covered by previous assertions)
+
+        expect(result.a[1]).toEqual({ c: 2 });
+
         expect(result.a.length).toEqual(source.a.length);
         expect(result.a).not.toBe(source.a);
         expect(result.a[0]).toEqual(source.a[0]);
@@ -71,6 +78,9 @@ describe('clone', () => {
         // Assert
         expect(result).toEqual(source);
         expect(result).not.toBe(source);
+
+        expect(result.length).toBe(3);
+        expect(result[2]).toBe(3);
     });
 
     it('should deep clone array of objects', () => {
@@ -83,7 +93,10 @@ describe('clone', () => {
         // Assert
         expect(result).toEqual(source);
         expect(result).not.toBe(source);
-        // (Sanity checks; should already be covered by previous assertions)
+
+        expect(result.length).toEqual(2);
+        expect(result[1]).toEqual({ b: 2 });
+
         expect(result.length).toEqual(source.length);
         expect(result).not.toBe(source);
         expect(result[0]).toEqual(source[0]);

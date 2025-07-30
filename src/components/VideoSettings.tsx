@@ -35,11 +35,13 @@ const VideoSettings = (props: Props) => {
         },
     }));
 
+    let previousValue = archivalSettings();
     createEffect(() => {
         const archivalSettingsValue = archivalSettings();
-        if (archivalSettingsValue) {
+        if (archivalSettingsValue && archivalSettingsValue !== previousValue) {
             form.reset(archivalSettingsValue);
         }
+        previousValue = archivalSettingsValue;
     });
 
     const { authState } = useAuthContext();

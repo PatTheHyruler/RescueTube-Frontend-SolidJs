@@ -53,7 +53,7 @@ const VideoSettingsBulkEdit = (props: Props) => {
                                 <input
                                     type="checkbox"
                                     class="form-check-input"
-                                    id="shouldRegularlyFetchVideoData"
+                                    id={field().name}
                                     name={field().name}
                                     /* @ts-expect-error TODO Figure out a way to declare indeterminate as a valid attribute */
                                     indeterminate={field().state.value === undefined}
@@ -63,9 +63,34 @@ const VideoSettingsBulkEdit = (props: Props) => {
                                         field().handleChange(getNextIndeterminateBooleanState(field().state.value));
                                     }}
                                 />
-                                <label class="form-check-label" for="shouldRegularlyFetchVideoData">
+                                <label class="form-check-label" for={field().name}>
                                     Regularly fetch video data?
                                 </label>
+                            </div>
+                        )} />
+                        <form.Field name="downloadPriority" children={(field) => (
+                            <div>
+                                <label for={field().name}>Download priority:</label>
+                                <input
+                                    type="number"
+                                    id={field().name}
+                                    name={field().name}
+                                    value={field().state.value ?? ''}
+                                    onBlur={field().handleBlur}
+                                    style={{ width: '8ch' }}
+                                    onChange={(e) => {
+                                        const stringValue = e.target.value.trim();
+                                        if (stringValue.length === 0) {
+                                            field().handleChange(undefined);
+                                            return;
+                                        }
+                                        const intValue = parseInt(stringValue);
+                                        if (isNaN(intValue)) {
+                                            return;
+                                        }
+                                        field().handleChange(intValue);
+                                    }}
+                                />
                             </div>
                         )} />
                     </fieldset>

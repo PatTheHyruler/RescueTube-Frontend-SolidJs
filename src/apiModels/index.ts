@@ -228,6 +228,14 @@ export interface AuthorArchivalSettingsUpsertDtoV1 {
 
 export interface VideoArchivalSettingsDtoV1 {
     shouldRegularlyFetchVideoData: boolean;
+    downloadPriority: number;
+}
+
+export interface VideoArchivalSettingsBulkUpdateDtoV1 {
+    filter: VideoSearchFilterDtoV1 | null;
+    selectAll: boolean;
+    videoIds?: string[];
+    settings: Partial<VideoArchivalSettingsDtoV1>;
 }
 
 export const SettingTypes = {
@@ -298,11 +306,4 @@ export interface CookieFileInfoDtoV1 {
 export interface RenameCookieFileDtoV1 {
     oldFileName: string;
     newFileName: string;
-}
-
-export interface VideoArchivalSettingsBulkUpdateDtoV1 {
-    filter: VideoSearchFilterDtoV1 | null;
-    selectAll: boolean;
-    videoIds?: string[];
-    settings: Partial<VideoArchivalSettingsDtoV1>;
 }

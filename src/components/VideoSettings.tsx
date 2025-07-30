@@ -11,6 +11,7 @@ interface Props {
 
 const defaultValues: VideoArchivalSettingsDtoV1 = {
     shouldRegularlyFetchVideoData: true,
+    downloadPriority: 0,
 };
 
 const VideoSettings = (props: Props) => {
@@ -62,15 +63,35 @@ const VideoSettings = (props: Props) => {
                                 <input
                                     type="checkbox"
                                     class="form-check-input"
-                                    id="shouldRegularlyFetchVideoData"
+                                    id={field().name}
                                     name={field().name}
                                     checked={field().state.value}
                                     onBlur={field().handleBlur}
                                     onChange={(e) => field().handleChange(e.target.checked)}
                                 />
-                                <label class="form-check-label" for="shouldRegularlyFetchVideoData">
+                                <label class="form-check-label" for={field().name}>
                                     Regularly fetch video data?
                                 </label>
+                            </div>
+                        )} />
+                        <form.Field name="downloadPriority" children={(field) => (
+                            <div>
+                                <label for={field().name}>Download priority:</label>
+                                <input
+                                    type="number"
+                                    id={field().name}
+                                    name={field().name}
+                                    value={field().state.value ?? ''}
+                                    onBlur={field().handleBlur}
+                                    style={{ width: '8ch' }}
+                                    onChange={(e) => {
+                                        const intValue = parseInt(e.target.value);
+                                        if (isNaN(intValue)) {
+                                            return;
+                                        }
+                                        field().handleChange(intValue);
+                                    }}
+                                />
                             </div>
                         )} />
                         <button type="submit" class="btn btn-primary align-self-start">

@@ -307,3 +307,21 @@ export interface RenameCookieFileDtoV1 {
     oldFileName: string;
     newFileName: string;
 }
+
+export interface PlaylistSearchFilterDtoV1 {
+    name?: string | null;
+}
+
+export interface PlaylistSearchDtoV1 extends PaginationQuery {
+    filter?: PlaylistSearchFilterDtoV1 | null;
+}
+
+export interface PlaylistSimpleDtoV1 {
+    id: string;
+    thumbnail: ImageDtoV1 | null;
+}
+
+export interface PlaylistSearchResponseDtoV1 {
+    paginationResult: PaginationResult;
+    playlists: PlaylistSimpleDtoV1[];
+}

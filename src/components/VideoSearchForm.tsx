@@ -15,7 +15,7 @@ import { createStore, type SetStoreFunction } from 'solid-js/store';
 interface IProps {
     query: VideoSearchDtoV1;
     setQuery: SetStoreFunction<VideoSearchDtoV1>;
-    paginationResult?: PaginationResult | null;
+    paginationResult: PaginationResult | null | undefined;
     onSubmit: (() => Promise<void>) | (() => void);
 }
 

@@ -18,6 +18,7 @@ import { Roles } from './auth/Roles';
 import { RootErrorHandler } from '@/components/RootErrorHandler';
 import DataFetches from '@/pages/data-fetches/DataFetches';
 import AuthorSearch from '@/pages/authors/AuthorSearch';
+import PlaylistSearch from './pages/playlists/PlaylistSearch';
 
 const root = document.getElementById('root');
 
@@ -49,6 +50,9 @@ render(
                         component={AuthorDetails}
                         matchFilters={{ id: (id) => isGuid(id) }}>
                     </Route>
+                </Route>
+                <Route path="/playlists">
+                    <Route path="/" component={PlaylistSearch} />
                 </Route>
                 <Route path="/data-fetches" component={() => <RequireAuth><DataFetches /></RequireAuth>} />
                 <Route path="/settings" component={() => <RequireAuth roles={Roles.AdminRoles}><Settings/></RequireAuth>} />

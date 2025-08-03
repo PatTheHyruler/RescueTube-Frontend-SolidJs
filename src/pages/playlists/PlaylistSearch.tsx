@@ -8,10 +8,12 @@ import {
     excludeUndefinedFields,
     isDeepEqual,
     reduceForSearchParams,
+    translationToString,
     tryParseInt,
 } from '@/utils';
 import { createStore } from 'solid-js/store';
 import PlaylistSearchForm from '@/components/Playlists/PlaylistSearchForm';
+import ThumbnailDisplay from '@/components/ThumbnailDisplay';
 
 const defaultSearch: PlaylistSearchDtoV1 = {
     filter: {
@@ -88,20 +90,18 @@ const PlaylistSearch = () => {
                         <For each={searchResults().playlists}>
                             {(playlist) => (
                                 <div>
-                                    {playlist.id}
-                                    <Show
-                                        when={playlist.thumbnail}
-                                        fallback={<div>No thumbnails :(</div>}
-                                        children={(thumbnail) => (
+                                    <ThumbnailDisplay thumbnail={playlist.thumbnail}>
+                                        {thumbnail => (
                                             <img
                                                 loading="lazy"
-                                                src={thumbnail().url}
+                                                src={thumbnail.url}
                                                 width={160}
                                                 height={90}
                                                 alt="Playlist thumbnail"
                                             />
                                         )}
-                                    />
+                                    </ThumbnailDisplay>
+                                    {translationToString(playlist.title)}
                                 </div>
                             )}
                         </For>

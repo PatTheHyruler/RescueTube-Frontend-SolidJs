@@ -318,7 +318,12 @@ export interface PlaylistSearchDtoV1 extends PaginationQuery {
 
 export interface PlaylistSimpleDtoV1 {
     id: string;
+    title: TextTranslationDtoV1[];
+    description: TextTranslationDtoV1[];
     thumbnail: ImageDtoV1 | null;
+    urlOnPlatform: string | null;
+    platform: Platform;
+    idOnPlatform: string;
 }
 
 export interface PlaylistSearchResponseDtoV1 {

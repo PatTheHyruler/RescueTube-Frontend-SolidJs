@@ -27,6 +27,7 @@ import { useResultListSelect } from '@/components/ResultListSelect';
 import SelectItemCheckbox from '@/components/SelectItemCheckbox';
 import SelectionSummary from '@/components/ResultListSelect/SelectionSummary';
 import { createStore } from 'solid-js/store';
+import ThumbnailDisplay from '@/components/ThumbnailDisplay';
 
 const defaultSearch: VideoSearchDtoV1 = {
     filter: {
@@ -142,20 +143,17 @@ const VideoSearch = () => {
                                     }}
                                 >
                                     <A href={`/videos/watch/${video.id}`}>
-                                        <Show
-                                            when={video.thumbnail}
-                                            fallback={
-                                                <div>No thumbnails :(</div>
-                                            }
-                                        >
-                                            <img
-                                                loading="lazy"
-                                                src={video.thumbnail?.url}
-                                                width={160}
-                                                height={90}
-                                                alt="Video thumbnail"
-                                            />
-                                        </Show>
+                                        <ThumbnailDisplay thumbnail={video.thumbnail}>
+                                            {thumbnail => (
+                                                <img
+                                                    loading="lazy"
+                                                    src={thumbnail.url}
+                                                    width={160}
+                                                    height={90}
+                                                    alt="Video thumbnail"
+                                                />
+                                            )}
+                                        </ThumbnailDisplay>
                                     </A>
                                 </div>
                                 <div>

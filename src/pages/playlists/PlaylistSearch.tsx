@@ -1,7 +1,7 @@
 import { playlistsApi } from '@/services/playlistsApi';
 import { createEffect, createResource, For, Show } from 'solid-js';
 import type { PlaylistSearchDtoV1, PlaylistSearchFilterDtoV1 } from '@/apiModels';
-import { type Params, useSearchParams } from '@solidjs/router';
+import { A, type Params, useSearchParams } from '@solidjs/router';
 import {
     clone,
     type DeepPartial,
@@ -14,6 +14,7 @@ import {
 import { createStore } from 'solid-js/store';
 import PlaylistSearchForm from '@/components/Playlists/PlaylistSearchForm';
 import ThumbnailDisplay from '@/components/ThumbnailDisplay';
+import { DateTimeDisplay } from '@/components/DateTimeDisplay';
 
 const defaultSearch: PlaylistSearchDtoV1 = {
     filter: {
@@ -101,7 +102,32 @@ const PlaylistSearch = () => {
                                             />
                                         )}
                                     </ThumbnailDisplay>
-                                    {translationToString(playlist.title)}
+                                    <h4>
+                                        <A href={`/playlists/${playlist.id}`}>
+                                            {translationToString(playlist.title)}
+                                        </A>
+                                    </h4>
+                                    <div>
+                                        <div>
+                                            Added to archive:
+                                            <DateTimeDisplay value={playlist.addedToArchiveAt} />
+                                        </div>
+                                        <Show when={playlist.createdAt} children={createdAt => (
+                                            <div>
+                                                Created at:&nbsp;
+                                                <DateTimeDisplay value={createdAt()} />
+                                            </div>
+                                        )} />
+                                        <Show when={playlist.updatedAt} children={updatedAt => (
+                                            <div>
+                                                Updated at:&nbsp;
+                                                <DateTimeDisplay value={updatedAt()} />
+                                            </div>
+                                        )} />
+                                        <div>
+                                            {playlist.videosCount} video<Show when={playlist.videosCount !== 1} children={'s'} />
+                                        </div>
+                                    </div>
                                 </div>
                             )}
                         </For>

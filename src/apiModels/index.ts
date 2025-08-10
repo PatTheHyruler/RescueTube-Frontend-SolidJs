@@ -321,9 +321,13 @@ export interface PlaylistSimpleDtoV1 {
     title: TextTranslationDtoV1[];
     description: TextTranslationDtoV1[];
     thumbnail: ImageDtoV1 | null;
+    videosCount: number;
     urlOnPlatform: string | null;
     platform: Platform;
     idOnPlatform: string;
+    addedToArchiveAt: string;
+    createdAt: string | null;
+    updatedAt: string | null;
 }
 
 export interface PlaylistSearchResponseDtoV1 {

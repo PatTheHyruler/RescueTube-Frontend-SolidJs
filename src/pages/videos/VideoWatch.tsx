@@ -1,15 +1,19 @@
 import VideoSettings from '@/components/VideoSettings';
-import { useParams } from '@solidjs/router';
+import { useParams, useSearchParams } from '@solidjs/router';
 import VideoPlayer from '@/components/VideoPlayer';
 import { createResource, createSignal, Show, Suspense } from 'solid-js';
 import { videosApi } from '@/services/videosApi';
-import { translationToString } from '@/utils';
+import { isGuid, translationToString } from '@/utils';
 import styles from './VideoWatch.module.css';
 import VideoComments from '@/components/VideoComments';
+import PlaylistContextInfo from '@/components/Playlists/PlaylistContextInfo';
 
 const VideoWatch = () => {
     const params = useParams();
     const videoId = params.id;
+
+    const [searchParams] = useSearchParams();
+    const playlistId = searchParams.playlistId;
 
     const [video] = createResource(async () => {
         if (!videoId) {
@@ -27,6 +31,11 @@ const VideoWatch = () => {
                     <div class={styles.videoPlayer}>
                         <VideoPlayer videoId={videoId()} />
                     </div>
+                    <Show when={isGuid(playlistId) && playlistId} children={playlistId => (
+                        <div class={styles.playlistItems}>
+                            <PlaylistContextInfo playlistId={playlistId()} />
+                        </div>
+                    )} />
                     <div class={styles.videoSettings}>
                         <VideoSettings videoId={videoId()} />
                     </div>

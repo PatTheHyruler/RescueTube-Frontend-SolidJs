@@ -13,6 +13,10 @@
     grid-row: 1;
 }
 
+.playlist-items {
+
+}
+
 .video-info {
     grid-column: 1;
     grid-row: 2;

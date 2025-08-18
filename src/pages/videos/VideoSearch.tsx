@@ -7,12 +7,9 @@ import {
     Show,
 } from 'solid-js';
 import VideoSearchForm from '@/components/VideoSearchForm';
-import { DateTimeDisplay } from '@/components/DateTimeDisplay';
-import { secondsToDurationString } from '@/services/timeUtils';
-import { A, type Params, useSearchParams } from '@solidjs/router';
+import { type Params, useSearchParams } from '@solidjs/router';
 import {
     reduceForSearchParams,
-    translationToString,
     tryParseBool,
     tryParseInt,
     tryParseObjEnum,
@@ -21,13 +18,11 @@ import {
     isDeepEqual,
     clone,
 } from '@/utils';
-import AuthorSummary from '@/components/AuthorSummary';
 import VideoBulkActions from '@/components/VideoBulkActions';
 import { useResultListSelect } from '@/components/ResultListSelect';
-import SelectItemCheckbox from '@/components/SelectItemCheckbox';
 import SelectionSummary from '@/components/ResultListSelect/SelectionSummary';
 import { createStore } from 'solid-js/store';
-import ThumbnailDisplay from '@/components/ThumbnailDisplay';
+import VideoSummary from '@/components/Videos/VideoSummary';
 
 const defaultSearch: VideoSearchDtoV1 = {
     filter: {
@@ -132,67 +127,7 @@ const VideoSearch = () => {
                 <div>
                     <For each={searchResults()!.data.videos}>
                         {(video) => (
-                            <div style={{ margin: '8px', display: 'flex' }}>
-                                <SelectItemCheckbox selection={videoSelection} id={video.id} />
-                                <div
-                                    style={{
-                                        'border-radius': '6px',
-                                        overflow: 'hidden',
-                                        width: 'fit-content',
-                                        height: 'fit-content',
-                                    }}
-                                >
-                                    <A href={`/videos/watch/${video.id}`}>
-                                        <ThumbnailDisplay thumbnail={video.thumbnail}>
-                                            {thumbnail => (
-                                                <img
-                                                    loading="lazy"
-                                                    src={thumbnail.url}
-                                                    width={160}
-                                                    height={90}
-                                                    alt="Video thumbnail"
-                                                />
-                                            )}
-                                        </ThumbnailDisplay>
-                                    </A>
-                                </div>
-                                <div>
-                                    <A href={`/videos/watch/${video.id}`}>
-                                        <div>
-                                            {translationToString(video.title)}
-                                        </div>
-                                    </A>
-                                    <div>
-                                        <Show
-                                            when={video.authors[0]}
-                                            fallback={'No author???'}
-                                            keyed
-                                        >
-                                            {(author) => (
-                                                <AuthorSummary
-                                                    author={author}
-                                                />
-                                            )}
-                                        </Show>
-                                    </div>
-                                    <div
-                                        style={{ display: 'flex', gap: '3px' }}
-                                    >
-                                        <DateTimeDisplay
-                                            value={
-                                                video.createdAt ??
-                                                video.publishedAt
-                                            }
-                                        ></DateTimeDisplay>
-                                        <div>
-                                            Duration:{' '}
-                                            {secondsToDurationString(
-                                                video.durationSeconds,
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <VideoSummary video={video} videoSelection={videoSelection} />
                         )}
                     </For>
                 </div>

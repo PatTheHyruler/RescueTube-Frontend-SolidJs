@@ -15,6 +15,7 @@ import { createStore } from 'solid-js/store';
 import PlaylistSearchForm from '@/components/Playlists/PlaylistSearchForm';
 import ThumbnailDisplay from '@/components/ThumbnailDisplay';
 import { DateTimeDisplay } from '@/components/DateTimeDisplay';
+import AuthorSummary from '@/components/AuthorSummary';
 
 const defaultSearch: PlaylistSearchDtoV1 = {
     filter: {
@@ -108,6 +109,9 @@ const PlaylistSearch = () => {
                                         </A>
                                     </h4>
                                     <div>
+                                        <Show when={playlist.authors[0]} children={author => (
+                                            <AuthorSummary author={author()} />
+                                        )} fallback={'No author???'} />
                                         <div>
                                             Added to archive:
                                             <DateTimeDisplay value={playlist.addedToArchiveAt} />

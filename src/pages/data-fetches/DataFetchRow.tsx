@@ -2,6 +2,7 @@ import type { DataFetchDtoV1 } from '@/apiModels';
 import { createSignal, Match, Show, Switch } from 'solid-js';
 import { DateTimeDisplay } from '@/components/DateTimeDisplay';
 import { A } from '@solidjs/router';
+import routes from '@/utils/routes';
 
 interface DataFetchProps {
     dataFetch: DataFetchDtoV1;
@@ -37,7 +38,7 @@ const DataFetchRow = (props: DataFetchProps) => {
                     </button>
                     <Show when={dataFetch.videoId}>
                         {(videoId) => (
-                            <A href={`/videos/watch/${videoId()}`}>Video</A>
+                            <A href={routes.videos.watch(videoId())}>Video</A>
                         )}
                     </Show>
                     <Show when={dataFetch.authorId}>

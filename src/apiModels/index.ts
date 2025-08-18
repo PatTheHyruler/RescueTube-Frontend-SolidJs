@@ -322,6 +322,7 @@ export interface PlaylistSimpleDtoV1 {
     description: TextTranslationDtoV1[];
     thumbnail: ImageDtoV1 | null;
     videosCount: number;
+    authors: AuthorSimpleDtoV1[];
     urlOnPlatform: string | null;
     platform: Platform;
     idOnPlatform: string;
@@ -333,4 +334,17 @@ export interface PlaylistSimpleDtoV1 {
 export interface PlaylistSearchResponseDtoV1 {
     paginationResult: PaginationResult;
     playlists: PlaylistSimpleDtoV1[];
+}
+
+export interface PlaylistItemDtoV1 {
+    id: string;
+    video: VideoSimpleDtoV1;
+    position: number;
+    addedAt: string | null;
+    removedAt: string | null;
+}
+
+export interface PlaylistItemsResponseDtoV1 {
+    paginationResult: PaginationResult;
+    playlistItems: PlaylistItemDtoV1[];
 }

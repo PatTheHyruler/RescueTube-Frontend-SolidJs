@@ -19,6 +19,7 @@ import { RootErrorHandler } from '@/components/RootErrorHandler';
 import DataFetches from '@/pages/data-fetches/DataFetches';
 import AuthorSearch from '@/pages/authors/AuthorSearch';
 import PlaylistSearch from './pages/playlists/PlaylistSearch';
+import PlaylistDetails from '@/pages/playlists/PlaylistDetails';
 
 const root = document.getElementById('root');
 
@@ -38,7 +39,7 @@ render(
                 <Route path="/videos">
                     <Route path="/search" component={VideoSearch}></Route>
                     <Route
-                        path="/watch/:id"
+                        path="/:id/watch"
                         component={VideoWatch}
                         matchFilters={{ id: (id) => isGuid(id) }}
                     ></Route>
@@ -53,6 +54,7 @@ render(
                 </Route>
                 <Route path="/playlists">
                     <Route path="/" component={PlaylistSearch} />
+                    <Route path=":id" component={PlaylistDetails} matchFilters={{ id: isGuid }} />
                 </Route>
                 <Route path="/data-fetches" component={() => <RequireAuth><DataFetches /></RequireAuth>} />
                 <Route path="/settings" component={() => <RequireAuth roles={Roles.AdminRoles}><Settings/></RequireAuth>} />

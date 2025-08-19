@@ -3,17 +3,35 @@ import { useParams, useSearchParams } from '@solidjs/router';
 import VideoPlayer from '@/components/VideoPlayer';
 import { createResource, createSignal, Show, Suspense } from 'solid-js';
 import { videosApi } from '@/services/videosApi';
-import { isGuid, translationToString } from '@/utils';
+import { isGuid, translationToString, tryParseInt } from '@/utils';
 import styles from './VideoWatch.module.css';
 import VideoComments from '@/components/VideoComments';
 import PlaylistContextInfo from '@/components/Playlists/PlaylistContextInfo';
+
+const usePlaylistParams = () => {
+    const [searchParams] = useSearchParams();
+
+    const playlistId = searchParams.playlistId;
+    if (!playlistId || !isGuid(playlistId)) {
+        return null;
+    }
+
+    let playlistItemIndex = tryParseInt(searchParams.playlistItemIndex);
+    if (playlistItemIndex !== null && playlistItemIndex < 0) {
+        playlistItemIndex = null;
+    }
+
+    return {
+        playlistId,
+        playlistItemIndex,
+    };
+};
 
 const VideoWatch = () => {
     const params = useParams();
     const videoId = params.id;
 
-    const [searchParams] = useSearchParams();
-    const playlistId = searchParams.playlistId;
+    const playlistParams = usePlaylistParams();
 
     const [video] = createResource(async () => {
         if (!videoId) {
@@ -31,9 +49,9 @@ const VideoWatch = () => {
                     <div class={styles.videoPlayer}>
                         <VideoPlayer videoId={videoId()} />
                     </div>
-                    <Show when={isGuid(playlistId) && playlistId} children={playlistId => (
+                    <Show when={playlistParams} children={playlistParams => (
                         <div class={styles.playlistItems}>
-                            <PlaylistContextInfo playlistId={playlistId()} />
+                            <PlaylistContextInfo playlistId={playlistParams().playlistId} playlistItemIndex={playlistParams().playlistItemIndex} />
                         </div>
                     )} />
                     <div class={styles.videoSettings}>

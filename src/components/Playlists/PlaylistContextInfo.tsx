@@ -6,6 +6,7 @@ import AuthorSummary from '@/components/AuthorSummary';
 
 interface IProps {
     playlistId: string;
+    playlistItemIndex?: number | null;
 }
 
 const PlaylistContextInfo = (props: IProps) => {
@@ -26,7 +27,7 @@ const PlaylistContextInfo = (props: IProps) => {
                     {playlist().videosCount} video(s)
                 </>
             )} fallback={<h2>Loading playlist...</h2>} />
-            <PlaylistItems playlistId={props.playlistId} />
+            <PlaylistItems playlistId={props.playlistId} playlistItemIndex={props.playlistItemIndex} />
         </section>
     );
 };

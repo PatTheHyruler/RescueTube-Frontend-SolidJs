@@ -36,8 +36,8 @@ const App: Component = (props: { children?: JSX.Element }) => {
 
     const [userDetailsResource] = createResource(
         () => authState.jwtState,
-        async () => {
-            if (authState.jwtState) {
+        async (jwtState) => {
+            if (jwtState) {
                 const response = await accountApi.getCurrentUserDetails();
                 return response.data;
             }
@@ -60,12 +60,12 @@ const App: Component = (props: { children?: JSX.Element }) => {
             <div class={styles.App}>
                 <header class={styles.header}>
                     {/*<img src={logo} class={styles.logo} alt="logo"/>*/}
-                    <NavBar></NavBar>
+                    <NavBar />
                 </header>
                 {props.children}
             </div>
             <Show when={import.meta.env.DEV}>
-                <DebugAuthStateDisplay></DebugAuthStateDisplay>
+                <DebugAuthStateDisplay />
             </Show>
         </AuthContext.Provider>
         </ToastProvider>

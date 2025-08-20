@@ -25,13 +25,11 @@ const getPersistedVolume = () => {
     }
 };
 
-const VideoPlayer = ({ videoId }: IProps) => {
-    // Loss of reactivity due to props destructuring is ok, we don't expect videoId to change
-
+const VideoPlayer = (props: IProps) => {
     const [accessToken, { refetch: refetchAccessToken }] =
         createResource<AccessTokenDtoV1>(async () => {
             const tokenResponse =
-                await videosApi.getVideoFileAccessToken(videoId);
+                await videosApi.getVideoFileAccessToken(props.videoId);
             return tokenResponse.data;
         });
     setInterval(refetchAccessToken, 40_000);
@@ -81,7 +79,7 @@ const VideoPlayer = ({ videoId }: IProps) => {
                     onError={onError}
                 >
                     <source
-                        src={`${baseApi.baseUrl}/v1/videos/${videoId}/file/data`}
+                        src={`${baseApi.baseUrl}/v1/videos/${props.videoId}/file/data`}
                     />
                 </video>
             </Show>

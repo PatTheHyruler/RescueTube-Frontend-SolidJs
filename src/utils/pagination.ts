@@ -3,7 +3,10 @@ import { type Setter } from 'solid-js';
 
 export const useOnPaginationQueryUpdate =
     <TQuery extends PaginationQuery>(setQuery: Setter<TQuery>) =>
-    (newPaginationQuery: PaginationQuery) => {
+    (newPaginationQuery: PaginationQuery) => updatePaginationQuery(newPaginationQuery, setQuery);
+
+export const updatePaginationQuery =
+    <TQuery extends PaginationQuery>(newPaginationQuery: PaginationQuery, setQuery: Setter<TQuery>) => {
         setQuery((v) => ({
             ...v,
             limit: newPaginationQuery.limit,

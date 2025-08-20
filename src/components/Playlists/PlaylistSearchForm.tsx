@@ -1,7 +1,7 @@
 import type { PaginationResult, PlaylistSearchDtoV1 } from '@/apiModels';
 import type { SetStoreFunction } from 'solid-js/store';
 import PaginationComponent from '@/components/PaginationComponent';
-import { useOnPaginationQueryUpdate } from '@/utils/pagination';
+import { updatePaginationQuery } from '@/utils/pagination';
 
 interface IProps {
     query: PlaylistSearchDtoV1;
@@ -15,8 +15,6 @@ const PlaylistSearchForm = (props: IProps) => {
         e.preventDefault();
         return props.onSubmit();
     };
-
-    const onPaginationQueryUpdate = useOnPaginationQueryUpdate(props.setQuery);
 
     return (
         <>
@@ -32,7 +30,12 @@ const PlaylistSearchForm = (props: IProps) => {
                 </label>
                 <button type="submit">Apply</button>
             </form>
-            <PaginationComponent paginationQuery={props.query} paginationResult={props.paginationResult} onUpdate={onPaginationQueryUpdate} onSubmit={props.onSubmit} />
+            <PaginationComponent
+                paginationQuery={props.query}
+                paginationResult={props.paginationResult}
+                onUpdate={p => updatePaginationQuery(p, props.setQuery)}
+                onSubmit={props.onSubmit}
+            />
         </>
     );
 };

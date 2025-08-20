@@ -25,7 +25,7 @@ const AccountHeader = () => {
                 </Show>
                 <li class="nav-item">
                     <button
-                        onclick={() => logOut()}
+                        onClick={() => logOut()}
                         type="submit"
                         class="nav-link btn btn-link"
                     >

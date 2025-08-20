@@ -8,7 +8,7 @@ interface IProps {
     videoId: string;
 }
 
-const VideoComments = ({ videoId }: IProps) => {
+const VideoComments = (props: IProps) => {
     const [paginationQuery, setPaginationQuery] = createSignal<PaginationQuery>(
         {
             page: 0,
@@ -17,7 +17,7 @@ const VideoComments = ({ videoId }: IProps) => {
     );
     const [comments, { refetch }] = createResource(async () => {
         const response = await commentsApi.getVideoComments(
-            videoId,
+            props.videoId,
             paginationQuery(),
         );
         return response.data;

@@ -19,13 +19,17 @@ interface SelectProps<TOption extends Option> {
 const Select = <TOption extends Option = Option>(props: SelectProps<TOption>) => {
     const [search, setSearch] = createSignal<string>('');
     const [result] = createResource(
-        () => ({ search: search(), selectedIds: props.selectedOptions?.map(x => x.id) }),
+        () => ({
+            search: search(),
+            selectedIds: props.selectedOptions?.map(x => x.id),
+            fetchOptions: props.fetchOptions,
+        }),
         async (deps) => {
             const search = deps.search;
             if (!search) {
                 return [];
             }
-            return await props.fetchOptions(search);
+            return await deps.fetchOptions(search);
         },
     );
 

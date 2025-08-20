@@ -1,14 +1,14 @@
 import VideoSettings from '@/components/VideoSettings';
 import { useParams, useSearchParams } from '@solidjs/router';
 import VideoPlayer from '@/components/VideoPlayer';
-import { createResource, createSignal, Show, Suspense } from 'solid-js';
+import { createMemo, createResource, createSignal, Show, Suspense } from 'solid-js';
 import { videosApi } from '@/services/videosApi';
 import { isGuid, translationToString, tryParseInt } from '@/utils';
 import styles from './VideoWatch.module.css';
 import VideoComments from '@/components/VideoComments';
 import PlaylistContextInfo from '@/components/Playlists/PlaylistContextInfo';
 
-const usePlaylistParams = () => {
+const getPlaylistParams = () => {
     const [searchParams] = useSearchParams();
 
     const playlistId = searchParams.playlistId;
@@ -29,11 +29,11 @@ const usePlaylistParams = () => {
 
 const VideoWatch = () => {
     const params = useParams();
-    const videoId = params.id;
+    const videoId = () => params.id;
 
-    const playlistParams = usePlaylistParams();
+    const playlistParams = createMemo(getPlaylistParams);
 
-    const [video] = createResource(async () => {
+    const [video] = createResource(videoId, async (videoId) => {
         if (!videoId) {
             throw new Error('No videoId provided');
         }
@@ -43,17 +43,27 @@ const VideoWatch = () => {
     const [videoInfoOpen, setVideoInfoOpen] = createSignal(false);
 
     return (
-        <Show when={videoId}>
+        <Show when={videoId()}>
             {(videoId) => (
                 <div class={styles.container}>
                     <div class={styles.videoPlayer}>
                         <VideoPlayer videoId={videoId()} />
                     </div>
-                    <Show when={playlistParams} children={playlistParams => (
-                        <div class={styles.playlistItems}>
-                            <PlaylistContextInfo playlistId={playlistParams().playlistId} playlistItemIndex={playlistParams().playlistItemIndex} />
-                        </div>
-                    )} />
+                    <Show
+                        when={playlistParams()}
+                        children={(playlistParams) => (
+                            <div class={styles.playlistItems}>
+                                <PlaylistContextInfo
+                                    playlistId={playlistParams().playlistId}
+                                    current={playlistParams().playlistItemIndex !== null ? {
+                                        playlistItemIndex:
+                                            playlistParams().playlistItemIndex!,
+                                        videoId: videoId(),
+                                    } : undefined}
+                                />
+                            </div>
+                        )}
+                    />
                     <div class={styles.videoSettings}>
                         <VideoSettings videoId={videoId()} />
                     </div>

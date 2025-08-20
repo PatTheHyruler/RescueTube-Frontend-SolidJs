@@ -6,7 +6,7 @@ import {
 } from '@/apiModels';
 import { createResource, For } from 'solid-js';
 import PaginationComponent from './PaginationComponent';
-import { useOnPaginationQueryUpdate } from '@/utils/pagination';
+import { updatePaginationQuery } from '@/utils/pagination';
 import type { Values } from '@/utils';
 import { authorsApi } from '@/services/authorsApi';
 import Select, { type Option } from '@/components/Select/Select';
@@ -36,8 +36,6 @@ const VideoSearchForm = (props: IProps) => {
         e.preventDefault();
         return props.onSubmit();
     };
-
-    const onPaginationQueryUpdate = useOnPaginationQueryUpdate(props.setQuery);
 
     const [authorCache, setAuthorCache] = createStore<Record<string, AuthorSimpleDtoV1>>({});
     const [fetchedSelectedAuthors] = createResource(
@@ -155,7 +153,7 @@ const VideoSearchForm = (props: IProps) => {
             <PaginationComponent
                 paginationQuery={props.query}
                 paginationResult={props.paginationResult}
-                onUpdate={onPaginationQueryUpdate}
+                onUpdate={p => updatePaginationQuery(p, props.setQuery)}
                 onSubmit={props.onSubmit}
             />
         </>

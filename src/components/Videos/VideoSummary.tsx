@@ -17,13 +17,13 @@ interface IProps {
 }
 
 const VideoSummary = (props: IProps) => {
-    const video = props.video;
-    const videoWatchLink = props.videoWatchLink ?? routes.videos.watch(video.id);
+    const video = () => props.video;
+    const videoWatchLink = () => props.videoWatchLink ?? routes.videos.watch(video().id);
 
     return (
         <div style={{ margin: '8px', display: 'flex' }}>
             <Show when={props.videoSelection} children={videoSelection => (
-                <SelectItemCheckbox selection={videoSelection()} id={video.id} />
+                <SelectItemCheckbox selection={videoSelection()} id={video().id} />
             )} />
             <div
                 style={{
@@ -33,8 +33,8 @@ const VideoSummary = (props: IProps) => {
                     height: 'fit-content',
                 }}
             >
-                <A href={videoWatchLink}>
-                    <ThumbnailDisplay thumbnail={video.thumbnail}>
+                <A href={videoWatchLink()}>
+                    <ThumbnailDisplay thumbnail={video().thumbnail}>
                         {thumbnail => (
                             <img
                                 loading="lazy"
@@ -48,14 +48,14 @@ const VideoSummary = (props: IProps) => {
                 </A>
             </div>
             <div>
-                <A href={videoWatchLink}>
+                <A href={videoWatchLink()}>
                     <div>
-                        {translationToString(video.title)}
+                        {translationToString(video().title)}
                     </div>
                 </A>
                 <div>
                     <Show
-                        when={video.authors[0]}
+                        when={video().authors[0]}
                         fallback={'No author???'}
                         keyed
                     >
@@ -71,14 +71,14 @@ const VideoSummary = (props: IProps) => {
                 >
                     <DateTimeDisplay
                         value={
-                            video.createdAt ??
-                            video.publishedAt
+                            video().createdAt ??
+                            video().publishedAt
                         }
-                    ></DateTimeDisplay>
+                     />
                     <div>
                         Duration:{' '}
                         {secondsToDurationString(
-                            video.durationSeconds,
+                            video().durationSeconds,
                         )}
                     </div>
                 </div>

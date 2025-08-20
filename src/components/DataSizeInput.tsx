@@ -1,4 +1,4 @@
-import { createSignal, createEffect, For, Show } from 'solid-js';
+import { createSignal, createEffect, For, Show, untrack } from 'solid-js';
 import type { Component } from 'solid-js';
 
 interface Props {
@@ -44,7 +44,7 @@ const getBestUnit = (bytes: number | null): Unit => {
 };
 
 export const DataSizeInput: Component<Props> = (props) => {
-    const [unit, setUnit] = createSignal(getBestUnit(props.valueBytes ?? props.defaultValueBytes));
+    const [unit, setUnit] = createSignal(getBestUnit(untrack(() => props.valueBytes ?? props.defaultValueBytes)));
     const [value, setValue] = createSignal<string | null>(null);
     const [error, setError] = createSignal<string | null>(null);
 

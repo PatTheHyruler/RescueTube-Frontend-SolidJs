@@ -11,7 +11,7 @@ import FieldErrors from '@/components/FieldErrors';
 
 interface Props {
     cookieFile: CookieFileInfoDtoV1;
-    refetch: () => Promise<unknown>;
+    refetch: () => Promise<unknown> | unknown;
 }
 
 const CookieFileListItem = (props: Props) => {

@@ -79,6 +79,21 @@ const VideoSearchForm = (props: IProps) => {
         return options;
     };
 
+    const handleFetchOptions = async (search: string | null) => {
+        const response = await authorsApi.searchAuthors({
+            name: search,
+            excludeAuthorIds: props.query.filter?.authorIds,
+            limit: 10,
+            page: 0,
+        });
+        const authors = response.data.authors;
+        setAuthorCache(cache => ({
+            ...cache,
+            ...Object.fromEntries(authors.map(author => [author.id, author])),
+        }));
+        return authors.map(mapAuthorToAuthorOption);
+    };
+
     return (
         <>
             <form onSubmit={onSubmit} class="d-inline-flex gap-1">
@@ -96,20 +111,7 @@ const VideoSearchForm = (props: IProps) => {
                     Author:
                     <Select
                         id="authorIds"
-                        fetchOptions={async (search) => {
-                            const response = await authorsApi.searchAuthors({
-                                name: search,
-                                excludeAuthorIds: props.query.filter?.authorIds,
-                                limit: 10,
-                                page: 0,
-                            });
-                            const authors = response.data.authors;
-                            setAuthorCache(cache => ({
-                                ...cache,
-                                ...Object.fromEntries(authors.map(author => [author.id, author])),
-                            }));
-                            return authors.map(mapAuthorToAuthorOption);
-                        }}
+                        fetchOptions={handleFetchOptions}
                         selectedOptions={selectedAuthors()}
                         onChange={selectedAuthors => {
                             props.setQuery('filter', 'authorIds', selectedAuthors.map(

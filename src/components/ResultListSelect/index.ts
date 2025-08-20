@@ -18,7 +18,7 @@ export function useResultListSelect<TId extends string = string>() {
     const toggleSelected = (id: TId) => {
         setSelectedIds(ids => {
             if (ids.includes(id)) {
-                return ids.filter(id => id !== id);
+                return ids.filter(otherItemId => otherItemId !== id);
             } else {
                 return [...ids, id];
             }

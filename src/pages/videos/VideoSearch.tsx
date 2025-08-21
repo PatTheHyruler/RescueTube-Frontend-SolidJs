@@ -5,6 +5,7 @@ import {
     createResource,
     For,
     Show,
+    untrack,
 } from 'solid-js';
 import VideoSearchForm from '@/components/VideoSearchForm';
 import { type Params, useSearchParams } from '@solidjs/router';
@@ -92,7 +93,9 @@ const VideoSearch = () => {
     const [searchResults, searchResultActions] = createResource(() =>
         videosApi.searchVideos(query),
     );
-    let previousFilter: VideoSearchFilterDtoV1 = clone(query.filter);
+
+    // I think this untrack is correct?
+    let previousFilter: VideoSearchFilterDtoV1 = clone(untrack(() => query.filter));
     const applySearch = () => {
         if (!isDeepEqual(previousFilter, query.filter)) {
             videoSelection.clear();

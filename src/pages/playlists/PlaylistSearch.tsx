@@ -1,5 +1,5 @@
 import { playlistsApi } from '@/services/playlistsApi';
-import { createEffect, createResource, For, Show } from 'solid-js';
+import { createEffect, createResource, For, Show, untrack } from 'solid-js';
 import type { PlaylistSearchDtoV1, PlaylistSearchFilterDtoV1 } from '@/apiModels';
 import { A, type Params, useSearchParams } from '@solidjs/router';
 import {
@@ -67,7 +67,8 @@ const PlaylistSearch = () => {
         searchResultActions.refetch();
     });
 
-    let previousFilter: PlaylistSearchFilterDtoV1 | null | undefined = clone(query.filter);
+    // I think this untrack is correct?
+    let previousFilter: PlaylistSearchFilterDtoV1 | null | undefined = clone(untrack(() => query.filter));
     const applySearch = () => {
         if (!isDeepEqual(previousFilter, query.filter)) {
             // playlistSelection.clear(); TODO

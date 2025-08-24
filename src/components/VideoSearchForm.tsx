@@ -4,18 +4,18 @@ import {
     type VideoSearchDtoV1,
     VideoSortingOptions,
 } from '@/apiModels';
-import { createResource, For } from 'solid-js';
+import { createMemo, createResource, For } from 'solid-js';
 import PaginationComponent from './PaginationComponent';
-import { useOnPaginationQueryUpdate } from '@/utils/pagination';
-import type { Values } from '@/utils';
+import { updatePaginationQuery } from '@/utils/pagination';
+import { isDeepEqual, type Values } from '@/utils';
 import { authorsApi } from '@/services/authorsApi';
 import Select, { type Option } from '@/components/Select/Select';
-import { createStore, type SetStoreFunction } from 'solid-js/store';
+import { createStore, produce, type SetStoreFunction } from 'solid-js/store';
 
 interface IProps {
     query: VideoSearchDtoV1;
     setQuery: SetStoreFunction<VideoSearchDtoV1>;
-    paginationResult?: PaginationResult | null;
+    paginationResult: PaginationResult | null | undefined;
     onSubmit: (() => Promise<void>) | (() => void);
 }
 
@@ -37,48 +37,67 @@ const VideoSearchForm = (props: IProps) => {
         return props.onSubmit();
     };
 
-    const onPaginationQueryUpdate = useOnPaginationQueryUpdate(props.setQuery);
-
     const [authorCache, setAuthorCache] = createStore<Record<string, AuthorSimpleDtoV1>>({});
-    const [fetchedSelectedAuthors] = createResource(
-        // Wrapping authorIds in an object, because otherwise the resource won't be fetched if authorIds is falsy
-        () => ({ authorIds: props.query.filter?.authorIds }),
-        async (source) => {
-            const authorIds = source.authorIds;
-            if (!authorIds?.length) {
+    const uncachedAuthorIds = createMemo(
+        () => props.query.filter?.authorIds?.filter(id => !authorCache[id]) ?? [],
+        [],
+        { equals: isDeepEqual },
+    );
+    const [fetchedUncachedAuthors] = createResource(
+        uncachedAuthorIds,
+        async (unCachedAuthorIds) => {
+            if (!unCachedAuthorIds.length) {
                 return [];
             }
-            const uncachedIds = authorIds.filter(id => !authorCache[id]);
-            if (uncachedIds.length > 0) {
-                const response = await authorsApi.searchAuthors({
-                    limit: uncachedIds.length,
-                    page: 0,
-                    authorIds: uncachedIds,
-                });
+
+            const response = await authorsApi.searchAuthors({
+                limit: unCachedAuthorIds.length,
+                page: 0,
+                authorIds: unCachedAuthorIds,
+            });
+            setAuthorCache(produce(cache => {
                 response.data.authors.forEach(author => {
-                    setAuthorCache(cache => ({ ...cache, [author.id]: author }));
+                    cache[author.id] = author;
                 });
-            }
-            return authorIds
-                .map(id => authorCache[id])
-                .filter<AuthorSimpleDtoV1>(x => !!x);
+            }));
+            return response.data.authors;
         },
     );
-    const selectedAuthors = () => {
-        if (!props.query.filter?.authorIds?.length) {
+
+    const selectedAuthors = createMemo(() => {
+        const authorIds = props.query.filter?.authorIds;
+        if (!authorIds?.length) {
             return [];
         }
-        const authors = fetchedSelectedAuthors();
-        if (!authors) {
+
+        if (fetchedUncachedAuthors.loading || fetchedUncachedAuthors.error) {
             return null;
         }
+
+        const authors = authorIds.map(id => authorCache[id]).filter(x => x !== undefined);
+
         const options: AuthorOption[] = authors.map(mapAuthorToAuthorOption);
-        for (const authorId of props.query.filter?.authorIds) {
+        for (const authorId of authorIds) {
             if (authors.findIndex(x => x.id == authorId) === -1) {
                 options.push({ id: authorId, name: `id: ${authorId}`, author: null });
             }
         }
         return options;
+    });
+
+    const handleFetchOptions = async (search: string | null) => {
+        const response = await authorsApi.searchAuthors({
+            name: search,
+            excludeAuthorIds: props.query.filter?.authorIds,
+            limit: 10,
+            page: 0,
+        });
+        const authors = response.data.authors;
+        setAuthorCache(cache => ({
+            ...cache,
+            ...Object.fromEntries(authors.map(author => [author.id, author])),
+        }));
+        return authors.map(mapAuthorToAuthorOption);
     };
 
     return (
@@ -98,27 +117,14 @@ const VideoSearchForm = (props: IProps) => {
                     Author:
                     <Select
                         id="authorIds"
-                        fetchOptions={async (search) => {
-                            const response = await authorsApi.searchAuthors({
-                                name: search,
-                                excludeAuthorIds: props.query.filter?.authorIds,
-                                limit: 10,
-                                page: 0,
-                            });
-                            const authors = response.data.authors;
-                            setAuthorCache(cache => ({
-                                ...cache,
-                                ...Object.fromEntries(authors.map(author => [author.id, author])),
-                            }));
-                            return authors.map(mapAuthorToAuthorOption);
-                        }}
+                        fetchOptions={handleFetchOptions}
                         selectedOptions={selectedAuthors()}
                         onChange={selectedAuthors => {
                             props.setQuery('filter', 'authorIds', selectedAuthors.map(
                                 (author) => author.id,
                             ));
                         }}
-                        disabled={fetchedSelectedAuthors() === undefined}
+                        disabled={selectedAuthors() === null}
                     />
                 </label>
                 <label for="sortingOptions">
@@ -155,7 +161,7 @@ const VideoSearchForm = (props: IProps) => {
             <PaginationComponent
                 paginationQuery={props.query}
                 paginationResult={props.paginationResult}
-                onUpdate={onPaginationQueryUpdate}
+                onUpdate={p => updatePaginationQuery(p, props.setQuery)}
                 onSubmit={props.onSubmit}
             />
         </>

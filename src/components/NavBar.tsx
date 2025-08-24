@@ -18,7 +18,7 @@ const NavBar = () => {
                     aria-expanded="false"
                     aria-label="Toggle navigation"
                 >
-                    <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon" />
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
@@ -37,10 +37,15 @@ const NavBar = () => {
                                 Authors
                             </A>
                         </li>
-                        <AdminDropDown></AdminDropDown>
+                        <li class="nav-item">
+                            <A href="/playlists" class="nav-link text-dark">
+                                Playlists
+                            </A>
+                        </li>
+                        <AdminDropDown />
                     </ul>
                     <ul class="navbar-nav">
-                        <AccountHeader></AccountHeader>
+                        <AccountHeader />
                     </ul>
                 </div>
             </div>

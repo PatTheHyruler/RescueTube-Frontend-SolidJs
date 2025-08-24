@@ -15,12 +15,7 @@ const defaultValues: VideoArchivalSettingsDtoV1 = {
 };
 
 const VideoSettings = (props: Props) => {
-    const videoId = props.videoId;
-
-    const [archivalSettings, { refetch: refetchArchivalSettings }] = createResource(async () => {
-        if (!videoId) {
-            throw new Error('No videoId provided');       
-        }
+    const [archivalSettings, { refetch: refetchArchivalSettings }] = createResource(() => props.videoId, async (videoId) => {
         const response = await videosApi.getVideoArchivalSettings(videoId);
         return response.data;
     });
@@ -29,7 +24,7 @@ const VideoSettings = (props: Props) => {
         defaultValues,
         onSubmit: async ({ value }) => {
             await videosApi.upsertVideoArchivalSettings({
-                videoId, settings: value,
+                videoId: props.videoId, settings: value,
             });
             await refetchArchivalSettings();
         },

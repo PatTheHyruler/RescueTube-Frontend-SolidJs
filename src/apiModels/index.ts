@@ -307,3 +307,44 @@ export interface RenameCookieFileDtoV1 {
     oldFileName: string;
     newFileName: string;
 }
+
+export interface PlaylistSearchFilterDtoV1 {
+    name?: string | null;
+}
+
+export interface PlaylistSearchDtoV1 extends PaginationQuery {
+    filter?: PlaylistSearchFilterDtoV1 | null;
+}
+
+export interface PlaylistSimpleDtoV1 {
+    id: string;
+    title: TextTranslationDtoV1[];
+    description: TextTranslationDtoV1[];
+    thumbnail: ImageDtoV1 | null;
+    videosCount: number;
+    authors: AuthorSimpleDtoV1[];
+    urlOnPlatform: string | null;
+    platform: Platform;
+    idOnPlatform: string;
+    addedToArchiveAt: string;
+    createdAt: string | null;
+    updatedAt: string | null;
+}
+
+export interface PlaylistSearchResponseDtoV1 {
+    paginationResult: PaginationResult;
+    playlists: PlaylistSimpleDtoV1[];
+}
+
+export interface PlaylistItemDtoV1 {
+    id: string;
+    video: VideoSimpleDtoV1;
+    position: number;
+    addedAt: string | null;
+    removedAt: string | null;
+}
+
+export interface PlaylistItemsResponseDtoV1 {
+    paginationResult: PaginationResult;
+    playlistItems: PlaylistItemDtoV1[];
+}

@@ -7,13 +7,11 @@ interface Props {
 }
 
 const AuthorSettings = (props: Props) => {
-    const authorId = props.authorId;
-
     const [archivalSettings, { refetch: refetchArchivalSettings }] = createResource(async () => {
-        if (!authorId) {
+        if (!props.authorId) {
             throw new Error('No authorId provided');
         }
-        const response = await authorsApi.getAuthorArchivalSettings(authorId);
+        const response = await authorsApi.getAuthorArchivalSettings(props.authorId);
         return response.data;
     });
 
@@ -26,7 +24,8 @@ const AuthorSettings = (props: Props) => {
         },
         onSubmit: async ({ value: { isEnabledForArchival, archiveVideos, archivePlaylists, archiveClips } }) => {
             await authorsApi.upsertAuthorArchivalSettings({
-                authorId, settings: {
+                authorId: props.authorId,
+                settings: {
                     isEnabledForArchival,
                     archiveVideos,
                     archivePlaylists,

@@ -1,5 +1,6 @@
+import { ErrorBoundary } from "solid-js";
 /* @refresh reload */
-import { ErrorBoundary, render } from 'solid-js/web';
+import { render } from 'solid-js/web';
 
 import './index.css';
 import App from './App';
@@ -18,6 +19,8 @@ import { Roles } from './auth/Roles';
 import { RootErrorHandler } from '@/components/RootErrorHandler';
 import DataFetches from '@/pages/data-fetches/DataFetches';
 import AuthorSearch from '@/pages/authors/AuthorSearch';
+import PlaylistSearch from './pages/playlists/PlaylistSearch';
+import PlaylistDetails from '@/pages/playlists/PlaylistDetails';
 
 const root = document.getElementById('root');
 
@@ -31,31 +34,34 @@ render(
     () => (
         <ErrorBoundary fallback={RootErrorHandler}>
             <Router root={App}>
-                <Route path="/" component={Home}></Route>
-                <Route path="/login" component={Login}></Route>
-                <Route path="/register" component={Register}></Route>
+                <Route path="/" component={Home} />
+                <Route path="/login" component={Login} />
+                <Route path="/register" component={Register} />
                 <Route path="/videos">
-                    <Route path="/search" component={VideoSearch}></Route>
+                    <Route path="/search" component={VideoSearch} />
                     <Route
-                        path="/watch/:id"
+                        path="/:id/watch"
                         component={VideoWatch}
                         matchFilters={{ id: (id) => isGuid(id) }}
-                    ></Route>
+                     />
                 </Route>
                 <Route path="/authors">
                     <Route path="/" component={AuthorSearch} />
                     <Route
                         path=":id"
                         component={AuthorDetails}
-                        matchFilters={{ id: (id) => isGuid(id) }}>
-                    </Route>
+                        matchFilters={{ id: (id) => isGuid(id) }} />
+                </Route>
+                <Route path="/playlists">
+                    <Route path="/" component={PlaylistSearch} />
+                    <Route path=":id" component={PlaylistDetails} matchFilters={{ id: isGuid }} />
                 </Route>
                 <Route path="/data-fetches" component={() => <RequireAuth><DataFetches /></RequireAuth>} />
                 <Route path="/settings" component={() => <RequireAuth roles={Roles.AdminRoles}><Settings/></RequireAuth>} />
                 <Route
                     path="/hangfire/redirect"
                     component={HangfireRedirect}
-                ></Route>
+                 />
             </Router>
         </ErrorBoundary>
     ),

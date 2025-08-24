@@ -17,25 +17,30 @@ function dashesToCamelCase(s) {
 const files = await glob('src/**/*.module.css');
 
 files.forEach((file) => {
-    const content = fs.readFileSync(file, 'utf-8');
-    const parsedCss = css.parse(content);
-    const transformedClassNames = parsedCss.stylesheet.rules
-        .map(
-            (rule) =>
-                rule.selectors?.map(
-                    (selector) => selector.match(/(\.[A-Za-z0-9\-_]+)/g), // extract class selectors
-                ) ?? [],
-        )
-        .flat(2)
-        .map((className) => dashesToCamelCase(className.slice(1)))
-        .filter((value, index, array) => array.indexOf(value) === index); // remove duplicates
+    try {
+        const content = fs.readFileSync(file, 'utf-8');
+        const parsedCss = css.parse(content);
+        const transformedClassNames = parsedCss.stylesheet.rules
+            .map(
+                (rule) =>
+                    rule.selectors?.map(
+                        (selector) => selector.match(/(\.[A-Za-z0-9\-_]+)/g), // extract class selectors
+                    ) ?? [],
+            )
+            .flat(2)
+            .map((className) => dashesToCamelCase(className.slice(1)))
+            .filter((value, index, array) => array.indexOf(value) === index); // remove duplicates
 
-    const types = transformedClassNames
-        .map((name) => `    readonly ${name}: string;`)
-        .join('\n');
-    const dtsContent = `declare const styles: {\n${types}\n};\nexport default styles;\n`;
+        const types = transformedClassNames
+            .map((name) => `    readonly ${name}: string;`)
+            .join('\n');
+        const dtsContent = `declare const styles: {\n${types}\n};\nexport default styles;\n`;
 
-    const dtsFile = file.replace('.css', '.css.d.ts');
-    fs.writeFileSync(dtsFile, dtsContent, 'utf-8');
-    console.log(`Generated ${dtsFile}`);
+        const dtsFile = file.replace('.css', '.css.d.ts');
+        fs.writeFileSync(dtsFile, dtsContent, 'utf-8');
+        console.log(`Generated ${dtsFile}`);
+    }
+    catch (e) {
+        console.error(`Failed to generate types for ${file}`, e);
+    }
 });

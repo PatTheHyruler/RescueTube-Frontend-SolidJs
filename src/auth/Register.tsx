@@ -1,4 +1,4 @@
-import { createSignal, For } from 'solid-js';
+import { createSignal, For, onMount } from 'solid-js';
 import { accountApi } from './accountApi';
 import { useAuthContext } from './AuthContext';
 import { processJwtResponse } from './jwtStorage';
@@ -18,11 +18,13 @@ const Register = () => {
 
     const [shouldLogOut, setShouldLogOut] = createSignal(true);
 
-    if (authState.jwtState && shouldLogOut()) {
-        void accountApi.logout(authState.jwtState);
-        setAuthState({ jwtState: undefined, userDetails: undefined });
-        setShouldLogOut(false);
-    }
+    onMount(() => {
+        if (authState.jwtState && shouldLogOut()) {
+            void accountApi.logout(authState.jwtState);
+            setAuthState({ jwtState: undefined, userDetails: undefined });
+            setShouldLogOut(false);
+        }
+    });
 
     const onSubmit = async (event: SubmitEvent) => {
         event.preventDefault();

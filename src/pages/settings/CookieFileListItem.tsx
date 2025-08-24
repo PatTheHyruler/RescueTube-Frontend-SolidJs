@@ -11,14 +11,12 @@ import FieldErrors from '@/components/FieldErrors';
 
 interface Props {
     cookieFile: CookieFileInfoDtoV1;
-    refetch: () => Promise<unknown>;
+    refetch: () => Promise<unknown> | unknown;
 }
 
 const CookieFileListItem = (props: Props) => {
-    const cookieFile = props.cookieFile;
-
     const deleteCookieFile = async () => {
-        await settingsApi.deleteYouTubeCookieFile(cookieFile.fileName);
+        await settingsApi.deleteYouTubeCookieFile(props.cookieFile.fileName);
         await props.refetch();
     };
 
@@ -30,7 +28,7 @@ const CookieFileListItem = (props: Props) => {
         },
         onSubmit: async ({ value: { newFileName } }) => {
             await settingsApi.renameYouTubeCookieFile({
-                oldFileName: cookieFile.fileName,
+                oldFileName: props.cookieFile.fileName,
                 newFileName,
             });
             await props.refetch();
@@ -39,7 +37,7 @@ const CookieFileListItem = (props: Props) => {
 
     return (
         <li>
-            {cookieFile.fileName}
+            {props.cookieFile.fileName}
             <button onClick={deleteCookieFile}>Delete</button>
             <Switch>
                 <Match when={!isRenaming()}>

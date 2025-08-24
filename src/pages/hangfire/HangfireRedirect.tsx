@@ -36,7 +36,7 @@ const HangfireRedirect = () => {
     const [searchParams] = useSearchParams();
     const returnUrlString = searchParams.url;
 
-    createEffect(async () => {
+    createEffect(() => {
         const userDetailsResource = authContext.userDetailsResource;
         if (!userDetailsResource || userDetailsResource.loading) {
             return;
@@ -52,21 +52,22 @@ const HangfireRedirect = () => {
             return;
         }
 
-        const hangfireTokenResponse = await accountApi.getHangfireToken();
-        const hangfireToken = hangfireTokenResponse.data;
+        accountApi.getHangfireToken().then(hangfireTokenResponse => {
+            const hangfireToken = hangfireTokenResponse.data;
 
-        const targetUrl = getTargetUrl(returnUrlString);
+            const targetUrl = getTargetUrl(returnUrlString);
 
-        const hangfireAuthUrl = new URL(hangfireAuthUrlString, window.location.origin);
-        const appAuthUrl = new URL(window.location.href);
-        appAuthUrl.pathname = '/hangfire/redirect';
-        appAuthUrl.search = '';
+            const hangfireAuthUrl = new URL(hangfireAuthUrlString, window.location.origin);
+            const appAuthUrl = new URL(window.location.href);
+            appAuthUrl.pathname = '/hangfire/redirect';
+            appAuthUrl.search = '';
 
-        hangfireAuthUrl.searchParams.set('targetUrl', targetUrl.toString());
-        hangfireAuthUrl.searchParams.set('hangfireToken', hangfireToken);
-        hangfireAuthUrl.searchParams.set('appAuthUrl', appAuthUrl.toString());
+            hangfireAuthUrl.searchParams.set('targetUrl', targetUrl.toString());
+            hangfireAuthUrl.searchParams.set('hangfireToken', hangfireToken);
+            hangfireAuthUrl.searchParams.set('appAuthUrl', appAuthUrl.toString());
 
-        window.location.href = hangfireAuthUrl.toString();
+            window.location.href = hangfireAuthUrl.toString();
+        });
     });
 
     return (

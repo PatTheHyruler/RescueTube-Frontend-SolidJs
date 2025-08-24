@@ -7,9 +7,10 @@ interface IProps {
 
 export const AuthorSummary = (props: IProps) => {
     const nameDisplay = () => {
-        const {
-            author: { displayName, userName, idOnPlatform },
-        } = props;
+        const displayName = props.author.displayName;
+        const userName = props.author.userName;
+        const idOnPlatform = props.author.idOnPlatform;
+
         if (!displayName) {
             return userName ?? idOnPlatform;
         }

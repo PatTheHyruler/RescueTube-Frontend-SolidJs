@@ -67,7 +67,7 @@ const DebugAuthStateDisplay = () => {
                     MOVE
                 </button>
                 <button
-                    onclick={() =>
+                    onClick={() =>
                         setState((prev) => ({
                             ...prev,
                             display: !prev.display,

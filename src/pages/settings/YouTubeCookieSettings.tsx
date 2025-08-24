@@ -107,7 +107,7 @@ const YouTubeCookieSettings = () => {
                             {(cookieFile) => (
                                 <CookieFileListItem
                                     cookieFile={cookieFile}
-                                    refetch={async () => await refetch()} />
+                                    refetch={refetch} />
                             )}
                         </For>
                     </ul>

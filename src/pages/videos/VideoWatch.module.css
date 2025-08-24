@@ -13,6 +13,10 @@
     grid-row: 1;
 }
 
+.playlist-context {
+    /* TODO: Position playlist context in the grid I guess */
+}
+
 .video-info {
     grid-column: 1;
     grid-row: 2;

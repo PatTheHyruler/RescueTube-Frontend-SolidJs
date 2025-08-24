@@ -6,14 +6,12 @@ interface Props<TId extends string> {
 }
 
 function SelectItemCheckbox<TId extends string>(props: Props<TId>) {
-    const selection = props.selection;
-
     return (
         <input
             type="checkbox"
-            checked={selection.isSelected(props.id)}
+            checked={props.selection.isSelected(props.id)}
             onChange={() =>
-                selection.toggleSelected(props.id)
+                props.selection.toggleSelected(props.id)
             }
         />
     );

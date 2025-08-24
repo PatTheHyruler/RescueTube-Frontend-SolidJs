@@ -52,7 +52,7 @@ const VideoWatch = () => {
                     <Show
                         when={playlistParams()}
                         children={(playlistParams) => (
-                            <div class={styles.playlistItems}>
+                            <div class={styles.playlistContext}>
                                 <PlaylistContextInfo
                                     playlistId={playlistParams().playlistId}
                                     current={playlistParams().playlistItemIndex !== null ? {

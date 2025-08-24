@@ -13,8 +13,8 @@
     grid-row: 1;
 }
 
-.playlist-items {
-
+.playlist-context {
+    /* TODO: Position playlist context in the grid I guess */
 }
 
 .video-info {

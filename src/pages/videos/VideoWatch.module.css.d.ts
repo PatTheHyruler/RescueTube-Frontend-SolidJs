@@ -2,7 +2,7 @@ declare const styles: {
     readonly container: string;
     readonly videoPlayer: string;
     readonly videoSettings: string;
-    readonly playlistItems: string;
+    readonly playlistContext: string;
     readonly videoInfo: string;
     readonly comments: string;
     readonly description: string;

@@ -16,6 +16,15 @@ interface IProps {
 }
 
 const PlaylistItems = (props: IProps) => {
+    const pageSize = 50;
+
+    const initialPageParam = () => {
+        if (!props.current) {
+            return 0;
+        }
+        return Math.floor(props.current.playlistItemIndex / pageSize);
+    };
+
     const getPreviousPage = (paginationResult: PaginationResult): number | null => {
         if (paginationResult.page === 0) {
             return null;
@@ -33,11 +42,11 @@ const PlaylistItems = (props: IProps) => {
         queryFn: async ({ pageParam }) => {
             const response = await playlistsApi.getPlaylistItems({
                 id: props.playlistId,
-                pagination: { page: pageParam, limit: 50 },
+                pagination: { page: pageParam, limit: pageSize },
             });
             return response.data;
         },
-        initialPageParam: 0,
+        initialPageParam: initialPageParam(),
         getPreviousPageParam: (firstPage) => getPreviousPage(firstPage.paginationResult),
         getNextPageParam: (lastPage) => getNextPage(lastPage.paginationResult),
     }));

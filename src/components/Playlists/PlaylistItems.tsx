@@ -1,9 +1,11 @@
-import { createResource, For, Show } from 'solid-js';
+import { For, Show } from 'solid-js';
 import { playlistsApi } from '@/services/playlistsApi';
 import VideoSummary from '@/components/Videos/VideoSummary';
 import routes from '@/utils/routes';
 import styles from './PlaylistItems.module.css';
-import type { PlaylistItemDtoV1 } from '@/apiModels';
+import type { PaginationResult, PlaylistItemDtoV1 } from '@/apiModels';
+import { useInfiniteQuery } from '@tanstack/solid-query';
+import { isLastPage } from '@/utils/pagination';
 
 interface IProps {
     playlistId: string;
@@ -14,10 +16,31 @@ interface IProps {
 }
 
 const PlaylistItems = (props: IProps) => {
-    const [playlistItems] = createResource(async () => {
-        const response = await playlistsApi.getPlaylistItems({ id: props.playlistId, pagination: { limit: 50, page: 0 } });
-        return response.data;
-    });
+    const getPreviousPage = (paginationResult: PaginationResult): number | null => {
+        if (paginationResult.page === 0) {
+            return null;
+        }
+        return paginationResult.page - 1;
+    };
+    const getNextPage = (paginationResult: PaginationResult): number | null => {
+        if (isLastPage(paginationResult)) {
+            return null;
+        }
+        return paginationResult.page + 1;
+    };
+    const infiniteQuery = useInfiniteQuery(() => ({
+        queryKey: ['playlistItems'],
+        queryFn: async ({ pageParam }) => {
+            const response = await playlistsApi.getPlaylistItems({
+                id: props.playlistId,
+                pagination: { page: pageParam, limit: 50 },
+            });
+            return response.data;
+        },
+        initialPageParam: 0,
+        getPreviousPageParam: (firstPage) => getPreviousPage(firstPage.paginationResult),
+        getNextPageParam: (lastPage) => getNextPage(lastPage.paginationResult),
+    }));
 
     const isCurrent = (playlistItem: PlaylistItemDtoV1): boolean => {
         if (!props.current) {
@@ -27,18 +50,29 @@ const PlaylistItems = (props: IProps) => {
     };
 
     return (
-        <Show when={playlistItems()}>
-            {playlistItems => (
-                <ol>
-                    <For each={playlistItems().playlistItems} children={playlistItem => (
-                        <li data-is-current={isCurrent(playlistItem)} class={styles.playlistItem} value={playlistItem.position + 1}>
-                            <VideoSummary video={playlistItem.video} videoWatchLink={`${routes.videos.watch(playlistItem.video.id)}?playlistId=${props.playlistId}&playlistItemIndex=${playlistItem.position}`} />
-                        </li>
-                    )} />
-                    TODO: Load more items, scrolling
-                </ol>
-            )}
-        </Show>
+        <div>
+            <Show when={infiniteQuery.hasPreviousPage}>
+                <button onClick={() => infiniteQuery.fetchPreviousPage()} disabled={infiniteQuery.isFetching}>
+                    {infiniteQuery.isFetchingPreviousPage
+                        ? 'Loading more...'
+                        : 'Load more'}
+                </button>
+            </Show>
+            <ol>
+                <For each={infiniteQuery.data?.pages.flatMap(x => x.playlistItems)} children={playlistItem => (
+                    <li data-is-current={isCurrent(playlistItem)} class={styles.playlistItem} value={playlistItem.position + 1}>
+                        <VideoSummary video={playlistItem.video} videoWatchLink={`${routes.videos.watch(playlistItem.video.id)}?playlistId=${props.playlistId}&playlistItemIndex=${playlistItem.position}`} />
+                    </li>
+                )} />
+            </ol>
+            <Show when={infiniteQuery.hasNextPage}>
+                <button onClick={() => infiniteQuery.fetchNextPage()} disabled={infiniteQuery.isFetching}>
+                    {infiniteQuery.isFetchingNextPage
+                        ? 'Loading more...'
+                        : 'Load more'}
+                </button>
+            </Show>
+        </div>
     );
 };
 

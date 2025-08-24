@@ -18,6 +18,17 @@ import { accountApi } from './auth/accountApi';
 import DebugAuthStateDisplay from './auth/DebugAuthStateDisplay';
 import { persistJwt, readPersistedJwt } from './auth/jwtStorage';
 import { Toaster, ToastProvider } from 'solid-notifications';
+import { QueryClient, QueryClientProvider } from '@tanstack/solid-query';
+
+const queryClient = new QueryClient();
+
+declare global {
+    interface Window {
+        __TANSTACK_QUERY_CLIENT__: QueryClient;
+    }
+}
+
+window.__TANSTACK_QUERY_CLIENT__ = queryClient;
 
 const App: Component = (props: { children?: JSX.Element }) => {
     const persistedJwt = readPersistedJwt();
@@ -54,6 +65,7 @@ const App: Component = (props: { children?: JSX.Element }) => {
     });
 
     return (
+        <QueryClientProvider client={queryClient}>
         <ToastProvider>
         <AuthContext.Provider value={{ authState, setAuthState, userDetailsResource }}>
             <Toaster />
@@ -69,6 +81,7 @@ const App: Component = (props: { children?: JSX.Element }) => {
             </Show>
         </AuthContext.Provider>
         </ToastProvider>
+        </QueryClientProvider>
     );
 };
 

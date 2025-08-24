@@ -38,7 +38,7 @@ const PlaylistItems = (props: IProps) => {
         return paginationResult.page + 1;
     };
     const infiniteQuery = useInfiniteQuery(() => ({
-        queryKey: ['playlistItems'],
+        queryKey: ['playlistItems', { playlistId: props.playlistId }],
         queryFn: async ({ pageParam }) => {
             const response = await playlistsApi.getPlaylistItems({
                 id: props.playlistId,

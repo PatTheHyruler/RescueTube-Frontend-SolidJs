@@ -15,7 +15,7 @@ interface IProps {
 
 const PlaylistItems = (props: IProps) => {
     const [playlistItems] = createResource(async () => {
-        const response = await playlistsApi.getPlaylistItems(props.playlistId);
+        const response = await playlistsApi.getPlaylistItems({ id: props.playlistId, pagination: { limit: 50, page: 0 } });
         return response.data;
     });
 
@@ -31,7 +31,7 @@ const PlaylistItems = (props: IProps) => {
             {playlistItems => (
                 <ol>
                     <For each={playlistItems().playlistItems} children={playlistItem => (
-                        <li data-is-current={isCurrent(playlistItem)} class={styles.playlistItem}>
+                        <li data-is-current={isCurrent(playlistItem)} class={styles.playlistItem} value={playlistItem.position + 1}>
                             <VideoSummary video={playlistItem.video} videoWatchLink={`${routes.videos.watch(playlistItem.video.id)}?playlistId=${props.playlistId}&playlistItemIndex=${playlistItem.position}`} />
                         </li>
                     )} />

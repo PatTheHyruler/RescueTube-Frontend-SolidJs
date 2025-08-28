@@ -279,19 +279,34 @@ export interface DataFetchDtoV1 {
 
     videoId: string | null;
     authorId: string | null;
+    playlistId: string | null;
 }
 
 export interface DataFetchesResponseDtoV1 extends PaginationResult {
     dataFetches: DataFetchDtoV1[];
 }
 
-export interface DataFetchesQueryDtoV1 extends PaginationQuery{
+export interface DataFetchesQueryDtoV1 extends PaginationQuery {
     type?: string;
     source?: string;
     occurredAtFrom?: string;
     occurredAtTo?: string;
     success?: boolean;
     orderByDescending: boolean;
+}
+
+export interface DataFetchJobDefinitionDtoV1 {
+    entityType: EntityType;
+    jobName: string;
+}
+
+export interface DataFetchJobDefinitionsResponseDtoV1 {
+    jobDefinitions: DataFetchJobDefinitionDtoV1[];
+}
+
+export interface EnqueueDataFetchJobRequestV1 {
+    jobName: string;
+    entityId: string;
 }
 
 export interface CreateCookieFileDtoV1 {

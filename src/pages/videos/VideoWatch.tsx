@@ -7,6 +7,8 @@ import { isGuid, translationToString, tryParseInt } from '@/utils';
 import styles from './VideoWatch.module.css';
 import VideoComments from '@/components/VideoComments';
 import PlaylistContextInfo from '@/components/Playlists/PlaylistContextInfo';
+import ManualDataFetches from '@/components/ManualDataFetches';
+import { EntityTypes } from '@/apiModels';
 
 const getPlaylistParams = () => {
     const [searchParams] = useSearchParams();
@@ -66,6 +68,9 @@ const VideoWatch = () => {
                     />
                     <div class={styles.videoSettings}>
                         <VideoSettings videoId={videoId()} />
+                    </div>
+                    <div>
+                        <ManualDataFetches entityType={EntityTypes.Video} entityId={videoId()} />
                     </div>
                     <Suspense fallback={<div>Loading...</div>}>
                         <div class={styles.videoInfo}>

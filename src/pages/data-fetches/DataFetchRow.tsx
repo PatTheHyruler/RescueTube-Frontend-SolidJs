@@ -38,12 +38,23 @@ const DataFetchRow = (props: DataFetchProps) => {
                     </button>
                     <Show when={dataFetch().videoId}>
                         {(videoId) => (
-                            <A href={routes.videos.watch(videoId())}>Video</A>
+                            <A href={routes.videos.watch(videoId())}>
+                                Video
+                            </A>
                         )}
                     </Show>
                     <Show when={dataFetch().authorId}>
                         {(authorId) => (
-                            <A href={`/authors/${authorId()}`}>Author</A>
+                            <A href={routes.authors.details(authorId())}>
+                                Author
+                            </A>
+                        )}
+                    </Show>
+                    <Show when={dataFetch().playlistId}>
+                        {(playlistId) => (
+                            <A href={routes.playlists.details(playlistId())}>
+                                Playlist
+                            </A>
                         )}
                     </Show>
                 </td>

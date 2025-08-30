@@ -16,6 +16,7 @@ import PlaylistSearchForm from '@/components/Playlists/PlaylistSearchForm';
 import ThumbnailDisplay from '@/components/ThumbnailDisplay';
 import { DateTimeDisplay } from '@/components/DateTimeDisplay';
 import AuthorSummary from '@/components/AuthorSummary';
+import routes from '@/utils/routes';
 
 const defaultSearch: PlaylistSearchDtoV1 = {
     filter: {
@@ -105,7 +106,7 @@ const PlaylistSearch = () => {
                                         )}
                                     </ThumbnailDisplay>
                                     <h4>
-                                        <A href={`/playlists/${playlist.id}`}>
+                                        <A href={routes.playlists.details(playlist.id)}>
                                             {translationToString(playlist.title)}
                                         </A>
                                     </h4>

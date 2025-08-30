@@ -1,4 +1,9 @@
-import type { DataFetchesQueryDtoV1, DataFetchesResponseDtoV1 } from '@/apiModels';
+import type {
+    DataFetchesQueryDtoV1,
+    DataFetchesResponseDtoV1,
+    DataFetchJobDefinitionsResponseDtoV1,
+    EnqueueDataFetchJobRequestV1,
+} from '@/apiModels';
 import { baseApi } from '@/services/baseApi';
 
 export const getDataFetches = async (query: DataFetchesQueryDtoV1) => {
@@ -24,6 +29,16 @@ export const getDataFetches = async (query: DataFetchesQueryDtoV1) => {
     return await baseApi.axios.get<DataFetchesResponseDtoV1>(`/v1/data-fetches?${urlParams.toString()}`);
 };
 
+export const getDataFetchJobDefinitions = async () => {
+    return await baseApi.axios.get<DataFetchJobDefinitionsResponseDtoV1>('/v1/data-fetches/jobs/definitions');
+};
+
+export const enqueueDataFetchJob = async (request: EnqueueDataFetchJobRequestV1) => {
+    return await baseApi.axios.post('/v1/data-fetches/jobs/enqueue', request);
+};
+
 export const dataFetchesApi = {
     getDataFetches,
+    getDataFetchJobDefinitions,
+    enqueueDataFetchJob,
 };

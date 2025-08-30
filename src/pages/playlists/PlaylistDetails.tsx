@@ -7,6 +7,8 @@ import { translationToString } from '@/utils';
 import { DateTimeDisplay } from '@/components/DateTimeDisplay';
 import AuthorSummary from '@/components/AuthorSummary';
 import PlaylistItems from '@/components/Playlists/PlaylistItems';
+import ManualDataFetches from '@/components/ManualDataFetches';
+import { EntityTypes } from '@/apiModels';
 
 const PlaylistDetails = () => {
     const params = useParams();
@@ -63,6 +65,7 @@ const PlaylistDetails = () => {
                     )}
                 </Show>
                 <PlaylistItems playlistId={playlistId()} />
+                <ManualDataFetches entityType={EntityTypes.Playlist} entityId={playlistId()} />
             </div>
         )} />
     );

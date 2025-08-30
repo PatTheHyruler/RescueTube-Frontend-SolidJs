@@ -3,6 +3,8 @@ import { playlistsApi } from '@/services/playlistsApi';
 import { translationToString } from '@/utils';
 import PlaylistItems from '@/components/Playlists/PlaylistItems';
 import AuthorSummary from '@/components/AuthorSummary';
+import { A } from '@solidjs/router';
+import routes from '@/utils/routes';
 
 interface IProps {
     playlistId: string;
@@ -22,7 +24,11 @@ const PlaylistContextInfo = (props: IProps) => {
         <section>
             <Show when={playlist()} children={playlist => (
                 <>
-                    <h2>{translationToString(playlist().title)}</h2>
+                    <h2>
+                        <A href={routes.playlists.details(props.playlistId)}>
+                            {translationToString(playlist().title)}
+                        </A>
+                    </h2>
                     <Show when={playlist().authors[0]}
                           children={author => <AuthorSummary author={author()} />}
                           fallback={'No authors???'}

@@ -2,7 +2,8 @@ import { useParams } from '@solidjs/router';
 import { Show, createResource, For } from 'solid-js';
 import AuthorSettings from '@/components/AuthorSettings';
 import { authorsApi } from '@/services/authorsApi';
-import type { AuthorSimpleDtoV1 } from '@/apiModels';
+import { type AuthorSimpleDtoV1, EntityTypes } from '@/apiModels';
+import ManualDataFetches from '@/components/ManualDataFetches';
 
 const AuthorDetails = () => {
     const params = useParams();
@@ -57,6 +58,7 @@ const AuthorDetails = () => {
                     </>)}
                 </Show>
                 <AuthorSettings authorId={authorId()} />
+                <ManualDataFetches entityType={EntityTypes.Author} entityId={authorId()} />
             </>)}
         </Show>
     );

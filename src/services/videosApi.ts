@@ -43,6 +43,10 @@ const bulkUpdateVideoArchivalSettings = async (settings: VideoArchivalSettingsBu
     return await baseApi.axios.patch<number>('/v1/videos/archival-settings/bulk', settings);
 };
 
+const enqueueManualDownload = async (videoId: string) => {
+    return await baseApi.axios.post(`/v1/videos/${videoId}/enqueue-download`);
+};
+
 export const videosApi = {
     searchVideos,
     getVideoDetails,
@@ -50,4 +54,5 @@ export const videosApi = {
     getVideoArchivalSettings,
     upsertVideoArchivalSettings,
     bulkUpdateVideoArchivalSettings,
+    enqueueManualDownload,
 };

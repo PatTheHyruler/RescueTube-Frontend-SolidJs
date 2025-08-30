@@ -5,6 +5,7 @@ import type { EntityType } from '@/apiModels';
 interface IProps {
     entityType: EntityType;
     entityId: string;
+    extraActions?: { label: string; onClick: () => Promise<unknown> }[];
 }
 
 const ManualDataFetches = (props: IProps) => {
@@ -31,6 +32,14 @@ const ManualDataFetches = (props: IProps) => {
                                 </button>
                             </li>
                         )} />
+                    <For each={props.extraActions} children={extraAction => (
+                        <li>
+                            {extraAction.label}
+                            <button onClick={extraAction.onClick}>
+                                Enqueue
+                            </button>
+                        </li>
+                    )} />
                 </ul>
             )} />
         </div>

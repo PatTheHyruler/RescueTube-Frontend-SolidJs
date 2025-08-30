@@ -8,6 +8,8 @@ export enum KnownPlatforms {
 
 export type Platform = `${KnownPlatforms}` | (string & {});
 
+export const PlatformsWithDownloadSupport: Platform[] = [KnownPlatforms.YouTube];
+
 export enum EntityTypes {
     Video = 'Video',
     Author = 'Author',

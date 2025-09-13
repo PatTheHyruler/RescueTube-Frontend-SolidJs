@@ -164,7 +164,6 @@ export interface CommentDtoV1 extends Fetchable {
 
     privacyStatusOnPlatform?: PrivacyStatus;
     isAvailable: boolean;
-    privacyStatus: PrivacyStatus;
 
     addedToArchiveAt: string;
 

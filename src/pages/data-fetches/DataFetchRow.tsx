@@ -1,5 +1,5 @@
-import type { DataFetchDtoV1 } from '@/apiModels';
-import { createSignal, Match, Show, Switch } from 'solid-js';
+import { type DataFetchDtoV1, DataFetchStatuses } from '@/apiModels';
+import { createSignal, Show } from 'solid-js';
 import { DateTimeDisplay } from '@/components/DateTimeDisplay';
 import { A } from '@solidjs/router';
 import routes from '@/utils/routes';
@@ -23,36 +23,34 @@ const DataFetchRow = (props: DataFetchProps) => {
                 <td>{dataFetch().type}</td>
                 <td>{dataFetch().source}</td>
                 <td>
-                    <Switch>
-                        <Match when={dataFetch().success}>
-                            <span class="text-success">Succeeded</span>
-                        </Match>
-                        <Match when={!dataFetch().success}>
-                            <span class="text-danger">Failed</span>
-                        </Match>
-                    </Switch>
+                    <span classList={{
+                        'text-success': dataFetch().status === DataFetchStatuses.Succeeded,
+                        'text-danger': dataFetch().status === DataFetchStatuses.Failed,
+                    }}>
+                        {dataFetch().status}
+                    </span>
                 </td>
                 <td>
                     <button onClick={() => setShouldShowJson(v => !v)}>
                         JSON
                     </button>
-                    <Show when={dataFetch().videoId}>
+                    <Show when={dataFetch().videoIdOnPlatform}>
                         {(videoId) => (
-                            <A href={routes.videos.watch(videoId())}>
+                            <A href={routes.videos.byPlatformId({ platform: dataFetch().platform, idOnPlatform: videoId() })}>
                                 Video
                             </A>
                         )}
                     </Show>
-                    <Show when={dataFetch().authorId}>
+                    <Show when={dataFetch().authorIdOnPlatform}>
                         {(authorId) => (
-                            <A href={routes.authors.details(authorId())}>
+                            <A href={routes.authors.byPlatformId({ platform: dataFetch().platform, idOnPlatform: authorId() })}>
                                 Author
                             </A>
                         )}
                     </Show>
-                    <Show when={dataFetch().playlistId}>
+                    <Show when={dataFetch().playlistIdOnPlatform}>
                         {(playlistId) => (
-                            <A href={routes.playlists.details(playlistId())}>
+                            <A href={routes.playlists.byPlatformId({ platform: dataFetch().platform, idOnPlatform: playlistId() })}>
                                 Playlist
                             </A>
                         )}

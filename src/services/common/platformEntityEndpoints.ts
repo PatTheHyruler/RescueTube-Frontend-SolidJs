@@ -14,7 +14,7 @@ const getEntityId = async (
     request: GetEntityIdRequest,
 ) => {
     return await baseApi.axios.get<string>(
-        `/v1/${entitiesPath}/${encodeURIComponent(request.platform)}/${encodeURIComponent(request.idOnPlatform)}`
+        `/v1/${entitiesPath}/${encodeURIComponent(request.platform)}/${encodeURIComponent(request.idOnPlatform)}`,
     );
 };
 

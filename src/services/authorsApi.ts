@@ -5,6 +5,7 @@ import type {
     AuthorSearchResponseDtoV1,
     AuthorSimpleDtoV1,
 } from '@/apiModels';
+import { createGetEntityIdEndpoint } from '@/services/common/platformEntityEndpoints';
 
 const getAuthor = async (authorId: string) => {
     return await baseApi.axios.get<AuthorSimpleDtoV1>(`/v1/authors/${authorId}`);
@@ -44,9 +45,12 @@ const upsertAuthorArchivalSettings = async ({ authorId, settings }: UpsertAuthor
     return await baseApi.axios.put<AuthorArchivalSettingsUpsertDtoV1>(`/v1/authors/${authorId}/archival-settings`, settings);
 };
 
+const getAuthorId = createGetEntityIdEndpoint('authors');
+
 export const authorsApi = {
     getAuthor,
     searchAuthors,
     getAuthorArchivalSettings,
     upsertAuthorArchivalSettings,
+    getAuthorId,
 };

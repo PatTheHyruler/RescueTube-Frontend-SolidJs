@@ -1,6 +1,6 @@
 import { createResource, createSignal, For } from 'solid-js';
 import { dataFetchesApi } from '@/services/dataFetchesApi';
-import type { DataFetchesQueryDtoV1 } from '@/apiModels';
+import { type DataFetchesQueryDtoV1, type DataFetchStatus, DataFetchStatuses } from '@/apiModels';
 import PaginationComponent from '@/components/PaginationComponent';
 import DataFetchRow from '@/pages/data-fetches/DataFetchRow';
 import { getNextIndeterminateBooleanState } from '@/utils';
@@ -27,7 +27,7 @@ const DataFetches = () => {
             <PaginationComponent
                 paginationQuery={query()}
                 paginationResult={dataFetches()}
-                onUpdate={p => setQuery(q => ({ ...q, ...p }))}
+                onUpdate={(p) => setQuery((q) => ({ ...q, ...p }))}
                 onSubmit={refetch}
             />
             <table>
@@ -35,7 +35,14 @@ const DataFetches = () => {
                     <tr>
                         <th>
                             Occurred at
-                            <button onClick={() => updateQueryAndRefetch('orderByDescending', q => !q.orderByDescending)}>
+                            <button
+                                onClick={() =>
+                                    updateQueryAndRefetch(
+                                        'orderByDescending',
+                                        (q) => !q.orderByDescending,
+                                    )
+                                }
+                            >
                                 {query().orderByDescending ? '↓' : '↑'}
                             </button>
                         </th>
@@ -44,14 +51,26 @@ const DataFetches = () => {
                             <input
                                 type="text"
                                 value={query().type ?? ''}
-                                onChange={e => updateQueryAndRefetch('type', e.currentTarget.value)} />
+                                onChange={(e) =>
+                                    updateQueryAndRefetch(
+                                        'type',
+                                        e.currentTarget.value,
+                                    )
+                                }
+                            />
                         </th>
                         <th>
                             Source
                             <input
                                 type="text"
                                 value={query().source ?? ''}
-                                onChange={e => updateQueryAndRefetch('source', e.currentTarget.value)} />
+                                onChange={(e) =>
+                                    updateQueryAndRefetch(
+                                        'source',
+                                        e.currentTarget.value,
+                                    )
+                                }
+                            />
                         </th>
                         <th>
                             Status
@@ -60,19 +79,43 @@ const DataFetches = () => {
                                 /* @ts-expect-error TODO Figure out a way to declare indeterminate as a valid attribute */
                                 indeterminate={query().success === undefined}
                                 checked={query().success}
-                                onChange={() => updateQueryAndRefetch('success', q => {
-                                    return getNextIndeterminateBooleanState(q.success);
-                                })}
+                                onChange={() =>
+                                    updateQueryAndRefetch('success', (q) => {
+                                        return getNextIndeterminateBooleanState(
+                                            q.success,
+                                        );
+                                    })
+                                }
                             />
+                            <select
+                                multiple
+                                onChange={(e) =>
+                                    updateQueryAndRefetch(
+                                        'statuses',
+                                        Array.from(e.target.selectedOptions)
+                                            .map((x) => x.value)
+                                            .filter(
+                                                (x) => !!x,
+                                            ) as DataFetchStatus[],
+                                    )
+                                }
+                                // value={query().statuses ?? []}
+                            >
+                                <option value="" />
+                                <For
+                                    each={Object.values(DataFetchStatuses)}
+                                    children={(status) => (
+                                        <option value={status}>{status}</option>
+                                    )}
+                                />
+                            </select>
                         </th>
                         <th />
                     </tr>
                 </thead>
                 <tbody>
                     <For each={dataFetches()?.dataFetches}>
-                        {(dataFetch) => (
-                            <DataFetchRow dataFetch={dataFetch} />
-                        )}
+                        {(dataFetch) => <DataFetchRow dataFetch={dataFetch} />}
                     </For>
                 </tbody>
             </table>

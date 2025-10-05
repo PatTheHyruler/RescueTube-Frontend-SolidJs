@@ -295,6 +295,7 @@ export interface DataFetchesQueryDtoV1 extends PaginationQuery {
     source?: string;
     occurredAtFrom?: string;
     occurredAtTo?: string;
+    statuses?: DataFetchStatus[];
     success?: boolean;
     orderByDescending: boolean;
 }

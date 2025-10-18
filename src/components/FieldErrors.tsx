@@ -3,7 +3,31 @@ import { Show } from 'solid-js';
 
 interface Props {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    field: FieldApi<any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any>;
+    field: FieldApi<
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any,
+        any
+    >;
 }
 
 const FieldErrors = (props: Props) => {

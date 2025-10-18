@@ -4,11 +4,12 @@ import { accountApi } from '@/auth/accountApi';
 import { baseApi } from '@/services/baseApi';
 import { useAuthContext } from '@/auth/AuthContext';
 import { isAdmin } from '@/auth/authUtils';
+import { getUrlParamString } from '@/utils';
 
 const hangfireUrlString = `${baseApi.baseUrlWithoutPrefix}/hangfire-dashboard`;
 const hangfireAuthUrlString = `${baseApi.baseUrl}/v1/auth/hangfire`;
 
-const getTargetUrl = (returnUrlString: string | undefined) => {
+const getTargetUrl = (returnUrlString: string | null | undefined) => {
     const hangfireUrl = new URL(hangfireUrlString, window.location.origin);
 
     if (returnUrlString) {
@@ -20,7 +21,7 @@ const getTargetUrl = (returnUrlString: string | undefined) => {
             return returnUrl;
         }
         console.warn(
-            `Invalid Hangfire return URL '${returnUrl}', redirecting to '${hangfireUrl}' instead`,
+            `Invalid Hangfire return URL '${returnUrl}', redirecting to '${hangfireUrl}' instead`
         );
     }
 
@@ -34,7 +35,7 @@ const HangfireRedirect = () => {
     const navigate = useNavigate();
 
     const [searchParams] = useSearchParams();
-    const returnUrlString = searchParams.url;
+    const returnUrlString = getUrlParamString(searchParams.url);
 
     createEffect(() => {
         const userDetailsResource = authContext.userDetailsResource;
@@ -44,7 +45,9 @@ const HangfireRedirect = () => {
 
         const userDetails = userDetailsResource();
         if (!userDetails?.user) {
-            navigate(`/login?returnUrl=${encodeURIComponent(window.location.href)}`);
+            navigate(
+                `/login?returnUrl=${encodeURIComponent(window.location.href)}`
+            );
             return;
         }
 
@@ -52,19 +55,25 @@ const HangfireRedirect = () => {
             return;
         }
 
-        accountApi.getHangfireToken().then(hangfireTokenResponse => {
+        accountApi.getHangfireToken().then((hangfireTokenResponse) => {
             const hangfireToken = hangfireTokenResponse.data;
 
             const targetUrl = getTargetUrl(returnUrlString);
 
-            const hangfireAuthUrl = new URL(hangfireAuthUrlString, window.location.origin);
+            const hangfireAuthUrl = new URL(
+                hangfireAuthUrlString,
+                window.location.origin
+            );
             const appAuthUrl = new URL(window.location.href);
             appAuthUrl.pathname = '/hangfire/redirect';
             appAuthUrl.search = '';
 
             hangfireAuthUrl.searchParams.set('targetUrl', targetUrl.toString());
             hangfireAuthUrl.searchParams.set('hangfireToken', hangfireToken);
-            hangfireAuthUrl.searchParams.set('appAuthUrl', appAuthUrl.toString());
+            hangfireAuthUrl.searchParams.set(
+                'appAuthUrl',
+                appAuthUrl.toString()
+            );
 
             window.location.href = hangfireAuthUrl.toString();
         });

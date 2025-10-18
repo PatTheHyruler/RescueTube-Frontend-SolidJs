@@ -275,7 +275,8 @@ export type SettingValueDtoV1 =
 
 export interface DataFetchDtoV1 {
     id: string;
-    occurredAt: string;
+    startedAt: string;
+    statusUpdatedAt: string | null;
     status: DataFetchStatus;
     type: string;
     source: string;
@@ -293,8 +294,8 @@ export interface DataFetchesResponseDtoV1 extends PaginationResult {
 export interface DataFetchesQueryDtoV1 extends PaginationQuery {
     type?: string;
     source?: string;
-    occurredAtFrom?: string;
-    occurredAtTo?: string;
+    startedAtFrom?: string;
+    startedAtTo?: string;
     statuses?: DataFetchStatus[];
     success?: boolean;
     orderByDescending: boolean;

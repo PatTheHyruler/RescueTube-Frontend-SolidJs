@@ -34,7 +34,7 @@ const DataFetches = () => {
                 <thead>
                     <tr>
                         <th>
-                            Occurred at
+                            Started at
                             <button
                                 onClick={() =>
                                     updateQueryAndRefetch(

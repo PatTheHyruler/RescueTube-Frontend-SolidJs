@@ -17,7 +17,7 @@ const DataFetchRow = (props: DataFetchProps) => {
             <tr>
                 <td>
                     <DateTimeDisplay
-                        value={dataFetch().occurredAt}
+                        value={dataFetch().startedAt}
                         customDisplay={dt => dt?.toFormat('yyyy-MM-dd HH:mm:ss')} />
                 </td>
                 <td>{dataFetch().type}</td>

@@ -30,7 +30,7 @@ export enum PrivacyStatuses {
 export type PrivacyStatus = `${PrivacyStatuses}`;
 
 export enum DataFetchStatuses {
-    Starting = 'Starting',
+    Started = 'Started',
     Succeeded = 'Succeeded',
     Failed = 'Failed',
 }

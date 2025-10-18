@@ -1,5 +1,5 @@
-import type { DataFetchDtoV1 } from '@/apiModels';
-import { createSignal, Match, Show, Switch } from 'solid-js';
+import { type DataFetchDtoV1, DataFetchStatuses } from '@/apiModels';
+import { createSignal, Show } from 'solid-js';
 import { DateTimeDisplay } from '@/components/DateTimeDisplay';
 import { A } from '@solidjs/router';
 import routes from '@/utils/routes';
@@ -17,20 +17,18 @@ const DataFetchRow = (props: DataFetchProps) => {
             <tr>
                 <td>
                     <DateTimeDisplay
-                        value={dataFetch().occurredAt}
+                        value={dataFetch().startedAt}
                         customDisplay={dt => dt?.toFormat('yyyy-MM-dd HH:mm:ss')} />
                 </td>
                 <td>{dataFetch().type}</td>
                 <td>{dataFetch().source}</td>
                 <td>
-                    <Switch>
-                        <Match when={dataFetch().success}>
-                            <span class="text-success">Succeeded</span>
-                        </Match>
-                        <Match when={!dataFetch().success}>
-                            <span class="text-danger">Failed</span>
-                        </Match>
-                    </Switch>
+                    <span classList={{
+                        'text-success': dataFetch().status === DataFetchStatuses.Succeeded,
+                        'text-danger': dataFetch().status === DataFetchStatuses.Failed,
+                    }}>
+                        {dataFetch().status}
+                    </span>
                 </td>
                 <td>
                     <button onClick={() => setShouldShowJson(v => !v)}>

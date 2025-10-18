@@ -1,4 +1,4 @@
-import type { Fetchable, TextTranslationDtoV1 } from '@/apiModels';
+import type { TextTranslationDtoV1 } from '@/apiModels';
 import { DateTime } from 'luxon';
 
 export const isGuid = (value: unknown): boolean => {
@@ -47,13 +47,6 @@ export const getDateTime = (value: DateOrStringNullable) => {
 
 export const getUnixTimeMillisOrMinimum = (value: Date | null | undefined) => {
     return value?.getTime() ?? Number.MIN_VALUE;
-};
-
-export const isLikelyDeleted = (entity: Fetchable) => {
-    const diff =
-        getUnixTimeMillisOrMinimum(getDate(entity.lastUnsuccessfulFetch)) -
-        getUnixTimeMillisOrMinimum(getDate(entity.lastSuccessfulFetch));
-    return diff > 24 * 60 * 1000;
 };
 
 export type Values<TObject> = TObject[keyof TObject];

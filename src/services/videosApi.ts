@@ -7,6 +7,7 @@ import type {
     VideoSimpleDtoV1,
 } from '@/apiModels';
 import { baseApi } from './baseApi';
+import { createGetEntityIdEndpoint } from '@/services/common/platformEntityEndpoints';
 
 const searchVideos = async (query: VideoSearchDtoV1) => {
     return await baseApi.axios.post<VideoSearchResponseDtoV1>(
@@ -43,6 +44,8 @@ const bulkUpdateVideoArchivalSettings = async (settings: VideoArchivalSettingsBu
     return await baseApi.axios.patch<number>('/v1/videos/archival-settings/bulk', settings);
 };
 
+const getVideoId = createGetEntityIdEndpoint('videos');
+
 const enqueueManualDownload = async (videoId: string) => {
     return await baseApi.axios.post(`/v1/videos/${videoId}/enqueue-download`);
 };
@@ -54,5 +57,6 @@ export const videosApi = {
     getVideoArchivalSettings,
     upsertVideoArchivalSettings,
     bulkUpdateVideoArchivalSettings,
+    getVideoId,
     enqueueManualDownload,
 };

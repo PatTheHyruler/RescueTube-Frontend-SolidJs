@@ -6,6 +6,7 @@ import type {
     PlaylistSearchResponseDtoV1,
     PlaylistSimpleDtoV1,
 } from '@/apiModels';
+import { createGetEntityIdEndpoint } from '@/services/common/platformEntityEndpoints';
 
 export const searchPlaylists = async (search: PlaylistSearchDtoV1) => {
     return await baseApi.axios.post<PlaylistSearchResponseDtoV1>('/v1/playlists/search', search);
@@ -31,8 +32,11 @@ export const getPlaylistItems = async ({ id, pagination }: GetPlaylistItemsQuery
     return await baseApi.axios.get<PlaylistItemsResponseDtoV1>(url);
 };
 
+const getPlaylistId = createGetEntityIdEndpoint('playlists');
+
 export const playlistsApi = {
     searchPlaylists,
     getPlaylist,
     getPlaylistItems,
+    getPlaylistId,
 };

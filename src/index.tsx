@@ -21,6 +21,11 @@ import DataFetches from '@/pages/data-fetches/DataFetches';
 import AuthorSearch from '@/pages/authors/AuthorSearch';
 import PlaylistSearch from './pages/playlists/PlaylistSearch';
 import PlaylistDetails from '@/pages/playlists/PlaylistDetails';
+import { PlatformEntityRedirectRoute } from '@/components/PlatformEntityRedirect';
+import { videosApi } from '@/services/videosApi';
+import routes from '@/utils/routes';
+import { authorsApi } from '@/services/authorsApi';
+import { playlistsApi } from '@/services/playlistsApi';
 
 const root = document.getElementById('root');
 
@@ -43,25 +48,53 @@ render(
                         path="/:id/watch"
                         component={VideoWatch}
                         matchFilters={{ id: (id) => isGuid(id) }}
-                     />
+                    />
+                    <PlatformEntityRedirectRoute
+                        fetchEntityId={videosApi.getVideoId}
+                        getRoute={routes.videos.watch}
+                    />
                 </Route>
                 <Route path="/authors">
                     <Route path="/" component={AuthorSearch} />
                     <Route
                         path=":id"
                         component={AuthorDetails}
-                        matchFilters={{ id: (id) => isGuid(id) }} />
+                        matchFilters={{ id: (id) => isGuid(id) }}
+                    />
+                    <PlatformEntityRedirectRoute
+                        fetchEntityId={authorsApi.getAuthorId}
+                        getRoute={routes.authors.details}
+                    />
                 </Route>
                 <Route path="/playlists">
                     <Route path="/" component={PlaylistSearch} />
-                    <Route path=":id" component={PlaylistDetails} matchFilters={{ id: isGuid }} />
+                    <Route
+                        path=":id"
+                        component={PlaylistDetails}
+                        matchFilters={{ id: isGuid }}
+                    />
+                    <PlatformEntityRedirectRoute
+                        fetchEntityId={playlistsApi.getPlaylistId}
+                        getRoute={routes.playlists.details}
+                    />
                 </Route>
-                <Route path="/data-fetches" component={() => <RequireAuth><DataFetches /></RequireAuth>} />
-                <Route path="/settings" component={() => <RequireAuth roles={Roles.AdminRoles}><Settings/></RequireAuth>} />
                 <Route
-                    path="/hangfire/redirect"
-                    component={HangfireRedirect}
-                 />
+                    path="/data-fetches"
+                    component={() => (
+                        <RequireAuth>
+                            <DataFetches />
+                        </RequireAuth>
+                    )}
+                />
+                <Route
+                    path="/settings"
+                    component={() => (
+                        <RequireAuth roles={Roles.AdminRoles}>
+                            <Settings />
+                        </RequireAuth>
+                    )}
+                />
+                <Route path="/hangfire/redirect" component={HangfireRedirect} />
             </Router>
         </ErrorBoundary>
     ),

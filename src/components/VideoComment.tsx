@@ -1,7 +1,6 @@
 import { type CommentDtoV1 } from '@/apiModels';
 import { DateTimeDisplay } from './DateTimeDisplay';
 import { For, Show } from 'solid-js';
-import { isLikelyDeleted } from '@/utils';
 import AuthorSummary from './AuthorSummary';
 
 interface IProps {
@@ -22,18 +21,6 @@ const VideoComment = (props: IProps) => {
                 <div>
                     <DateTimeDisplay value={props.comment.createdAt} />
                 </div>
-                <Show when={isLikelyDeleted(props.comment)}>
-                    <div class="text-danger">
-                        Likely deleted, last successful fetch:{' '}
-                        <DateTimeDisplay
-                            value={props.comment.lastSuccessfulFetch}
-                        />
-                        last unsuccessful fetch:{' '}
-                        <DateTimeDisplay
-                            value={props.comment.lastUnsuccessfulFetch}
-                        />
-                    </div>
-                </Show>
                 <div
                     class="border border-1 rounded-2 p-2"
                     style={{ 'white-space': 'pre-wrap' }}

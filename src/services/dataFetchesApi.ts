@@ -11,11 +11,11 @@ export const getDataFetches = async (query: DataFetchesQueryDtoV1) => {
     urlParams.append('page', query.page.toString());
     urlParams.append('limit', query.limit.toString());
     urlParams.append('orderByDescending', query.orderByDescending.toString());
-    if (query.occurredAtFrom) {
-        urlParams.append('occurredAtFrom', query.occurredAtFrom);
+    if (query.startedAtFrom) {
+        urlParams.append('startedAtFrom', query.startedAtFrom);
     }
-    if (query.occurredAtTo) {
-        urlParams.append('occurredAtTo', query.occurredAtTo);
+    if (query.startedAtTo) {
+        urlParams.append('startedAtTo', query.startedAtTo);
     }
     if (query.source) {
         urlParams.append('source', query.source);
@@ -25,6 +25,11 @@ export const getDataFetches = async (query: DataFetchesQueryDtoV1) => {
     }
     if (query.success !== undefined) {
         urlParams.append('success', query.success.toString());
+    }
+    if (query.statuses) {
+        for (const status of query.statuses) {
+            urlParams.append('statuses', status);
+        }
     }
     return await baseApi.axios.get<DataFetchesResponseDtoV1>(`/v1/data-fetches?${urlParams.toString()}`);
 };

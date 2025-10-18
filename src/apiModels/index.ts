@@ -281,9 +281,9 @@ export interface DataFetchDtoV1 {
     source: string;
     platform: Platform;
 
-    videoIdOnPlatform: string | null;
-    authorIdOnPlatform: string | null;
-    playlistIdOnPlatform: string | null;
+    videoId: string | null;
+    authorId: string | null;
+    playlistId: string | null;
 }
 
 export interface DataFetchesResponseDtoV1 extends PaginationResult {

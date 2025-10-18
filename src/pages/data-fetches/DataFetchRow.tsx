@@ -34,23 +34,23 @@ const DataFetchRow = (props: DataFetchProps) => {
                     <button onClick={() => setShouldShowJson(v => !v)}>
                         JSON
                     </button>
-                    <Show when={dataFetch().videoIdOnPlatform}>
+                    <Show when={dataFetch().videoId}>
                         {(videoId) => (
-                            <A href={routes.videos.byPlatformId({ platform: dataFetch().platform, idOnPlatform: videoId() })}>
+                            <A href={routes.videos.watch(videoId())}>
                                 Video
                             </A>
                         )}
                     </Show>
-                    <Show when={dataFetch().authorIdOnPlatform}>
+                    <Show when={dataFetch().authorId}>
                         {(authorId) => (
-                            <A href={routes.authors.byPlatformId({ platform: dataFetch().platform, idOnPlatform: authorId() })}>
+                            <A href={routes.authors.details(authorId())}>
                                 Author
                             </A>
                         )}
                     </Show>
-                    <Show when={dataFetch().playlistIdOnPlatform}>
+                    <Show when={dataFetch().playlistId}>
                         {(playlistId) => (
-                            <A href={routes.playlists.byPlatformId({ platform: dataFetch().platform, idOnPlatform: playlistId() })}>
+                            <A href={routes.playlists.details(playlistId())}>
                                 Playlist
                             </A>
                         )}

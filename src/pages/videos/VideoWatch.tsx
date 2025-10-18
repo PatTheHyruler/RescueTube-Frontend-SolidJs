@@ -1,9 +1,20 @@
 import VideoSettings from '@/components/VideoSettings';
 import { useParams, useSearchParams } from '@solidjs/router';
 import VideoPlayer from '@/components/VideoPlayer';
-import { createMemo, createResource, createSignal, Show, Suspense } from 'solid-js';
+import {
+    createMemo,
+    createResource,
+    createSignal,
+    Show,
+    Suspense,
+} from 'solid-js';
 import { videosApi } from '@/services/videosApi';
-import { isGuid, translationToString, tryParseInt } from '@/utils';
+import {
+    getUrlParamString,
+    isGuid,
+    translationToString,
+    tryParseInt,
+} from '@/utils';
 import styles from './VideoWatch.module.css';
 import VideoComments from '@/components/VideoComments';
 import PlaylistContextInfo from '@/components/Playlists/PlaylistContextInfo';
@@ -13,12 +24,14 @@ import { PlatformsWithDownloadSupport, EntityTypes } from '@/apiModels';
 const getPlaylistParams = () => {
     const [searchParams] = useSearchParams();
 
-    const playlistId = searchParams.playlistId;
+    const playlistId = getUrlParamString(searchParams.playlistId);
     if (!playlistId || !isGuid(playlistId)) {
         return null;
     }
 
-    let playlistItemIndex = tryParseInt(searchParams.playlistItemIndex);
+    let playlistItemIndex = tryParseInt(
+        getUrlParamString(searchParams.playlistItemIndex)
+    );
     if (playlistItemIndex !== null && playlistItemIndex < 0) {
         playlistItemIndex = null;
     }
@@ -57,11 +70,17 @@ const VideoWatch = () => {
                             <div class={styles.playlistContext}>
                                 <PlaylistContextInfo
                                     playlistId={playlistParams().playlistId}
-                                    current={playlistParams().playlistItemIndex !== null ? {
-                                        playlistItemIndex:
-                                            playlistParams().playlistItemIndex!,
-                                        videoId: videoId(),
-                                    } : undefined}
+                                    current={
+                                        playlistParams().playlistItemIndex !==
+                                        null
+                                            ? {
+                                                  playlistItemIndex:
+                                                      playlistParams()
+                                                          .playlistItemIndex!,
+                                                  videoId: videoId(),
+                                              }
+                                            : undefined
+                                    }
                                 />
                             </div>
                         )}
@@ -73,14 +92,22 @@ const VideoWatch = () => {
                         <ManualDataFetches
                             entityType={EntityTypes.Video}
                             entityId={videoId()}
-                            extraActions={video()?.platform && PlatformsWithDownloadSupport.includes(video()!.platform)
-                                ? [
-                                    {
-                                        label: 'Download',
-                                        onClick: () => videosApi.enqueueManualDownload(videoId()),
-                                    },
-                                ]
-                                : undefined}
+                            extraActions={
+                                video()?.platform &&
+                                PlatformsWithDownloadSupport.includes(
+                                    video()!.platform
+                                )
+                                    ? [
+                                          {
+                                              label: 'Download',
+                                              onClick: () =>
+                                                  videosApi.enqueueManualDownload(
+                                                      videoId()
+                                                  ),
+                                          },
+                                      ]
+                                    : undefined
+                            }
                         />
                     </div>
                     <Suspense fallback={<div>Loading...</div>}>
@@ -95,7 +122,7 @@ const VideoWatch = () => {
                                 >
                                     <span>
                                         {translationToString(
-                                            video()?.description,
+                                            video()?.description
                                         )}
                                     </span>
                                 </div>

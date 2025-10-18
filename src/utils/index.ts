@@ -5,19 +5,24 @@ export const isGuid = (value: unknown): boolean => {
     return (
         typeof value === 'string' &&
         /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-            value,
+            value
         )
     );
 };
 
 export const translationToString = (
-    translations: TextTranslationDtoV1[] | null | undefined,
+    translations: TextTranslationDtoV1[] | null | undefined
 ) => {
     if (!translations || !translations.length || !translations[0]) {
         return '';
     }
-    return translations.toSorted((a, b) =>
-        (getDate(b.validSince)?.getTime() ?? 0) - (getDate(a.validSince)?.getTime() ?? 0))[0]?.content ?? '';
+    return (
+        translations.toSorted(
+            (a, b) =>
+                (getDate(b.validSince)?.getTime() ?? 0) -
+                (getDate(a.validSince)?.getTime() ?? 0)
+        )[0]?.content ?? ''
+    );
 };
 
 export type DateOrStringNullable = Date | string | null | undefined;
@@ -54,7 +59,7 @@ export type Values<TObject> = TObject[keyof TObject];
 export function tryParseObjEnum<TEnumObj extends Record<string, string>>(
     input: string | null | undefined,
     enumObj: TEnumObj,
-    caseSensitive: boolean = false,
+    caseSensitive: boolean = false
 ): Values<TEnumObj> | null {
     const values = Object.values(enumObj);
     const comparer: (value: string) => boolean = caseSensitive
@@ -90,7 +95,7 @@ export function tryParseBool(value: string | null | undefined): boolean | null {
 
 export function reduceForSearchParams<TValues extends object>(
     values: TValues,
-    defaultValues?: TValues | null,
+    defaultValues?: TValues | null
 ): Partial<TValues> {
     const result: Partial<TValues> = {};
     Object.entries(values).forEach(([key, value]) => {
@@ -112,7 +117,7 @@ type ExcludeUndefinedFields<T> = T extends unknown[]
       : T;
 
 export function excludeUndefinedFields<T extends Record<string, unknown>>(
-    obj: T,
+    obj: T
 ): ExcludeUndefinedFields<T> {
     if (Array.isArray(obj)) {
         return obj as ExcludeUndefinedFields<T>;
@@ -121,7 +126,9 @@ export function excludeUndefinedFields<T extends Record<string, unknown>>(
     Object.entries(obj).forEach(([key, value]) => {
         if (value !== undefined) {
             if (value !== null && typeof value === 'object') {
-                result[key] = excludeUndefinedFields(value as Record<string, unknown>);
+                result[key] = excludeUndefinedFields(
+                    value as Record<string, unknown>
+                );
             } else {
                 result[key] = value;
             }
@@ -154,7 +161,12 @@ export function isDeepEqual<T>(value: T, other: T): boolean {
     if (value === other) {
         return true;
     }
-    if (value === null || value === undefined || other === null || other === undefined) {
+    if (
+        value === null ||
+        value === undefined ||
+        other === null ||
+        other === undefined
+    ) {
         return false;
     }
     if (isPrimitive(value)) {
@@ -183,7 +195,9 @@ export function isDeepEqual<T>(value: T, other: T): boolean {
         }
         return true;
     }
-    throw new Error(`Failed to compare values. Value: (${typeof value}) ${JSON.stringify(value)}, (${typeof other}) other: ${JSON.stringify(other)}`);
+    throw new Error(
+        `Failed to compare values. Value: (${typeof value}) ${JSON.stringify(value)}, (${typeof other}) other: ${JSON.stringify(other)}`
+    );
 }
 
 type Depth = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
@@ -213,30 +227,29 @@ type IncrementDepth<TDepth extends Depth> = TDepth extends 10
 
 type ClonablePrimitiveValue = string | number | boolean | null | undefined;
 
-type ClonableValue<T, TDepth extends Depth = 0> =
-    TDepth extends 10
-        ? never
-        :
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-    T extends Function
-        ? never
-        : T extends
-                | ClonablePrimitiveValue
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                | ClonableValue<infer _U, IncrementDepth<TDepth>>[]
-                | (T extends object ? ClonableObject<T, TDepth> : never)
-          ? T
-          : never;
-type ClonableObject<T extends object, TDepth extends Depth = 0> =
-    TDepth extends 10
-        ? never
-        :
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-    T extends Function | (unknown)[]
-        ? never
-        : {
-              [key in keyof T]: ClonableValue<T[key], IncrementDepth<TDepth>>;
-          };
+type ClonableValue<T, TDepth extends Depth = 0> = TDepth extends 10
+    ? never
+    : // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+      T extends Function
+      ? never
+      : T extends
+              | ClonablePrimitiveValue
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              | ClonableValue<infer _U, IncrementDepth<TDepth>>[]
+              | (T extends object ? ClonableObject<T, TDepth> : never)
+        ? T
+        : never;
+type ClonableObject<
+    T extends object,
+    TDepth extends Depth = 0,
+> = TDepth extends 10
+    ? never
+    : // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+      T extends Function | unknown[]
+      ? never
+      : {
+            [key in keyof T]: ClonableValue<T[key], IncrementDepth<TDepth>>;
+        };
 
 export function clone<T>(value: T & ClonableValue<T>): T {
     if (value === null || value === undefined || isPrimitive(value)) {
@@ -253,6 +266,24 @@ export function clone<T>(value: T & ClonableValue<T>): T {
         return result as unknown as T;
     }
     throw new Error(
-        `Failed to clone value. Type: ${typeof value}, Value: ${JSON.stringify(value)}`,
+        `Failed to clone value. Type: ${typeof value}, Value: ${JSON.stringify(value)}`
     );
+}
+
+export function getUrlParamString(
+    value: string | string[] | null | undefined
+): string | null | undefined {
+    if (value === null || value === undefined) {
+        return value;
+    }
+
+    if (typeof value === 'string') {
+        return value;
+    }
+
+    if (Array.isArray(value) && value.length > 0) {
+        return value[0];
+    }
+
+    return undefined;
 }

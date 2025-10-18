@@ -7,12 +7,19 @@ import noRelativeImportPaths from 'eslint-plugin-no-relative-import-paths';
 import solid from 'eslint-plugin-solid/configs/typescript';
 
 export default defineConfig([
-    { files: ['**/*.{js,mjs,cjs,ts}'], plugins: { js }, extends: ['js/recommended'] },
-    { files: ['**/*.{js,mjs,cjs,ts}'], languageOptions: { globals: globals.browser } },
+    {
+        files: ['**/*.{js,mjs,cjs,ts}'],
+        plugins: { js },
+        extends: ['js/recommended'],
+    },
+    {
+        files: ['**/*.{js,mjs,cjs,ts}'],
+        languageOptions: { globals: globals.browser },
+    },
     tseslint.configs.recommended,
     { ignores: ['dist'] },
     {
-        files: ["**/*.{ts,tsx}"],
+        files: ['**/*.{ts,tsx}'],
         ...solid,
     },
     {
@@ -26,7 +33,7 @@ export default defineConfig([
                 { allowSameFolder: true, rootDir: 'src', prefix: '@' },
             ],
             '@stylistic/object-curly-spacing': ['error', 'always'],
-            '@stylistic/comma-dangle': ['error', 'always-multiline'],
+            '@stylistic/comma-dangle': ['error', 'only-multiline'],
             '@stylistic/member-delimiter-style': 'error',
             '@stylistic/semi': ['error', 'always'],
             '@stylistic/no-extra-semi': ['error'],

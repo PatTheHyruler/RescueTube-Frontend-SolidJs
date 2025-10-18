@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from '@solidjs/router';
 import { accountApi } from './accountApi';
 import { processJwtResponse } from './jwtStorage';
 import { getValidationErrors } from './authUtils';
+import { getUrlParamString } from '@/utils';
 
 const getValidRelativePath = (url: string): string | null => {
     try {
@@ -32,7 +33,7 @@ const Login = () => {
     const [username, setUsername] = createSignal('');
     const [password, setPassword] = createSignal('');
     const [validationErrors, setValidationErrors] = createSignal(
-        [] as string[],
+        [] as string[]
     );
 
     const onSubmit = async (event: SubmitEvent) => {
@@ -61,8 +62,9 @@ const Login = () => {
         }
         setAuthState('jwtState', processJwtResponse(jwtResponse.data));
 
-        if (searchParams.returnUrl) {
-            const relativePath = getValidRelativePath(searchParams.returnUrl);
+        const returnUrl = getUrlParamString(searchParams.returnUrl);
+        if (returnUrl) {
+            const relativePath = getValidRelativePath(returnUrl);
             if (relativePath) {
                 navigate(relativePath);
                 return;

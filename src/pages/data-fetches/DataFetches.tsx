@@ -3,7 +3,6 @@ import { dataFetchesApi } from '@/services/dataFetchesApi';
 import { type DataFetchesQueryDtoV1, type DataFetchStatus, DataFetchStatuses } from '@/apiModels';
 import PaginationComponent from '@/components/PaginationComponent';
 import DataFetchRow from '@/pages/data-fetches/DataFetchRow';
-import { getNextIndeterminateBooleanState } from '@/utils';
 
 const DataFetches = () => {
     const [query, setQuery] = createSignal<DataFetchesQueryDtoV1>({
@@ -74,19 +73,6 @@ const DataFetches = () => {
                         </th>
                         <th>
                             Status
-                            <input
-                                type="checkbox"
-                                /* @ts-expect-error TODO Figure out a way to declare indeterminate as a valid attribute */
-                                indeterminate={query().success === undefined}
-                                checked={query().success}
-                                onChange={() =>
-                                    updateQueryAndRefetch('success', (q) => {
-                                        return getNextIndeterminateBooleanState(
-                                            q.success,
-                                        );
-                                    })
-                                }
-                            />
                             <select
                                 multiple
                                 onChange={(e) =>

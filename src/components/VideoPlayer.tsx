@@ -1,5 +1,4 @@
-import { createResource, createSignal, Show } from 'solid-js';
-import { type AccessTokenDtoV1 } from '@/apiModels';
+import { createEffect, createResource, createSignal, Show } from 'solid-js';
 import { videosApi } from '@/services/videosApi';
 import { baseApi } from '@/services/baseApi';
 
@@ -27,9 +26,9 @@ const getPersistedVolume = () => {
 
 const VideoPlayer = (props: IProps) => {
     const [accessToken, { refetch: refetchAccessToken }] =
-        createResource<AccessTokenDtoV1>(async () => {
+        createResource(() => props.videoId, async (videoId) => {
             const tokenResponse =
-                await videosApi.getVideoFileAccessToken(props.videoId);
+                await videosApi.getVideoFileAccessToken(videoId);
             return tokenResponse.data;
         });
     setInterval(refetchAccessToken, 40_000);
@@ -56,6 +55,17 @@ const VideoPlayer = (props: IProps) => {
         }
     };
 
+    let videoElement!: HTMLVideoElement;
+
+    createEffect(previousVideoId => {
+        if (videoElement && previousVideoId !== props.videoId) {
+            videoElement.load();
+            setCurrentTimeSeconds(0);
+        }
+        return props.videoId;
+        // eslint-disable-next-line solid/reactivity
+    }, props.videoId);
+
     return (
         <>
             <Show
@@ -77,6 +87,7 @@ const VideoPlayer = (props: IProps) => {
                         persistVolume(e.currentTarget.volume)
                     }
                     onError={onError}
+                    ref={videoElement}
                 >
                     <source
                         src={`${baseApi.baseUrl}/v1/videos/${props.videoId}/file/data`}

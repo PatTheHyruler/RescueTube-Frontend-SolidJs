@@ -1,4 +1,4 @@
-import { createEffect, createResource, createSignal, Show } from 'solid-js';
+import { createEffect, createResource, createSignal, onCleanup, Show } from 'solid-js';
 import { videosApi } from '@/services/videosApi';
 import { baseApi } from '@/services/baseApi';
 
@@ -31,7 +31,9 @@ const VideoPlayer = (props: IProps) => {
                 await videosApi.getVideoFileAccessToken(videoId);
             return tokenResponse.data;
         });
-    setInterval(refetchAccessToken, 40_000);
+
+    const refetchInterval = setInterval(refetchAccessToken, 40_000);
+    onCleanup(() => clearInterval(refetchInterval));
 
     const [currentTimeSeconds, setCurrentTimeSeconds] = createSignal(0);
     const [lastErrorReloadAttempt, setLastErrorReloadAttempt] =

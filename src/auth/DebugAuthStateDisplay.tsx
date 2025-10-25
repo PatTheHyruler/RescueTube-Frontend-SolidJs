@@ -1,4 +1,4 @@
-import { createEffect, createSignal, Show, useContext } from 'solid-js';
+import { createEffect, createSignal, onCleanup, Show, useContext } from 'solid-js';
 import AuthContext from './AuthContext';
 import styles from './DebugAuthStateDisplay.module.css';
 
@@ -30,6 +30,7 @@ const DebugAuthStateDisplay = () => {
         y: initialState.y,
     });
     const [isPressed, setIsPressed] = createSignal(false);
+
     const onMove = (e: MouseEvent) => {
         if (isPressed()) {
             setPosition((p) => ({
@@ -39,15 +40,21 @@ const DebugAuthStateDisplay = () => {
         }
     };
 
-    window.addEventListener('mouseup', () => {
+    const onMouseUp = () => {
         const wasPressed = isPressed();
         setIsPressed(false);
         if (wasPressed) {
             setState((v) => ({ ...v, x: position().x, y: position().y }));
         }
-    });
+    };
 
+    window.addEventListener('mouseup', onMouseUp);
     window.addEventListener('mousemove', onMove);
+
+    onCleanup(() => {
+        window.removeEventListener('mouseup', onMouseUp);
+        window.removeEventListener('mousemove', onMove);
+    });
 
     return (
         <>

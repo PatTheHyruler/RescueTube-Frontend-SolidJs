@@ -8,7 +8,9 @@ export enum KnownPlatforms {
 
 export type Platform = `${KnownPlatforms}` | (string & {});
 
-export const PlatformsWithDownloadSupport: Platform[] = [KnownPlatforms.YouTube];
+export const PlatformsWithDownloadSupport: Platform[] = [
+    KnownPlatforms.YouTube,
+];
 
 export enum EntityTypes {
     Video = 'Video',
@@ -249,7 +251,7 @@ export const SettingTypes = {
     DataSizeBytes: 'DataSizeBytes',
 } as const;
 
-export type SettingType = typeof SettingTypes[keyof typeof SettingTypes];
+export type SettingType = (typeof SettingTypes)[keyof typeof SettingTypes];
 
 interface SettingDefinitionDtoV1<T> {
     key: string;
@@ -268,10 +270,10 @@ export type SettingValueDtoV1_Boolean = SettingValueDtoV1Base<boolean, typeof Se
 export type SettingValueDtoV1_DataSizeBytes = SettingValueDtoV1Base<number, typeof SettingTypes.DataSizeBytes>;
 
 export type SettingValueDtoV1 =
-    SettingValueDtoV1_Long |
-    SettingValueDtoV1_String |
-    SettingValueDtoV1_Boolean |
-    SettingValueDtoV1_DataSizeBytes;
+    | SettingValueDtoV1_Long
+    | SettingValueDtoV1_String
+    | SettingValueDtoV1_Boolean
+    | SettingValueDtoV1_DataSizeBytes;
 
 export interface DataFetchDtoV1 {
     id: string;
@@ -303,7 +305,7 @@ export interface DataFetchesQueryDtoV1 extends PaginationQuery {
 
 export interface DataFetchJobDefinitionDtoV1 {
     entityType: EntityType;
-    jobName: string;
+    jobId: string;
 }
 
 export interface DataFetchJobDefinitionsResponseDtoV1 {
@@ -311,7 +313,7 @@ export interface DataFetchJobDefinitionsResponseDtoV1 {
 }
 
 export interface EnqueueDataFetchJobRequestV1 {
-    jobName: string;
+    jobId: string;
     entityId: string;
 }
 

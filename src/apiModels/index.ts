@@ -8,9 +8,7 @@ export enum KnownPlatforms {
 
 export type Platform = `${KnownPlatforms}` | (string & {});
 
-export const PlatformsWithDownloadSupport: Platform[] = [
-    KnownPlatforms.YouTube,
-];
+export const PlatformsWithDownloadSupport: Platform[] = [KnownPlatforms.YouTube];
 
 export enum EntityTypes {
     Video = 'Video',
@@ -264,22 +262,10 @@ interface SettingValueDtoV1Base<T, TDiscriminator extends SettingType> {
     value: T | null;
 }
 
-export type SettingValueDtoV1_Long = SettingValueDtoV1Base<
-    number,
-    typeof SettingTypes.Long
->;
-export type SettingValueDtoV1_String = SettingValueDtoV1Base<
-    string,
-    typeof SettingTypes.String
->;
-export type SettingValueDtoV1_Boolean = SettingValueDtoV1Base<
-    boolean,
-    typeof SettingTypes.Bool
->;
-export type SettingValueDtoV1_DataSizeBytes = SettingValueDtoV1Base<
-    number,
-    typeof SettingTypes.DataSizeBytes
->;
+export type SettingValueDtoV1_Long = SettingValueDtoV1Base<number, typeof SettingTypes.Long>;
+export type SettingValueDtoV1_String = SettingValueDtoV1Base<string, typeof SettingTypes.String>;
+export type SettingValueDtoV1_Boolean = SettingValueDtoV1Base<boolean, typeof SettingTypes.Bool>;
+export type SettingValueDtoV1_DataSizeBytes = SettingValueDtoV1Base<number, typeof SettingTypes.DataSizeBytes>;
 
 export type SettingValueDtoV1 =
     | SettingValueDtoV1_Long
@@ -395,4 +381,11 @@ export interface JobSettingsDtoV1 {
 export interface DataFetchJobSettingsDtoV1 {
     successCutoffOffset: string;
     failureCutoffOffset: string;
+}
+
+export interface JobSettingsUpdateDtoV1 {
+    jobId: string;
+    isEnabled: boolean;
+    cron: string;
+    dataFetchJobSettings: DataFetchJobSettingsDtoV1 | null;
 }

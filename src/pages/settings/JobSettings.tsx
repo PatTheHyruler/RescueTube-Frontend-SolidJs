@@ -1,7 +1,7 @@
 import { jobsApi } from '@/services/jobsApi';
 import { createForm } from '@tanstack/solid-form';
 import { createResource, Index, Show } from 'solid-js';
-import type { JobSettingsDtoV1 } from '@/apiModels';
+import type { JobSettingsDtoV1, JobSettingsUpdateDtoV1 } from '@/apiModels';
 
 interface JobSettingsFormData {
     jobSettings: JobSettingsDtoV1[];
@@ -19,9 +19,32 @@ const JobSettings = () => {
 
     const form = createForm(() => ({
         defaultValues: initialValues(),
+        onSubmit: async ({ value, formApi }) => {
+            const changedSettings = value.jobSettings.filter((_, index) =>
+                isChangedJobSettingsValue(formApi.state.fieldMeta, index)
+            );
+
+            if (changedSettings.length <= 0) {
+                return;
+            }
+
+            await jobsApi.updateJobSettings(
+                changedSettings.map(
+                    (x) =>
+                        ({
+                            jobId: x.jobId,
+                            isEnabled: x.isEnabled,
+                            cron: x.cron,
+                            dataFetchJobSettings: x.dataFetchJobSettings,
+                        }) satisfies JobSettingsUpdateDtoV1
+                )
+            );
+
+            await refetch();
+        },
     }));
 
-    function isUnchangedJobSettingsValue(fieldMeta: typeof form.state.fieldMeta, jobSettingsIndex: number): boolean {
+    function isChangedJobSettingsValue(fieldMeta: typeof form.state.fieldMeta, jobSettingsIndex: number): boolean {
         return Object.entries(fieldMeta)
             .filter(([fieldName]) => fieldName.startsWith(`jobSettings[${jobSettingsIndex}]`))
             .some(([, fieldMeta]) => !fieldMeta.isDefaultValue);
@@ -59,7 +82,7 @@ const JobSettings = () => {
                                             <Show when={jobSetting().isArchivalJob}>&nbsp;(Archival job)</Show>
                                             <Show
                                                 when={form.useStore((state) =>
-                                                    isUnchangedJobSettingsValue(state.fieldMeta, i)
+                                                    isChangedJobSettingsValue(state.fieldMeta, i)
                                                 )()}
                                             >
                                                 <button onClick={() => form.resetField(`jobSettings[${i}]`)}>
@@ -138,6 +161,8 @@ const JobSettings = () => {
                             />
                         )}
                     />
+                    <br />
+                    <button type="submit">Submit</button>
                 </fieldset>
             </form>
         </>

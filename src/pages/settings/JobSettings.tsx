@@ -2,6 +2,7 @@ import { jobsApi } from '@/services/jobsApi';
 import { createForm } from '@tanstack/solid-form';
 import { createResource, Index, Show } from 'solid-js';
 import type { JobSettingsDtoV1, JobSettingsUpdateDtoV1, SimpleJobSettingsDtoV1 } from '@/apiModels';
+import styles from './JobSettings.module.css';
 
 interface JobSettingsFormData {
     jobSettings: JobSettingsDtoV1[];
@@ -71,12 +72,7 @@ const JobSettings = () => {
                     e.stopPropagation();
                     await form.handleSubmit();
                 }}
-                style={{
-                    display: 'grid',
-                    'grid-template-columns': 'repeat(4, 1fr)',
-                    'grid-column-gap': '10px',
-                    'grid-row-gap': '10px',
-                }}
+                class={styles.jobSettingsForm}
             >
                 <fieldset style={{ display: 'contents' }} disabled={isSubmitting()}>
                     <form.Field
@@ -86,7 +82,7 @@ const JobSettings = () => {
                             <Index
                                 each={arrayField().state.value}
                                 children={(jobSetting, i) => (
-                                    <div>
+                                    <div class={styles.jobSettingsEntry}>
                                         <div>
                                             <strong>{jobSetting().jobId}</strong>
                                             <Show when={jobSetting().isArchivalJob}>&nbsp;(Archival job)</Show>

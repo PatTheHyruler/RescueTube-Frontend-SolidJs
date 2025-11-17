@@ -370,12 +370,19 @@ export interface PlaylistItemsResponseDtoV1 {
     playlistItems: PlaylistItemDtoV1[];
 }
 
-export interface JobSettingsDtoV1 {
+export interface SimpleJobSettingsDtoV1 {
     jobId: string;
-    isArchivalJob: boolean;
+    isDefault: boolean;
     isEnabled: boolean;
     cron: string;
     dataFetchJobSettings: DataFetchJobSettingsDtoV1 | null;
+}
+
+export interface JobSettingsDtoV1 extends SimpleJobSettingsDtoV1 {
+    isArchivalJob: boolean;
+    defaultSettings: SimpleJobSettingsDtoV1 & {
+        isDefault: true;
+    };
 }
 
 export interface DataFetchJobSettingsDtoV1 {

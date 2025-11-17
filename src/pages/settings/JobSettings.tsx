@@ -1,10 +1,20 @@
 import { jobsApi } from '@/services/jobsApi';
 import { createForm } from '@tanstack/solid-form';
 import { createResource, Index, Show } from 'solid-js';
-import type { JobSettingsDtoV1, JobSettingsUpdateDtoV1 } from '@/apiModels';
+import type { JobSettingsDtoV1, JobSettingsUpdateDtoV1, SimpleJobSettingsDtoV1 } from '@/apiModels';
 
 interface JobSettingsFormData {
     jobSettings: JobSettingsDtoV1[];
+}
+
+function isEquivalentJobSetting(a: SimpleJobSettingsDtoV1, b: SimpleJobSettingsDtoV1): boolean {
+    return (
+        a.jobId == b.jobId &&
+        a.isEnabled == b.isEnabled &&
+        a.cron == b.cron &&
+        a.dataFetchJobSettings?.successCutoffOffset === b.dataFetchJobSettings?.successCutoffOffset &&
+        a.dataFetchJobSettings?.failureCutoffOffset === b.dataFetchJobSettings?.failureCutoffOffset
+    );
 }
 
 const JobSettings = () => {
@@ -87,6 +97,24 @@ const JobSettings = () => {
                                             >
                                                 <button onClick={() => form.resetField(`jobSettings[${i}]`)}>
                                                     Reset
+                                                </button>
+                                            </Show>
+                                            <Show
+                                                when={
+                                                    !jobSetting().isDefault &&
+                                                    !isEquivalentJobSetting(jobSetting(), jobSetting().defaultSettings)
+                                                }
+                                            >
+                                                <button
+                                                    onClick={() =>
+                                                        form.setFieldValue(`jobSettings[${i}]`, {
+                                                            ...jobSetting().defaultSettings,
+                                                            isArchivalJob: jobSetting().isArchivalJob,
+                                                            defaultSettings: jobSetting().defaultSettings,
+                                                        })
+                                                    }
+                                                >
+                                                    Reset to default
                                                 </button>
                                             </Show>
                                         </div>

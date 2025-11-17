@@ -168,7 +168,7 @@ const JobSettings = () => {
                                                     )}
                                                 />
                                                 <form.Field
-                                                    name={`jobSettings[${i}].dataFetchJobSettings.successCutoffOffset`}
+                                                    name={`jobSettings[${i}].dataFetchJobSettings.failureCutoffOffset`}
                                                     children={(field) => (
                                                         <label>
                                                             Failure cutoff offset:&nbsp;

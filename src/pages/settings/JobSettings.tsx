@@ -72,105 +72,75 @@ const JobSettings = () => {
                     e.stopPropagation();
                     await form.handleSubmit();
                 }}
-                class={styles.jobSettingsForm}
             >
                 <fieldset style={{ display: 'contents' }} disabled={isSubmitting()}>
-                    <form.Field
-                        name="jobSettings"
-                        mode="array"
-                        children={(arrayField) => (
-                            <Index
-                                each={arrayField().state.value}
-                                children={(jobSetting, i) => (
-                                    <div class={styles.jobSettingsEntry}>
-                                        <div>
-                                            <strong>{jobSetting().jobId}</strong>
-                                            <Show when={jobSetting().isArchivalJob}>&nbsp;(Archival job)</Show>
-                                            <Show
-                                                when={form.useStore((state) =>
-                                                    isChangedJobSettingsValue(state.fieldMeta, i)
-                                                )()}
-                                            >
-                                                <button onClick={() => form.resetField(`jobSettings[${i}]`)}>
-                                                    Reset
-                                                </button>
-                                            </Show>
-                                            <Show
-                                                when={
-                                                    !jobSetting().isDefault &&
-                                                    !isEquivalentJobSetting(jobSetting(), jobSetting().defaultSettings)
-                                                }
-                                            >
-                                                <button
-                                                    onClick={() =>
-                                                        form.setFieldValue(`jobSettings[${i}]`, {
-                                                            ...jobSetting().defaultSettings,
-                                                            isArchivalJob: jobSetting().isArchivalJob,
-                                                            defaultSettings: jobSetting().defaultSettings,
-                                                        })
+                    <div class={styles.jobSettingsForm}>
+                        <form.Field
+                            name="jobSettings"
+                            mode="array"
+                            children={(arrayField) => (
+                                <Index
+                                    each={arrayField().state.value}
+                                    children={(jobSetting, i) => (
+                                        <div class={styles.jobSettingsEntry}>
+                                            <div>
+                                                <strong>{jobSetting().jobId}</strong>
+                                                <Show when={jobSetting().isArchivalJob}>&nbsp;(Archival job)</Show>
+                                                <Show
+                                                    when={form.useStore((state) =>
+                                                        isChangedJobSettingsValue(state.fieldMeta, i)
+                                                    )()}
+                                                >
+                                                    <button onClick={() => form.resetField(`jobSettings[${i}]`)}>
+                                                        Reset
+                                                    </button>
+                                                </Show>
+                                                <Show
+                                                    when={
+                                                        !jobSetting().isDefault &&
+                                                        !isEquivalentJobSetting(
+                                                            jobSetting(),
+                                                            jobSetting().defaultSettings
+                                                        )
                                                     }
                                                 >
-                                                    Reset to default
-                                                </button>
-                                            </Show>
-                                        </div>
-                                        <div style={{ display: 'flex', gap: '20px' }}>
-                                            <form.Field
-                                                name={`jobSettings[${i}].isEnabled`}
-                                                children={(field) => (
-                                                    <label>
-                                                        Is enabled:&nbsp;
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={field().state.value}
-                                                            onChange={(e) => {
-                                                                field().handleChange(e.target.checked);
-                                                            }}
-                                                        />
-                                                    </label>
-                                                )}
-                                            />
-                                            <form.Field
-                                                name={`jobSettings[${i}].cron`}
-                                                children={(field) => (
-                                                    <label>
-                                                        Cron:&nbsp;
-                                                        <input
-                                                            type="text"
-                                                            value={field().state.value}
-                                                            onChange={(e) => {
-                                                                field().handleChange(e.target.value);
-                                                            }}
-                                                        />
-                                                    </label>
-                                                )}
-                                            />
-                                        </div>
-                                        <Show when={jobSetting().dataFetchJobSettings}>
-                                            <div>
+                                                    <button
+                                                        onClick={() =>
+                                                            form.setFieldValue(`jobSettings[${i}]`, {
+                                                                ...jobSetting().defaultSettings,
+                                                                isArchivalJob: jobSetting().isArchivalJob,
+                                                                defaultSettings: jobSetting().defaultSettings,
+                                                            })
+                                                        }
+                                                    >
+                                                        Reset to default
+                                                    </button>
+                                                </Show>
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '20px' }}>
                                                 <form.Field
-                                                    name={`jobSettings[${i}].dataFetchJobSettings.successCutoffOffset`}
+                                                    name={`jobSettings[${i}].isEnabled`}
                                                     children={(field) => (
                                                         <label>
-                                                            Success cutoff offset:&nbsp;
+                                                            Is enabled:&nbsp;
                                                             <input
-                                                                type="text"
-                                                                value={field().state.value ?? ''}
+                                                                type="checkbox"
+                                                                checked={field().state.value}
                                                                 onChange={(e) => {
-                                                                    field().handleChange(e.target.value);
+                                                                    field().handleChange(e.target.checked);
                                                                 }}
                                                             />
                                                         </label>
                                                     )}
                                                 />
                                                 <form.Field
-                                                    name={`jobSettings[${i}].dataFetchJobSettings.failureCutoffOffset`}
+                                                    name={`jobSettings[${i}].cron`}
                                                     children={(field) => (
                                                         <label>
-                                                            Failure cutoff offset:&nbsp;
+                                                            Cron:&nbsp;
                                                             <input
                                                                 type="text"
-                                                                value={field().state.value ?? ''}
+                                                                value={field().state.value}
                                                                 onChange={(e) => {
                                                                     field().handleChange(e.target.value);
                                                                 }}
@@ -179,12 +149,46 @@ const JobSettings = () => {
                                                     )}
                                                 />
                                             </div>
-                                        </Show>
-                                    </div>
-                                )}
-                            />
-                        )}
-                    />
+                                            <Show when={jobSetting().dataFetchJobSettings}>
+                                                <div>
+                                                    <form.Field
+                                                        name={`jobSettings[${i}].dataFetchJobSettings.successCutoffOffset`}
+                                                        children={(field) => (
+                                                            <label>
+                                                                Success cutoff offset:&nbsp;
+                                                                <input
+                                                                    type="text"
+                                                                    value={field().state.value ?? ''}
+                                                                    onChange={(e) => {
+                                                                        field().handleChange(e.target.value);
+                                                                    }}
+                                                                />
+                                                            </label>
+                                                        )}
+                                                    />
+                                                    <form.Field
+                                                        name={`jobSettings[${i}].dataFetchJobSettings.failureCutoffOffset`}
+                                                        children={(field) => (
+                                                            <label>
+                                                                Failure cutoff offset:&nbsp;
+                                                                <input
+                                                                    type="text"
+                                                                    value={field().state.value ?? ''}
+                                                                    onChange={(e) => {
+                                                                        field().handleChange(e.target.value);
+                                                                    }}
+                                                                />
+                                                            </label>
+                                                        )}
+                                                    />
+                                                </div>
+                                            </Show>
+                                        </div>
+                                    )}
+                                />
+                            )}
+                        />
+                    </div>
                     <br />
                     <button type="submit">Submit</button>
                 </fieldset>

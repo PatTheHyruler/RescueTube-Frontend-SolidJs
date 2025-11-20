@@ -61,7 +61,7 @@ const DataFetchRow = (props: DataFetchProps) => {
                 <tr>
                     <td colspan={5}>
                         <pre>
-                            {JSON.stringify(dataFetch, null, 2)}
+                            {JSON.stringify(dataFetch(), null, 2)}
                         </pre>
                     </td>
                 </tr>

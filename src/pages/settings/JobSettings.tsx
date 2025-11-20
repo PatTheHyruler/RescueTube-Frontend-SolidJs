@@ -3,6 +3,7 @@ import { createForm } from '@tanstack/solid-form';
 import { createResource, Index, Show } from 'solid-js';
 import type { JobSettingsDtoV1, JobSettingsUpdateDtoV1, SimpleJobSettingsDtoV1 } from '@/apiModels';
 import styles from './JobSettings.module.css';
+import { useToast } from 'solid-notifications';
 
 interface JobSettingsFormData {
     jobSettings: JobSettingsDtoV1[];
@@ -23,6 +24,8 @@ const JobSettings = () => {
         const response = await jobsApi.getJobSettings();
         return response.data;
     });
+
+    const { notify } = useToast();
 
     const initialValues: () => JobSettingsFormData = () => ({
         jobSettings: jobSettings() ?? [],
@@ -144,10 +147,28 @@ const JobSettings = () => {
                                                                 onChange={(e) => {
                                                                     field().handleChange(e.target.value);
                                                                 }}
+                                                                style={{
+                                                                    'max-width': '14ch',
+                                                                }}
                                                             />
                                                         </label>
                                                     )}
                                                 />
+                                                <button type="button" disabled={!jobSetting().isEnabled} onClick={async () => {
+                                                    if (!jobSetting().isEnabled) {
+                                                        return;
+                                                    }
+                                                    try {
+                                                        await jobsApi.triggerRecurringJob(jobSetting().jobId);
+                                                        notify(`Triggered job ${jobSetting().jobId}`, { type: 'success' });
+                                                    }
+                                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                                    catch (e) {
+                                                        notify(`Failed to trigger job ${jobSetting().jobId}`, { type: 'error' });
+                                                    }
+                                                }}>
+                                                    Trigger
+                                                </button>
                                             </div>
                                             <Show when={jobSetting().dataFetchJobSettings}>
                                                 <div>

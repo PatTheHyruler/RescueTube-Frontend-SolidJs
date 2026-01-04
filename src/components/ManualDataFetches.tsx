@@ -17,31 +17,45 @@ const ManualDataFetches = (props: IProps) => {
     return (
         <div>
             <h3>Manual data fetches</h3>
-            <Show when={dataFetchJobDefinitions()} fallback="Loading..." children={dataFetchJobDefinitions => (
-                <ul>
-                    <For
-                        each={dataFetchJobDefinitions().jobDefinitions.filter(x => x.entityType === props.entityType)}
-                        children={dataFetchJobDefinition => (
-                            <li>
-                                {dataFetchJobDefinition.jobName}
-                                <button onClick={() => dataFetchesApi.enqueueDataFetchJob({
-                                    jobName: dataFetchJobDefinition.jobName,
-                                    entityId: props.entityId,
-                                })}>
-                                    Enqueue
-                                </button>
-                            </li>
-                        )} />
-                    <For each={props.extraActions} children={extraAction => (
-                        <li>
-                            {extraAction.label}
-                            <button onClick={extraAction.onClick}>
-                                Enqueue
-                            </button>
-                        </li>
-                    )} />
-                </ul>
-            )} />
+            <Show
+                when={dataFetchJobDefinitions()}
+                fallback="Loading..."
+                children={(dataFetchJobDefinitions) => (
+                    <ul>
+                        <For
+                            each={dataFetchJobDefinitions().jobDefinitions.filter(
+                                (x) => x.entityType === props.entityType
+                            )}
+                            children={(dataFetchJobDefinition) => (
+                                <li>
+                                    {dataFetchJobDefinition.jobId}
+                                    <button
+                                        onClick={() =>
+                                            dataFetchesApi.enqueueDataFetchJob({
+                                                jobId: dataFetchJobDefinition.jobId,
+                                                entityId: props.entityId,
+                                            })
+                                        }
+                                    >
+                                        Enqueue
+                                    </button>
+                                </li>
+                            )}
+                        />
+                        <For
+                            each={props.extraActions}
+                            children={(extraAction) => (
+                                <li>
+                                    {extraAction.label}
+                                    <button onClick={extraAction.onClick}>
+                                        Enqueue
+                                    </button>
+                                </li>
+                            )}
+                        />
+                    </ul>
+                )}
+            />
         </div>
     );
 };

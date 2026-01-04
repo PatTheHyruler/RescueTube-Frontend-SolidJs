@@ -28,12 +28,18 @@ const AdminDropDown = () => {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <A href="/settings" class="dropdown-item nav-link text-dark">
+                            <A
+                                href="/settings"
+                                class="dropdown-item nav-link text-dark"
+                            >
                                 Settings
                             </A>
                         </li>
                         <li class="nav-item">
-                            <A href="/data-fetches" class="dropdown-item nav-link text-dark">
+                            <A
+                                href="/data-fetches"
+                                class="dropdown-item nav-link text-dark"
+                            >
                                 Data fetches
                             </A>
                         </li>

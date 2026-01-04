@@ -2,7 +2,6 @@ import SubmissionForm from '@/components/SubmissionForm';
 import { createResource, onCleanup, Show } from 'solid-js';
 import { statisticsApi } from '@/services/statisticsApi';
 import { useAuthContext } from '@/auth/AuthContext';
-import { jobsApi } from '@/services/jobsApi';
 
 const Home = () => {
     const authContext = useAuthContext();
@@ -24,23 +23,7 @@ const Home = () => {
         refetchVideoStats,
     );
 
-    const [jobStats, { refetch: refetchJobStats }] = createResource(isAuthenticated(), async () => {
-        if (!isAuthenticated()) { 
-            return null;
-        }
-        const response = await jobsApi.getJobStats();
-        return response.data;
-    });
-    const jobStatsIntervalId = setInterval(
-        async (refetchFunc) => {
-            await refetchFunc();
-        },
-        10_000,
-        refetchJobStats,
-    );
-
     onCleanup(() => {
-        clearInterval(jobStatsIntervalId);
         clearInterval(videoStatsIntervalId);
     });
 
@@ -51,13 +34,6 @@ const Home = () => {
                 <div>
                     <pre>
                         {JSON.stringify(videoDownloadStats(), null, 2)}
-                    </pre>
-                </div>
-            </Show>
-            <Show when={jobStats()}>
-                <div>
-                    <pre>
-                        {JSON.stringify(jobStats(), null, 2)}
                     </pre>
                 </div>
             </Show>

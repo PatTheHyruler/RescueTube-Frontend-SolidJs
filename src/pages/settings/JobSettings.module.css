@@ -1,0 +1,25 @@
+.job-settings-form {
+    --job-settings-columns: 4;
+    @media (width < 1800px) {
+        --job-settings-columns: 3;
+    }
+    @media (width < 1350px) {
+        --job-settings-columns: 2;
+    }
+    @media (width < 850px) {
+        --job-settings-columns: 1;
+    }
+    display: grid;
+    grid-template-columns: repeat(var(--job-settings-columns, 4), 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    align-items: center;
+    justify-items: center;
+}
+
+.job-settings-entry {
+    padding: 5px;
+    border: 2px solid lightgray;
+    border-radius: 5px;
+    max-width: 360px;
+}

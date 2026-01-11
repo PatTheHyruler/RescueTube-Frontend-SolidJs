@@ -15,7 +15,7 @@ code {
 }
 
 table.results-table {
-    tbody:nth-child(even) {
+    tbody:nth-child(odd) {
         background-color: #f3f3f3;
     }
     td {

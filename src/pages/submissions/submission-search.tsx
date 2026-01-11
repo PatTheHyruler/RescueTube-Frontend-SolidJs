@@ -1,7 +1,7 @@
 import { For, Show } from 'solid-js';
 import { submissionsApi } from '@/services/submissionsApi';
 import type { SubmissionsSearchDtoV1 } from '@/apiModels';
-import { clone, type DeepPartial, tryParseBool, tryParseInt } from '@/utils';
+import { clone, type DeepPartial, isDeepEqual, tryParseBool, tryParseInt } from '@/utils';
 import { useSearch } from '@/utils/search';
 import { type Params } from '@solidjs/router';
 import SubmissionSearchForm from '@/components/SubmissionSearchForm';
@@ -37,6 +37,11 @@ const SubmissionSearch = () => {
         mapDtoToSearch: mapDtoToSearch,
         getSnapshot: clone,
         fetch: query => submissionsApi.getSubmissions(query),
+        beforeApplySearch: args => {
+            if (args.previousQuery.completed != args.query.completed) {
+                setQuery('page', 0);
+            }
+        }
     });
 
     return (

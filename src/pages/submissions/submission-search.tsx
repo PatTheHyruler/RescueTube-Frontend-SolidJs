@@ -3,8 +3,9 @@ import { submissionsApi } from '@/services/submissionsApi';
 import type { SubmissionsSearchDtoV1 } from '@/apiModels';
 import { clone, type DeepPartial, tryParseBool, tryParseInt } from '@/utils';
 import { useSearch } from '@/utils/search';
-import type { Params } from '@solidjs/router';
+import { type Params } from '@solidjs/router';
 import SubmissionSearchForm from '@/components/SubmissionSearchForm';
+import SubmissionListRow from '@/components/Submissions/SubmissionListRow';
 
 const defaultSearch: SubmissionsSearchDtoV1 = {
     page: 0,
@@ -49,11 +50,15 @@ const SubmissionSearch = () => {
             <Show
                 when={searchResults()?.data}
                 children={(data) => (
-                    <div>
+                    <ul class="d-flex flex-column gap-1">
                         <For each={data().results}>
-                            {(submission) => <pre>{JSON.stringify(submission, null, 2)}</pre>}
+                            {(submission) => (
+                                <li>
+                                    <SubmissionListRow submission={submission} />
+                                </li>
+                            )}
                         </For>
-                    </div>
+                    </ul>
                 )}
             />
         </>

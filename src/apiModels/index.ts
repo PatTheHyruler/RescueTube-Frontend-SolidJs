@@ -406,7 +406,7 @@ export interface SubmissionsSearchDtoV1 extends PaginationQuery {
     completed?: boolean | null;
 }
 
-interface SubmissionDtoV1 {
+export interface SubmissionDtoV1 {
     id: string;
 
     platform: Platform;

@@ -11,7 +11,7 @@ const SubmissionListRow = (props: IProps) => {
     return (
         <>
             <tr>
-                <td class="d-inline-flex gap-1">
+                <td>
                     <SubmissionEntityLink submission={props.submission} /> from{' '}
                     <Show
                         when={props.submission.url}
@@ -39,18 +39,20 @@ const SubmissionListRow = (props: IProps) => {
             </tr>
             <Show when={props.submission.failures.length > 0}>
                 <tr>
-                    <td colspan={3}>
+                    <td colspan={3} class="pt-0">
                         <details>
                             <summary>{props.submission.failures.length} failure(s)</summary>
                             <ul>
                                 <For each={props.submission.failures}>
                                     {(failure) => (
-                                        <li class="d-inline-flex gap-2">
-                                            <DateTimeDisplay
-                                                value={failure.occurredAt}
-                                                customDisplay={(d) => d?.toFormat('yyyy-MM-dd HH:mm')}
-                                            />
-                                            <span class="text-danger">{failure.reason}</span>
+                                        <li>
+                                            <span class="d-inline-flex gap-2">
+                                                <DateTimeDisplay
+                                                    value={failure.occurredAt}
+                                                    customDisplay={(d) => d?.toFormat('yyyy-MM-dd HH:mm')}
+                                                />
+                                                <span class="text-danger">{failure.reason}</span>
+                                            </span>
                                         </li>
                                     )}
                                 </For>

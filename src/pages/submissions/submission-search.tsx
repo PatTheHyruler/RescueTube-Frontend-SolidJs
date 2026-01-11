@@ -50,7 +50,7 @@ const SubmissionSearch = () => {
             <Show
                 when={searchResults()?.data}
                 children={(data) => (
-                    <table>
+                    <table class="results-table">
                         <thead>
                             <tr>
                                 <th />

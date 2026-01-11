@@ -13,3 +13,12 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
         monospace;
 }
+
+table.results-table {
+    tbody:nth-child(even) {
+        background-color: #f3f3f3;
+    }
+    td {
+        padding: 10px;
+    }
+}

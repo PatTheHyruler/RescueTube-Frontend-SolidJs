@@ -397,12 +397,45 @@ export interface JobSettingsUpdateDtoV1 {
     dataFetchJobSettings: DataFetchJobSettingsDtoV1 | null;
 }
 
+interface UserSimpleDtoV1 {
+    id: string;
+    userName: string;
+}
+
 export interface SubmissionsSearchDtoV1 extends PaginationQuery {
     completed?: boolean | null;
 }
 
 interface SubmissionDtoV1 {
+    id: string;
 
+    platform: Platform;
+    idOnPlatform: string;
+    idType: string | null;
+    entityType: EntityType;
+
+    url: string | null;
+
+    addedBy: UserSimpleDtoV1;
+    addedAt: string;
+
+    approvedBy: UserSimpleDtoV1 | null;
+    approvedAt: string | null;
+    grantAccess: boolean;
+
+    completedAt: string | null;
+
+    videoId: string | null;
+    playlistId: string | null;
+    authorId: string | null;
+
+    failures: SubmissionHandlingFailureDtoV1[];
+}
+
+interface SubmissionHandlingFailureDtoV1 {
+    id: string;
+    occurredAt: string;
+    reason: string;
 }
 
 export interface SubmissionSearchResponseDtoV1 {

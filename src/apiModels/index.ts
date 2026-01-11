@@ -396,3 +396,16 @@ export interface JobSettingsUpdateDtoV1 {
     cron: string;
     dataFetchJobSettings: DataFetchJobSettingsDtoV1 | null;
 }
+
+export interface SubmissionsSearchDtoV1 extends PaginationQuery {
+    completed?: boolean | null;
+}
+
+interface SubmissionDtoV1 {
+
+}
+
+export interface SubmissionSearchResponseDtoV1 {
+    paginationResult: PaginationResult;
+    results: SubmissionDtoV1[];
+}

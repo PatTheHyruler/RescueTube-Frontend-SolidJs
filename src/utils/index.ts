@@ -116,7 +116,7 @@ type ExcludeUndefinedFields<T> = T extends unknown[]
         }
       : T;
 
-export function excludeUndefinedFields<T extends Record<string, unknown>>(
+export function excludeUndefinedFields<T extends { [k in keyof T]: unknown }>(
     obj: T
 ): ExcludeUndefinedFields<T> {
     if (Array.isArray(obj)) {
@@ -143,8 +143,8 @@ export type DeepPartial<T> = T extends unknown[]
       ? { [P in keyof T]?: DeepPartial<T[P]> }
       : T;
 
-export function getNextIndeterminateBooleanState(current: boolean | undefined) {
-    if (current === undefined) {
+export function getNextIndeterminateBooleanState(current: boolean | null | undefined) {
+    if (current === null || current === undefined) {
         return true;
     }
     if (current) {
@@ -157,7 +157,11 @@ function isPrimitive(value: unknown) {
     return value !== Object(value);
 }
 
-export function isDeepEqual<T>(value: T, other: T): boolean {
+interface IsDeepEqualOptions {
+    emptyStringsAreEquivalentToNullAndUndefined?: boolean;
+}
+
+export function isDeepEqual<T>(value: T, other: T, options?: IsDeepEqualOptions): boolean {
     if (value === other) {
         return true;
     }
@@ -167,6 +171,9 @@ export function isDeepEqual<T>(value: T, other: T): boolean {
         other === null ||
         other === undefined
     ) {
+        if (options?.emptyStringsAreEquivalentToNullAndUndefined) {
+            return typeof value === 'string' && value.length === 0 || typeof other === 'string' && other.length === 0;
+        }
         return false;
     }
     if (isPrimitive(value)) {
@@ -181,7 +188,7 @@ export function isDeepEqual<T>(value: T, other: T): boolean {
                 return false;
             }
             for (let i = 0; i < value.length; i++) {
-                if (!isDeepEqual(value[i], other[i])) {
+                if (!isDeepEqual(value[i], other[i], options)) {
                     return false;
                 }
             }
@@ -189,7 +196,13 @@ export function isDeepEqual<T>(value: T, other: T): boolean {
         }
         for (const [propertyKey, propertyValue] of Object.entries(value)) {
             // @ts-expect-error propertyKey might indeed not exist on `other`, yes, good job TypeScript
-            if (!isDeepEqual(propertyValue, other[propertyKey])) {
+            if (!isDeepEqual(propertyValue, other[propertyKey], options)) {
+                return false;
+            }
+        }
+        const valueKeys = Object.keys(value);
+        for (const [otherPropertyKey, otherPropertyValue] of Object.entries(other)) {
+            if (otherPropertyValue !== undefined && otherPropertyKey !== undefined && !valueKeys.includes(otherPropertyKey)) {
                 return false;
             }
         }

@@ -42,6 +42,11 @@ const NavBar = () => {
                                 Playlists
                             </A>
                         </li>
+                        <li class="nav-item">
+                            <A href="/submissions" class="nav-link text-dark">
+                                Submissions
+                            </A>
+                        </li>
                         <AdminDropDown />
                     </ul>
                     <ul class="navbar-nav">

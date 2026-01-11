@@ -50,15 +50,22 @@ const SubmissionSearch = () => {
             <Show
                 when={searchResults()?.data}
                 children={(data) => (
-                    <ul class="d-flex flex-column gap-1">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th />
+                                <th />
+                                <th />
+                            </tr>
+                        </thead>
                         <For each={data().results}>
                             {(submission) => (
-                                <li>
+                                <tbody>
                                     <SubmissionListRow submission={submission} />
-                                </li>
+                                </tbody>
                             )}
                         </For>
-                    </ul>
+                    </table>
                 )}
             />
         </>

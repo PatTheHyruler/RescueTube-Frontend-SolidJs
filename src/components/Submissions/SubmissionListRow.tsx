@@ -9,39 +9,57 @@ interface IProps {
 
 const SubmissionListRow = (props: IProps) => {
     return (
-        <div>
-            <div class="d-inline-flex gap-1">
-                <SubmissionEntityLink submission={props.submission} /> from{' '}
-                <Show
-                    when={props.submission.url}
-                    children={(url) => <a href={url()}>{props.submission.platform}</a>}
-                    fallback={props.submission.platform}
-                />
-                <Show when={props.submission.completedAt}>
+        <>
+            <tr>
+                <td class="d-inline-flex gap-1">
+                    <SubmissionEntityLink submission={props.submission} /> from{' '}
+                    <Show
+                        when={props.submission.url}
+                        children={(url) => <a href={url()}>{props.submission.platform}</a>}
+                        fallback={props.submission.platform}
+                    />
+                </td>
+                <td>
                     <span>
-                        Completed on <DateTimeDisplay value={props.submission.completedAt} />
+                        Added by '{props.submission.addedBy.userName}' on{' '}
+                        <DateTimeDisplay value={props.submission.addedAt} />
                     </span>
-                </Show>
-                <span>
-                    Added by '{props.submission.addedBy.userName}' on <DateTimeDisplay value={props.submission.addedAt} />
-                </span>
-            </div>
+                </td>
+                <td>
+                    <Show
+                        when={props.submission.completedAt}
+                        children={(completedAt) => (
+                            <span>
+                                Completed on <DateTimeDisplay value={completedAt()} />
+                            </span>
+                        )}
+                        fallback={'Not completed'}
+                    />
+                </td>
+            </tr>
             <Show when={props.submission.failures.length > 0}>
-                <details>
-                    <summary>{props.submission.failures.length} failure(s)</summary>
-                    <ul>
-                        <For each={props.submission.failures}>
-                            {(failure) => (
-                                <li class="d-inline-flex gap-2">
-                                    <DateTimeDisplay value={failure.occurredAt} customDisplay={(d) => d?.toFormat('yyyy-MM-dd HH:mm')} />
-                                    <span class="text-danger">{failure.reason}</span>
-                                </li>
-                            )}
-                        </For>
-                    </ul>
-                </details>
+                <tr>
+                    <td colspan={3}>
+                        <details>
+                            <summary>{props.submission.failures.length} failure(s)</summary>
+                            <ul>
+                                <For each={props.submission.failures}>
+                                    {(failure) => (
+                                        <li class="d-inline-flex gap-2">
+                                            <DateTimeDisplay
+                                                value={failure.occurredAt}
+                                                customDisplay={(d) => d?.toFormat('yyyy-MM-dd HH:mm')}
+                                            />
+                                            <span class="text-danger">{failure.reason}</span>
+                                        </li>
+                                    )}
+                                </For>
+                            </ul>
+                        </details>
+                    </td>
+                </tr>
             </Show>
-        </div>
+        </>
     );
 };
 

@@ -96,7 +96,7 @@ const VideoSearch = () => {
     const videoSelection = useResultListSelect();
 
     return (
-        <>
+        <div class="center-container">
             <VideoSearchForm
                 query={query}
                 onSubmit={applySearch}
@@ -121,7 +121,7 @@ const VideoSearch = () => {
                     </div>
                 )}
             />
-        </>
+        </div>
     );
 };
 

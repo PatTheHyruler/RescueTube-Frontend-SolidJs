@@ -45,7 +45,7 @@ const SubmissionSearch = () => {
     });
 
     return (
-        <>
+        <div class="center-container">
             <SubmissionSearchForm
                 query={query}
                 onSubmit={applySearch}
@@ -73,7 +73,7 @@ const SubmissionSearch = () => {
                     </table>
                 )}
             />
-        </>
+        </div>
     );
 };
 

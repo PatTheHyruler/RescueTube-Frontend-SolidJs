@@ -13,7 +13,7 @@ const AuthorSearch = () => {
     const [searchResults, searchResultActions] = createResource(() => authorsApi.searchAuthors(query()));
 
     return (
-        <div>
+        <div class="center-container">
             <form onSubmit={async e => {
                 e.preventDefault();
                 await searchResultActions.refetch();

@@ -22,3 +22,7 @@ table.results-table {
         padding: 10px;
     }
 }
+
+.center-container {
+    justify-self: center;
+}

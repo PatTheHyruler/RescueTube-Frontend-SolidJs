@@ -81,7 +81,7 @@ const PlaylistSearch = () => {
     };
 
     return (
-        <>
+        <div class="center-container">
             <PlaylistSearchForm
                 query={query}
                 setQuery={setQuery}
@@ -140,7 +140,7 @@ const PlaylistSearch = () => {
                     </div>
                 )}
             </Show>
-        </>
+        </div>
     );
 };
 

@@ -55,7 +55,7 @@ const SubmissionSearch = () => {
             <Show
                 when={searchResults()?.data}
                 children={(data) => (
-                    <table class="results-table">
+                    <table class="results-table" style={{ 'min-width': '650px' }}>
                         <thead>
                             <tr>
                                 <th />

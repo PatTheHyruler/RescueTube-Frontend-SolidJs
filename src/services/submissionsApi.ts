@@ -33,7 +33,12 @@ const getSubmissions = async (query: SubmissionsSearchDtoV1) => {
     return await baseApi.axios.get<SubmissionSearchResponseDtoV1>(`/v1/submissions?${urlParams.toString()}`);
 };
 
+const handleSubmission = async (submissionId: string) => {
+    return await baseApi.axios.post(`/v1/submissions/${submissionId}/handle`);
+};
+
 export const submissionsApi = {
     submitLink,
     getSubmissions,
+    handleSubmission,
 };

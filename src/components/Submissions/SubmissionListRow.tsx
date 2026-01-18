@@ -1,13 +1,20 @@
 import type { SubmissionDtoV1 } from '@/apiModels';
 import SubmissionEntityLink from '@/components/Submissions/SubmissionEntityLink';
-import { For, Show } from 'solid-js';
+import { createSignal, For, Show } from 'solid-js';
 import { DateTimeDisplay } from '@/components/DateTimeDisplay';
+import { submissionsApi } from '@/services/submissionsApi';
 
 interface IProps {
     submission: SubmissionDtoV1;
+    allowManualHandling: boolean;
+    refreshResults: () => void;
 }
 
 const SubmissionListRow = (props: IProps) => {
+    const [isManuallyHandling, setIsManuallyHandling] = createSignal(false);
+
+    const disableManualHandling = () => isManuallyHandling() || props.submission.completedAt !== null;
+
     return (
         <>
             <tr>
@@ -36,6 +43,28 @@ const SubmissionListRow = (props: IProps) => {
                         fallback={'Not completed'}
                     />
                 </td>
+                <Show when={props.allowManualHandling}>
+                    <td>
+                        <button
+                            onClick={async () => {
+                                if (disableManualHandling()) {
+                                    return;
+                                }
+
+                                setIsManuallyHandling(true);
+                                try {
+                                    await submissionsApi.handleSubmission(props.submission.id);
+                                } finally {
+                                    setIsManuallyHandling(false);
+                                    props.refreshResults();
+                                }
+                            }}
+                            disabled={disableManualHandling()}
+                        >
+                            Handle
+                        </button>
+                    </td>
+                </Show>
             </tr>
             <Show when={props.submission.failures.length > 0}>
                 <tr>

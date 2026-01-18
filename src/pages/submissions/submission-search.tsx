@@ -1,11 +1,13 @@
 import { For, Show } from 'solid-js';
 import { submissionsApi } from '@/services/submissionsApi';
 import type { SubmissionsSearchDtoV1 } from '@/apiModels';
-import { clone, type DeepPartial, isDeepEqual, tryParseBool, tryParseInt } from '@/utils';
+import { clone, type DeepPartial, tryParseBool, tryParseInt } from '@/utils';
 import { useSearch } from '@/utils/search';
 import { type Params } from '@solidjs/router';
 import SubmissionSearchForm from '@/components/SubmissionSearchForm';
 import SubmissionListRow from '@/components/Submissions/SubmissionListRow';
+import { useAuthContext } from '@/auth/AuthContext';
+import { isAdmin } from '@/auth/authUtils';
 
 const defaultSearch: SubmissionsSearchDtoV1 = {
     page: 0,
@@ -31,7 +33,7 @@ const mapDtoToSearch = (dto: Partial<SubmissionsSearchDtoV1>): Partial<SearchPar
 });
 
 const SubmissionSearch = () => {
-    const { searchResults, applySearch, query, setQuery } = useSearch({
+    const { searchResults, applySearch, query, setQuery, searchResultActions } = useSearch({
         defaultSearch: defaultSearch,
         mapSearchToDto: mapSearchToDto,
         mapDtoToSearch: mapDtoToSearch,
@@ -43,6 +45,9 @@ const SubmissionSearch = () => {
             }
         }
     });
+
+    const { authState } = useAuthContext();
+    const isCurrentUserAdmin = () => isAdmin(authState.userDetails?.user);
 
     return (
         <div class="center-container">
@@ -61,12 +66,19 @@ const SubmissionSearch = () => {
                                 <th />
                                 <th />
                                 <th />
+                                <Show when={isCurrentUserAdmin()}>
+                                    <th />
+                                </Show>
                             </tr>
                         </thead>
                         <For each={data().results}>
                             {(submission) => (
                                 <tbody>
-                                    <SubmissionListRow submission={submission} />
+                                    <SubmissionListRow
+                                        submission={submission}
+                                        allowManualHandling={isCurrentUserAdmin()}
+                                        refreshResults={searchResultActions.refetch}
+                                    />
                                 </tbody>
                             )}
                         </For>

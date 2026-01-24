@@ -33,6 +33,8 @@ const stringifyOrderBy = (orderBy: OrderByPropertyDtoV1[] | undefined): string |
 const defaultSearch: SubmissionsSearchDtoV1 = {
     page: 0,
     limit: 50,
+    completed: null,
+    orderBy: null,
 };
 
 interface SearchParams extends Params {

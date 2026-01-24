@@ -1,6 +1,6 @@
 import { For, Show } from 'solid-js';
 import { submissionsApi } from '@/services/submissionsApi';
-import type { SubmissionsSearchDtoV1 } from '@/apiModels';
+import type { OrderByPropertyDtoV1, SubmissionsSearchDtoV1 } from '@/apiModels';
 import { clone, type DeepPartial, tryParseBool, tryParseInt } from '@/utils';
 import { useSearch } from '@/utils/search';
 import { type Params } from '@solidjs/router';
@@ -8,6 +8,27 @@ import SubmissionSearchForm from '@/components/SubmissionSearchForm';
 import SubmissionListRow from '@/components/Submissions/SubmissionListRow';
 import { useAuthContext } from '@/auth/AuthContext';
 import { isAdmin } from '@/auth/authUtils';
+
+const parseOrderBy = (orderByString: string | undefined): OrderByPropertyDtoV1[] | null => {
+    if (!orderByString) return null;
+
+    try {
+        const parts = orderByString.split(',');
+        return parts.map((part) => {
+            const descending = part.endsWith('↓') || part.endsWith('desc');
+            const propertyName = part.replace(/[↓↑]|asc|desc$/i, '').trim();
+            return { propertyName, descending };
+        });
+    } catch {
+        return null;
+    }
+};
+
+const stringifyOrderBy = (orderBy: OrderByPropertyDtoV1[] | undefined): string | undefined => {
+    if (!orderBy || orderBy.length === 0) return undefined;
+
+    return orderBy.map((order) => `${order.propertyName}${order.descending ? '↓' : '↑'}`).join(',');
+};
 
 const defaultSearch: SubmissionsSearchDtoV1 = {
     page: 0,
@@ -18,18 +39,21 @@ interface SearchParams extends Params {
     page: string;
     limit: string;
     completed: string;
+    orderBy: string;
 }
 
 const mapSearchToDto = (searchParams: Partial<SearchParams>): DeepPartial<SubmissionsSearchDtoV1> => ({
     page: tryParseInt(searchParams.page) ?? undefined,
     limit: tryParseInt(searchParams.limit) ?? undefined,
     completed: tryParseBool(searchParams.completed) ?? undefined,
+    orderBy: parseOrderBy(searchParams.orderBy) || undefined,
 });
 
 const mapDtoToSearch = (dto: Partial<SubmissionsSearchDtoV1>): Partial<SearchParams> => ({
     page: dto.page?.toString() ?? undefined,
     limit: dto.limit?.toString() ?? undefined,
     completed: dto.completed?.toString() ?? undefined,
+    orderBy: stringifyOrderBy(dto.orderBy || undefined),
 });
 
 const SubmissionSearch = () => {
@@ -38,12 +62,12 @@ const SubmissionSearch = () => {
         mapSearchToDto: mapSearchToDto,
         mapDtoToSearch: mapDtoToSearch,
         getSnapshot: clone,
-        fetch: query => submissionsApi.getSubmissions(query),
-        beforeApplySearch: args => {
+        fetch: (query) => submissionsApi.getSubmissions(query),
+        beforeApplySearch: (args) => {
             if (args.previousQuery.completed != args.query.completed) {
                 setQuery('page', 0);
             }
-        }
+        },
     });
 
     const { authState } = useAuthContext();

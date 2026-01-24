@@ -1,5 +1,7 @@
 import PaginationComponent from '@/components/PaginationComponent';
+import SortControls, { type SortOption } from '@/components/SortControls';
 import type { PaginationResult, SubmissionsSearchDtoV1 } from '@/apiModels';
+import { SubmissionSortingOptions } from '@/apiModels';
 import type { SetStoreFunction } from 'solid-js/store';
 import { updatePaginationQuery } from '@/utils/pagination';
 import { getNextIndeterminateBooleanState } from '@/utils';
@@ -10,6 +12,15 @@ interface IProps {
     paginationResult: PaginationResult | null | undefined;
     onSubmit: (() => Promise<void>) | (() => void);
 }
+
+const submissionSortOptions: SortOption[] = [
+    { value: SubmissionSortingOptions.AddedAt, label: 'Added at' },
+    { value: SubmissionSortingOptions.ApprovedAt, label: 'Approved at' },
+    { value: SubmissionSortingOptions.CompletedAt, label: 'Completed at' },
+    { value: SubmissionSortingOptions.Platform, label: 'Platform' },
+    { value: SubmissionSortingOptions.EntityType, label: 'Entity type' },
+    { value: SubmissionSortingOptions.Id, label: 'ID' },
+];
 
 const SubmissionSearchForm = (props: IProps) => {
     return (
@@ -32,6 +43,9 @@ const SubmissionSearchForm = (props: IProps) => {
                         }}
                     />
                 </label>
+
+                <SortControls query={props.query} setQuery={props.setQuery} sortOptions={submissionSortOptions} />
+
                 <button type="submit">Search</button>
             </form>
             <PaginationComponent

@@ -37,6 +37,11 @@ export enum DataFetchStatuses {
 
 export type DataFetchStatus = `${DataFetchStatuses}`;
 
+export interface OrderByPropertyDtoV1 {
+    propertyName: string;
+    descending: boolean;
+}
+
 export interface AuthorSearchRequestDtoV1 extends PaginationQuery {
     name?: string | null;
     authorIds?: string[] | null;
@@ -87,6 +92,15 @@ export interface TextTranslationDtoV1 {
 export const VideoSortingOptions = {
     CreatedAt: 'CreatedAt',
     Duration: 'Duration',
+} as const;
+
+export const SubmissionSortingOptions = {
+    AddedAt: 'AddedAt',
+    ApprovedAt: 'ApprovedAt',
+    CompletedAt: 'CompletedAt',
+    Platform: 'Platform',
+    EntityType: 'EntityType',
+    Id: 'Id',
 } as const;
 
 export interface VideoSearchFilterDtoV1 {
@@ -404,6 +418,7 @@ interface UserSimpleDtoV1 {
 
 export interface SubmissionsSearchDtoV1 extends PaginationQuery {
     completed?: boolean | null;
+    orderBy?: OrderByPropertyDtoV1[] | null;
 }
 
 export interface SubmissionDtoV1 {

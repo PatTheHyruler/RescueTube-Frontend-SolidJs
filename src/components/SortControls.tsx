@@ -59,11 +59,6 @@ const SortControls = (props: ISortControlsProps) => {
         return props.sortOptions.filter((option) => !existingFields.includes(option.value));
     };
 
-    const getOptionLabel = (value: string) => {
-        const option = props.sortOptions.find((opt) => opt.value === value);
-        return option?.label || value;
-    };
-
     return (
         <div class="sort-section">
             <Index each={props.query.orderBy || []}>
@@ -76,8 +71,6 @@ const SortControls = (props: ISortControlsProps) => {
                             <For each={getAvailableOptions(index)}>
                                 {(option) => <option value={option.value}>{option.label}</option>}
                             </For>
-                            {/* Keep current option even if it's not in available options */}
-                            <option value={orderBy().propertyName}>{getOptionLabel(orderBy().propertyName)}</option>
                         </select>
                         <button
                             type="button"

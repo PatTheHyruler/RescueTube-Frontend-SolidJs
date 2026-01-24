@@ -61,7 +61,7 @@ const JobSettings = () => {
     function isChangedJobSettingsValue(fieldMeta: typeof form.state.fieldMeta, jobSettingsIndex: number): boolean {
         return Object.entries(fieldMeta)
             .filter(([fieldName]) => fieldName.startsWith(`jobSettings[${jobSettingsIndex}]`))
-            .some(([, fieldMeta]) => !fieldMeta.isDefaultValue);
+            .some(([, fieldMeta]) => fieldMeta && !fieldMeta.isDefaultValue);
     }
 
     const isSubmitting = form.useStore((state) => state.isSubmitting);

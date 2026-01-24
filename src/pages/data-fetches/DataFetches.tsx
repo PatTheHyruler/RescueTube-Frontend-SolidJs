@@ -22,7 +22,7 @@ const DataFetches = () => {
     };
 
     return (
-        <div>
+        <div class="center-container">
             <PaginationComponent
                 paginationQuery={query()}
                 paginationResult={dataFetches()}

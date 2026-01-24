@@ -23,7 +23,7 @@ const Settings = () => {
     }));
 
     return (
-        <div>
+        <div class="center-container">
             <h2>Settings</h2>
             <form onSubmit={async (e) => {
                 e.preventDefault();

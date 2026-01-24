@@ -28,7 +28,7 @@ const Home = () => {
     });
 
     return (
-        <>
+        <div class="center-container">
             <SubmissionForm />
             <Show when={videoDownloadStats()}>
                 <div>
@@ -37,7 +37,7 @@ const Home = () => {
                     </pre>
                 </div>
             </Show>
-        </>
+        </div>
     );
 };
 

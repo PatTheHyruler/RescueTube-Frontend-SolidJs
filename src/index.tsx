@@ -26,6 +26,7 @@ import { videosApi } from '@/services/videosApi';
 import routes from '@/utils/routes';
 import { authorsApi } from '@/services/authorsApi';
 import { playlistsApi } from '@/services/playlistsApi';
+import SubmissionSearch from '@/pages/submissions/submission-search';
 
 const root = document.getElementById('root');
 
@@ -44,23 +45,12 @@ render(
                 <Route path="/register" component={Register} />
                 <Route path="/videos">
                     <Route path="/search" component={VideoSearch} />
-                    <Route
-                        path="/:id/watch"
-                        component={VideoWatch}
-                        matchFilters={{ id: (id) => isGuid(id) }}
-                    />
-                    <PlatformEntityRedirectRoute
-                        fetchEntityId={videosApi.getVideoId}
-                        getRoute={routes.videos.watch}
-                    />
+                    <Route path="/:id/watch" component={VideoWatch} matchFilters={{ id: (id) => isGuid(id) }} />
+                    <PlatformEntityRedirectRoute fetchEntityId={videosApi.getVideoId} getRoute={routes.videos.watch} />
                 </Route>
                 <Route path="/authors">
                     <Route path="/" component={AuthorSearch} />
-                    <Route
-                        path=":id"
-                        component={AuthorDetails}
-                        matchFilters={{ id: (id) => isGuid(id) }}
-                    />
+                    <Route path=":id" component={AuthorDetails} matchFilters={{ id: (id) => isGuid(id) }} />
                     <PlatformEntityRedirectRoute
                         fetchEntityId={authorsApi.getAuthorId}
                         getRoute={routes.authors.details}
@@ -68,16 +58,20 @@ render(
                 </Route>
                 <Route path="/playlists">
                     <Route path="/" component={PlaylistSearch} />
-                    <Route
-                        path=":id"
-                        component={PlaylistDetails}
-                        matchFilters={{ id: isGuid }}
-                    />
+                    <Route path=":id" component={PlaylistDetails} matchFilters={{ id: isGuid }} />
                     <PlatformEntityRedirectRoute
                         fetchEntityId={playlistsApi.getPlaylistId}
                         getRoute={routes.playlists.details}
                     />
                 </Route>
+                <Route
+                    path="/submissions"
+                    component={() => (
+                        <RequireAuth>
+                            <SubmissionSearch />
+                        </RequireAuth>
+                    )}
+                />
                 <Route
                     path="/data-fetches"
                     component={() => (
@@ -98,5 +92,5 @@ render(
             </Router>
         </ErrorBoundary>
     ),
-    root!,
+    root!
 );
